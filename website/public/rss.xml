@@ -2,10 +2,65 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
   <title>Polished Insurance guides</title>
-  <link>https://polished-insurance.com/guides</link>
-  <atom:link href="https://polished-insurance.com/rss.xml" rel="self" type="application/rss+xml" />
+  <link>https://www.polished-insurance.co.uk/guides</link>
+  <atom:link href="https://www.polished-insurance.co.uk/rss.xml" rel="self" type="application/rss+xml" />
   <description>Insurance guides for UK cleaning businesses.</description>
   <language>en-gb</language>
-
+  <item>
+    <title>Treatment Risks: The Gap in Standard Public Liability</title>
+    <link>https://www.polished-insurance.co.uk/guides/what-is-treatment-risk-insurance</link>
+    <guid>https://www.polished-insurance.co.uk/guides/what-is-treatment-risk-insurance</guid>
+    <pubDate>Tue, 30 Jan 2024 09:00:00 GMT</pubDate>
+    <description>Most standard public liability policies will not pay for the item you are actually cleaning. We explain damage to property worked upon.</description>
+  </item>
+  <item>
+    <title>Handling Accidental Damage: A Step-by-Step Guide</title>
+    <link>https://www.polished-insurance.co.uk/guides/handling-accidental-damage-cleaning</link>
+    <guid>https://www.polished-insurance.co.uk/guides/handling-accidental-damage-cleaning</guid>
+    <pubDate>Sun, 28 Jan 2024 09:00:00 GMT</pubDate>
+    <description>Breaking a client's item is every cleaner's nightmare. Here is the professional way to handle it.</description>
+  </item>
+  <item>
+    <title>Keyholding Risks Explained: Protecting Your Client's Security</title>
+    <link>https://www.polished-insurance.co.uk/guides/keyholding-risks-explained</link>
+    <guid>https://www.polished-insurance.co.uk/guides/keyholding-risks-explained</guid>
+    <pubDate>Fri, 26 Jan 2024 09:00:00 GMT</pubDate>
+    <description>Holding keys for clients is a big responsibility. Learn how to manage keys securely and check your insurance covers you if you lose them.</description>
+  </item>
+  <item>
+    <title>The True Cost of a Claim: It's More Than Just the Breakage</title>
+    <link>https://www.polished-insurance.co.uk/guides/the-true-cost-of-a-cleaning-claim</link>
+    <guid>https://www.polished-insurance.co.uk/guides/the-true-cost-of-a-cleaning-claim</guid>
+    <pubDate>Thu, 25 Jan 2024 09:00:00 GMT</pubDate>
+    <description>Think a broken vase just costs the price of a replacement? We explore the hidden costs of liability claims.</description>
+  </item>
+  <item>
+    <title>COSHH Explained Simply: A Cleaner's Guide to Safety</title>
+    <link>https://www.polished-insurance.co.uk/guides/coshh-explained-simply</link>
+    <guid>https://www.polished-insurance.co.uk/guides/coshh-explained-simply</guid>
+    <pubDate>Wed, 24 Jan 2024 09:00:00 GMT</pubDate>
+    <description>Chemical safety does not have to be complicated. Our simple guide to COSHH helps you stay safe and compliant.</description>
+  </item>
+  <item>
+    <title>Public Liability vs Employers' Liability: What's the Difference?</title>
+    <link>https://www.polished-insurance.co.uk/guides/public-liability-vs-employers-liability</link>
+    <guid>https://www.polished-insurance.co.uk/guides/public-liability-vs-employers-liability</guid>
+    <pubDate>Tue, 23 Jan 2024 09:00:00 GMT</pubDate>
+    <description>We break down the key differences between public and employers' liability, and which your cleaning business actually needs.</description>
+  </item>
+  <item>
+    <title>Legal Liability for Cleaners Entering Client Premises</title>
+    <link>https://www.polished-insurance.co.uk/guides/legal-liability-cleaner-entering-premises</link>
+    <guid>https://www.polished-insurance.co.uk/guides/legal-liability-cleaner-entering-premises</guid>
+    <pubDate>Mon, 22 Jan 2024 09:00:00 GMT</pubDate>
+    <description>Your duty of care, keyholding risks and legal responsibilities when working in a client's home or office.</description>
+  </item>
+  <item>
+    <title>Do I Really Need Insurance for My Cleaning Business?</title>
+    <link>https://www.polished-insurance.co.uk/guides/do-i-need-insurance-for-cleaning</link>
+    <guid>https://www.polished-insurance.co.uk/guides/do-i-need-insurance-for-cleaning</guid>
+    <pubDate>Mon, 15 Jan 2024 09:00:00 GMT</pubDate>
+    <description>Many new cleaners ask whether insurance is a legal requirement. Here is what the law says, and why going without is a big risk.</description>
+  </item>
 </channel>
 </rss>

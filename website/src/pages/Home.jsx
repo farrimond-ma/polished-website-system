@@ -19,7 +19,7 @@ const orgSchema = {
   legalName: SITE.legalName,
   url: SITE.url,
   logo: `${SITE.url}/favicon.svg`,
-  telephone: '+44-330-056-8970',
+  telephone: '+44-1942-403370',
   email: SITE.email,
   address: { '@type': 'PostalAddress', streetAddress: '98 Standishgate', addressLocality: 'Wigan', postalCode: 'WN1 1XA', addressCountry: 'GB' },
   areaServed: 'GB',

@@ -1,6 +1,6 @@
 name: Deploy CRM
 
-# Uploads the PHP CRM to crm.polished-insurance.com. config.php and data/ live only on the
+# Uploads the PHP CRM to crm.polished-insurance.co.uk. config.php and data/ live only on the
 # server and are excluded, so a deploy can never overwrite credentials or the local store.
 on:
   push:
@@ -31,7 +31,7 @@ jobs:
           password: ${{ secrets.CRM_FTP_PASSWORD || secrets.FTP_PASSWORD }}
           protocol: ftps
           local-dir: crm/
-          server-dir: ${{ vars.CRM_SERVER_DIR || 'crm.polished-insurance.com/public_html/' }}
+          server-dir: ${{ vars.CRM_SERVER_DIR || 'crm.polished-insurance.co.uk/public_html/' }}
           exclude: |
             **/.git*
             **/.git*/**

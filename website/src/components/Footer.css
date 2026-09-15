@@ -19,3 +19,5 @@
 .footer-links a:hover { color: var(--color-secondary-light); }
 .footer-bottom { border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 2rem; text-align: center; font-size: 0.9rem; }
 .footer-disclaimer { margin: 0 auto 1.1rem; font-size: 0.8rem; opacity: 0.65; max-width: 900px; line-height: 1.55; }
+.footer-link-button { background: none; border: 0; padding: 0; font: inherit; color: rgba(255, 255, 255, 0.72); cursor: pointer; }
+.footer-link-button:hover { color: var(--color-secondary-light); }

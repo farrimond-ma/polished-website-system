@@ -2,7 +2,7 @@
   "name": "polished-content-engine",
   "private": true,
   "type": "module",
-  "description": "Publishes insurance guides for cleaning businesses to polished-insurance.com",
+  "description": "Publishes insurance guides for cleaning businesses to polished-insurance.co.uk",
   "scripts": {
     "publish-guide": "node publish-guide.mjs",
     "dry-run": "node publish-guide.mjs --dry-run",

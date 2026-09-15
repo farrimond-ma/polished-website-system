@@ -1,6 +1,6 @@
-# Polished Insurance website (polished-insurance.com) — static React build on SiteGround.
+# Polished Insurance website (polished-insurance.co.uk) — static React build on SiteGround.
 # Based on the Boxx Finance site's .htaccess. No PHP runs on this site: forms post to
-# crm.polished-insurance.com.
+# crm.polished-insurance.co.uk.
 
 <FilesMatch "\.php$">
   <IfModule mod_authz_core.c>
@@ -52,19 +52,31 @@ Options -Indexes -MultiViews
   RewriteEngine On
   RewriteBase /
 
-  # HTTPS + non-www canonical host
-  RewriteCond %{HTTPS} !=on [OR]
-  RewriteCond %{HTTP_HOST} ^www\. [NC]
-  RewriteRule ^(.*)$ https://polished-insurance.com/$1 [R=301,L]
+  # ── URLs from the previous site (Next.js on Vercel, live until 2026-09) ─────────────
+  # Redirected straight to the canonical https://www host in ONE hop, so Google transfers
+  # the existing rankings to the new pages. Full record: docs/co-uk-migration.md
+  RewriteRule ^insurance/?$ https://www.polished-insurance.co.uk/cleaning-insurance [R=301,L]
+  RewriteRule ^insurance/carpet-cleaners-insurance/?$ https://www.polished-insurance.co.uk/cleaning-insurance/carpet-cleaners-insurance [R=301,L]
+  RewriteRule ^insurance/upholstery-cleaners-insurance/?$ https://www.polished-insurance.co.uk/cleaning-insurance/carpet-cleaners-insurance [R=301,L]
+  RewriteRule ^insurance/domestic-cleaners-insurance/?$ https://www.polished-insurance.co.uk/cleaning-insurance/domestic-cleaners-insurance [R=301,L]
+  RewriteRule ^insurance/contract-cleaners-insurance/?$ https://www.polished-insurance.co.uk/cleaning-insurance/contract-cleaners-insurance [R=301,L]
+  RewriteRule ^insurance/end-of-tenancy-cleaners-insurance/?$ https://www.polished-insurance.co.uk/cleaning-insurance/end-of-tenancy-cleaning-insurance [R=301,L]
+  RewriteRule ^insurance/office-cleaners-insurance/?$ https://www.polished-insurance.co.uk/cleaning-insurance/commercial-cleaning-insurance [R=301,L]
+  RewriteRule ^insurance/window-cleaners-insurance/?$ https://www.polished-insurance.co.uk/cleaning-insurance/window-cleaners-insurance [R=301,L]
+  RewriteRule ^insurance/oven-cleaners-insurance/?$ https://www.polished-insurance.co.uk/cleaning-insurance/oven-cleaners-insurance [R=301,L]
+  RewriteRule ^insurance/driveway-cleaners-insurance/?$ https://www.polished-insurance.co.uk/cleaning-insurance/pressure-washing-insurance [R=301,L]
+  RewriteRule ^contact/?$ https://www.polished-insurance.co.uk/get-a-quote [R=301,L]
+  RewriteRule ^blog/?$ https://www.polished-insurance.co.uk/guides [R=301,L]
+  RewriteRule ^blog/([a-z0-9-]+)/?$ https://www.polished-insurance.co.uk/guides/$1 [R=301,L]
 
-  # Old static site URLs -> new pages
+  # HTTPS + www canonical host
+  RewriteCond %{HTTPS} !=on [OR]
+  RewriteCond %{HTTP_HOST} !^www\. [NC]
+  RewriteRule ^(.*)$ https://www.polished-insurance.co.uk/$1 [R=301,L]
+
   # (THE_REQUEST check: only the visitor's original request, never our own internal rewrite to index.html)
   RewriteCond %{THE_REQUEST} \s/index\.html[\s?]
   RewriteRule ^index\.html$ / [R=301,L]
-  RewriteRule ^blog\.html$ /guides [R=301,L]
-  RewriteRule ^contact\.html$ /get-a-quote [R=301,L]
-  RewriteRule ^privacy\.html$ /privacy-policy [R=301,L]
-  RewriteRule ^terms\.html$ /terms-of-business [R=301,L]
 
   # One page = one URL: strip .html and trailing slashes
   RewriteCond %{THE_REQUEST} \s/([^?\s]+)\.html[\s?]

@@ -23,7 +23,7 @@ export function sanitiseHtml(html, allowedUrls) {
 
     const m = attrs.match(/href\s*=\s*("([^"]*)"|'([^']*)')/i);
     let href = m ? (m[2] ?? m[3] ?? '').trim() : '';
-    href = href.replace(/^https?:\/\/(www\.)?polished-insurance\.com/i, '') || '/';
+    href = href.replace(/^https?:\/\/(www\.)?polished-insurance\.co\.uk/i, '') || '/';
     if (href.startsWith('/')) {
       const clean = href.replace(/[?#].*$/, '').replace(/\/$/, '') || '/';
       if (allowedUrls.has(clean)) return `<a href="${escapeAttr(clean)}">`;

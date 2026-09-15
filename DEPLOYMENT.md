@@ -1,11 +1,11 @@
 # Going live
 
-Work through these in order. Nothing here has been done yet: no repository, DNS, database or server changes have been made.
+Work through these in order. The code is on GitHub (`farrimond-ma/polished-website-system`); no DNS, database or server changes have been made yet.
 
 ## 0. Before you start
 
-- **The current `quote.polished-insurance.com` (SSR Questionnaire app) stays exactly as it is.** Do not touch that subdomain's DNS or files.
-- The current root domain is served from **Vercel**. Moving `polished-insurance.com` to SiteGround replaces the old static site (the new `.htaccess` redirects `blog.html`, `contact.html`, `privacy.html` and `terms.html` to their new pages).
+- The new site replaces the current **www.polished-insurance.co.uk** (a Next.js site on Vercel). Its full text is archived in `docs/current-co-uk-site-archive.md`, and every old URL has a 301 redirect; see `docs/co-uk-migration.md`.
+- **The existing `quote.polished-insurance.com` (SSR Questionnaire app) is on a different domain and stays exactly as it is.**
 - The public email address is `hello@polished-insurance.co.uk` (set in `website/src/config/site.js` and `crm/config.php`). The CRM sends client emails from that mailbox, so its SMTP details are needed for `config.php`.
 - Get compliance sign-off on the legal pages (`website/src/pages/Legal.jsx`) and the client message wording (`crm/inc/messages.php`).
 
@@ -22,9 +22,9 @@ Work through these in order. Nothing here has been done yet: no repository, DNS,
 | `VITE_INTAKE_KEY` | secret | a long random string; must match `intake_key` in `crm/config.php` |
 | `ANTHROPIC_API_KEY` | secret | Claude API key for the content engine |
 | `PEXELS_API_KEY` | secret (optional) | free key from pexels.com/api for guide photos |
-| `WEBSITE_SERVER_DIR` | variable (optional) | FTP path to the site's web root; default `polished-insurance.com/public_html/` |
-| `CRM_SERVER_DIR` | variable (optional) | default `crm.polished-insurance.com/public_html/` |
-| `VITE_CRM_URL` | variable (optional) | default `https://crm.polished-insurance.com` |
+| `WEBSITE_SERVER_DIR` | variable (optional) | FTP path to the site's web root; default `polished-insurance.co.uk/public_html/` |
+| `CRM_SERVER_DIR` | variable (optional) | default `crm.polished-insurance.co.uk/public_html/` |
+| `VITE_CRM_URL` | variable (optional) | default `https://crm.polished-insurance.co.uk` |
 
 Optionally use separate `CRM_FTP_SERVER` / `CRM_FTP_USERNAME` / `CRM_FTP_PASSWORD` secrets for the CRM.
 
@@ -36,8 +36,8 @@ openssl rand -hex 32
 
 ## 2. SiteGround: the CRM (do this first, so the website form has somewhere to send leads)
 
-1. **Site Tools → Domain → Subdomains**: create `crm.polished-insurance.com`.
-2. **Security → SSL Manager**: install Let's Encrypt for `crm.polished-insurance.com`.
+1. **Site Tools → Domain → Subdomains**: create `crm.polished-insurance.co.uk`.
+2. **Security → SSL Manager**: install Let's Encrypt for `crm.polished-insurance.co.uk`.
 3. **MySQL → Databases**: create a database and a user with all privileges. Keep this separate from the SSR questionnaire's database.
 4. Run the **Deploy CRM** workflow (Actions tab → Deploy CRM → Run workflow), or upload the `crm/` folder contents.
 5. In File Manager, copy `config.sample.php` to **`config.php`** in the CRM web root and fill in:
@@ -47,13 +47,13 @@ openssl rand -hex 32
    - `sms`: Twilio account SID, auth token and sender (the same set-up as the Boxx CRM, on a separate Polished account or sender)
    - `notify_emails`: who gets new-enquiry and questionnaire-completed alerts
    - optional `telegram`
-6. Visit `https://crm.polished-insurance.com/setup.php` to create the first admin. The tables create themselves. `setup.php` stops working once a user exists.
+6. Visit `https://crm.polished-insurance.co.uk/setup.php` to create the first admin. The tables create themselves. `setup.php` stops working once a user exists.
 7. **Devs → Cron Jobs**: add the three reminder runs.
 
    ```
-   30 9  * * *  php /home/customer/www/crm.polished-insurance.com/public_html/auto_chase.php 1
-   0  13 * * *  php /home/customer/www/crm.polished-insurance.com/public_html/auto_chase.php 2
-   30 17 * * *  php /home/customer/www/crm.polished-insurance.com/public_html/auto_chase.php 3
+   30 9  * * *  php /home/customer/www/crm.polished-insurance.co.uk/public_html/auto_chase.php 1
+   0  13 * * *  php /home/customer/www/crm.polished-insurance.co.uk/public_html/auto_chase.php 2
+   30 17 * * *  php /home/customer/www/crm.polished-insurance.co.uk/public_html/auto_chase.php 3
    ```
 
    Check the exact path in Site Tools; it is shown when you create a cron job.
@@ -63,13 +63,22 @@ openssl rand -hex 32
 
 ## 3. SiteGround: the website
 
-1. Add `polished-insurance.com` as a site (or use the existing one) and install SSL.
-2. Run the **Deploy website** workflow. It builds, prerenders and uploads `website/dist/` over FTP.
-3. **DNS**: point `polished-insurance.com` and `www` at SiteGround (A record / nameservers as SiteGround shows). **Leave the `quote` record unchanged.**
-4. After DNS switches, purge SiteGround's cache (Speed → Caching) and test:
+The domain's nameservers are **already SiteGround** (`ns1/ns2.siteground.net`), and so is its email (`mx10/20/30.mailspamprotection.com`). Only the website records currently point to Vercel, so the switch is a two-record change and **email is not affected**.
+
+1. In the SiteGround site for `polished-insurance.co.uk`, install SSL for both `polished-insurance.co.uk` and `www.polished-insurance.co.uk`.
+2. Run the **Deploy website** workflow. It builds, prerenders and uploads `website/dist/` to the site's `public_html`. Visitors still see the Vercel site until step 3.
+3. **Site Tools → Domain → DNS Zone Editor**. Change only these two records:
+   - `polished-insurance.co.uk` **A** record: currently `216.150.1.1` (Vercel). Change it to the SiteGround server IP shown in Site Tools.
+   - `www` record: currently a **CNAME** to `...vercel-dns-016.com`. Change it to an A record with the same SiteGround IP, or a CNAME to `polished-insurance.co.uk`.
+   - **Do not change** the MX, SPF (`v=spf1 ...`) or `google-site-verification` TXT records.
+4. Wait for DNS (usually minutes, up to a few hours), purge SiteGround's cache (Speed → Caching), then test:
+   - `https://polished-insurance.co.uk` redirects to `https://www.polished-insurance.co.uk`.
+   - Old URLs redirect: `/insurance/window-cleaners-insurance`, `/contact`, `/blog`, `/blog/keyholding-risks-explained`.
    - Submit the quote form on the home page. The lead should appear in the CRM, and the email and text should arrive.
    - Open the questionnaire link, complete it and submit. The lead should become "Questionnaire Completed".
-   - Check `https://polished-insurance.com/sitemap.xml`, then submit it in Google Search Console.
+   - Accept cookies, then check the Pixel fires in Meta Events Manager (Test Events).
+5. **Google Search Console** (the domain is already verified): submit `https://www.polished-insurance.co.uk/sitemap.xml`. The old sitemap listed `polishedinsurance.co.uk` without the hyphen, which was wrong, so remove it if it appears.
+6. When the new site is confirmed working, remove the domain from the Vercel project so Vercel stops trying to serve it.
 
 ## 4. Content engine
 

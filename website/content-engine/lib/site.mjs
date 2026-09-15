@@ -7,7 +7,7 @@ export const SITE_DIR = path.resolve(ENGINE_DIR, '..');
 export const POSTS_FILE = path.join(SITE_DIR, 'src', 'data', 'blogPosts.json');
 export const TOPICS_FILE = path.join(ENGINE_DIR, 'topics.json');
 export const IMAGES_DIR = path.join(SITE_DIR, 'public', 'images', 'guides');
-export const SITE_URL = 'https://polished-insurance.com';
+export const SITE_URL = 'https://www.polished-insurance.co.uk';
 
 export const CATEGORIES = ['Business types', 'Covers explained', 'Contracts & tenders', 'Running your business', 'Claims & risk'];
 

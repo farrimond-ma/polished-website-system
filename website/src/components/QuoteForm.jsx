@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { CRM_URL, INTAKE_KEY, SITE } from '../config/site';
 import { getAttribution } from '../lib/attribution';
+import { trackLead } from '../lib/consent';
 import './QuoteForm.css';
 
 const CONSENT_TEXT =
@@ -60,7 +61,7 @@ const QuoteForm = ({ coverInterest = '', heading = 'Get a quote', intro, compact
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data.ok) throw new Error(data.error || 'Something went wrong.');
-      if (typeof window.gtag === 'function') window.gtag('event', 'generate_lead', { cover: coverInterest || 'general' });
+      trackLead({ content_name: coverInterest || 'Cleaning business insurance' }); // no-op unless cookies accepted
       navigate('/get-a-quote/thank-you', { state: { firstName: values.first_name.trim(), reference: data.reference, phone: values.phone } });
     } catch (err) {
       setStatus('error');

@@ -1,6 +1,6 @@
 # Polished content engine
 
-Publishes detailed insurance guides for UK cleaning businesses to `polished-insurance.com/guides`. It follows the same loop as the Boxx site's engine (generate → commit → deploy) but is simpler: the topic queue is a JSON file in the repo, so there is no Google Sheet to maintain.
+Publishes detailed insurance guides for UK cleaning businesses to `polished-insurance.co.uk/guides`. It follows the same loop as the Boxx site's engine (generate → commit → deploy) but is simpler: the topic queue is a JSON file in the repo, so there is no Google Sheet to maintain.
 
 ## Schedule
 

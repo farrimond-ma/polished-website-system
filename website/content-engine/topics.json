@@ -1,13 +1,14 @@
 [
   {
     "id": "t001",
-    "status": "queued",
+    "status": "skipped",
     "title": "Do cleaners need public liability insurance in the UK?",
     "keyword": "do cleaners need public liability insurance",
     "coverSlug": "public-liability-insurance-for-cleaners",
     "angle": "Answer the legal position, why clients ask for it, what it covers and typical scenarios.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "note": "Overlaps migrated guide /guides/do-i-need-insurance-for-cleaning"
   },
   {
     "id": "t002",
@@ -191,13 +192,14 @@
   },
   {
     "id": "t020",
-    "status": "queued",
+    "status": "skipped",
     "title": "What happens if a client slips on a wet floor you cleaned?",
     "keyword": "slip claim cleaning company",
     "coverSlug": "public-liability-insurance-for-cleaners",
     "angle": "Walk through a claim: notification, investigation, defence, evidence, signage.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "note": "Overlaps migrated guide /guides/the-true-cost-of-a-cleaning-claim"
   },
   {
     "id": "t021",
@@ -221,13 +223,14 @@
   },
   {
     "id": "t023",
-    "status": "queued",
+    "status": "skipped",
     "title": "COSHH and cleaning chemicals: how it affects your insurance",
     "keyword": "coshh cleaning insurance",
     "coverSlug": "commercial-cleaning-insurance",
     "angle": "COSHH duties, assessments, records and how they support claims defence.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "note": "Overlaps migrated guide /guides/coshh-explained-simply"
   },
   {
     "id": "t024",
@@ -301,13 +304,14 @@
   },
   {
     "id": "t031",
-    "status": "queued",
+    "status": "skipped",
     "title": "Accidental damage in customers' homes: what is and is not covered",
     "keyword": "cleaner breaks something in house insurance",
     "coverSlug": "domestic-cleaners-insurance",
     "angle": "Real examples, exclusions, wear and tear, items worked upon.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "note": "Overlaps migrated guide /guides/handling-accidental-damage-cleaning"
   },
   {
     "id": "t032",
@@ -341,13 +345,14 @@
   },
   {
     "id": "t035",
-    "status": "queued",
+    "status": "skipped",
     "title": "What to do if you lose a client's keys",
     "keyword": "lost client keys cleaner",
     "coverSlug": "loss-of-keys-insurance",
     "angle": "Immediate steps, notifying client and insurer, costs, preventing repeats.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "note": "Overlaps migrated guide /guides/keyholding-risks-explained"
   },
   {
     "id": "t036",

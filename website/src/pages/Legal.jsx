@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
 import { ResourceHero } from '../components/resource/ResourceHero';
 import { SITE, REGULATORY_LINE } from '../config/site';
+import { openConsent } from '../lib/consent';
 
 // DRAFT legal wording — must be reviewed and approved by Allied Insurance Services' compliance
 // team before the site goes live (particularly retention periods, insurer/partner lists and the
@@ -28,7 +29,7 @@ export const PrivacyPolicy = () => (
       <li><strong>Contact details</strong> you give us through our quote form: name, business name, email address and phone number.</li>
       <li><strong>Questionnaire answers</strong> about your business, including turnover, staff, activities, covers required, claims history and declarations about directors or partners. Some answers, such as criminal convictions, may be special category or criminal offence data.</li>
       <li><strong>Records of our contact with you</strong>, including emails, text messages and notes of calls.</li>
-      <li><strong>Technical information</strong> such as the pages you visited before making an enquiry and any campaign tags in the link you followed.</li>
+      <li><strong>Technical information</strong> such as the pages you visited before making an enquiry and any campaign tags in the link you followed. If you accept advertising cookies, Meta (Facebook) also receives information about your visit through its Pixel; see our <Link to="/cookie-policy">cookie policy</Link>.</li>
     </ul>
 
     <h2>How we use your information</h2>
@@ -88,7 +89,15 @@ export const Complaints = () => (
 
 export const CookiePolicy = () => (
   <LegalPage title="Cookie Policy" path="/cookie-policy" description="How this website uses cookies and similar technologies.">
-    <p>This website uses only the storage it needs to work. We store a small record in your browser for the length of your visit of the page you first landed on and any campaign tags in the link you followed. This lets us see which page an enquiry came from. It is deleted when you close your browser.</p>
-    <p>We do not currently use advertising or analytics cookies. If we add them in future, we will update this policy and ask for your consent where required.</p>
+    <h2>Essential storage (always on)</h2>
+    <ul>
+      <li><strong>Enquiry attribution</strong>: for the length of your visit we record the page you first landed on and any campaign tags in the link you followed, so we can see which page an enquiry came from. It is deleted when you close your browser.</li>
+      <li><strong>Your cookie choice</strong>: we remember whether you accepted or rejected advertising cookies, so we do not ask again on every page.</li>
+    </ul>
+    <h2>Advertising cookies (only with your consent)</h2>
+    <p>If you click &ldquo;Accept&rdquo;, we load the Meta Pixel, provided by Meta Platforms Ireland Ltd (Facebook and Instagram). It sets cookies such as <code>_fbp</code> and tells Meta which pages you viewed and whether you sent us an enquiry. This helps us measure our adverts and show them to relevant people. Meta&rsquo;s use of this information is covered by its own privacy policy at <a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noopener noreferrer">facebook.com/privacy/policy</a>.</p>
+    <p>If you click &ldquo;Reject&rdquo;, or make no choice, the Meta Pixel is not loaded.</p>
+    <h2>Changing your choice</h2>
+    <p>You can change your mind at any time using <button type="button" className="link-button" onClick={openConsent}>cookie settings</button>, which also appears in the footer of every page. You can also delete cookies in your browser settings.</p>
   </LegalPage>
 );

@@ -1,12 +1,12 @@
 # Polished Website System
 
-Everything for **polished-insurance.com** in one repository:
+Everything for **polished-insurance.co.uk** in one repository:
 
 | Folder | What it is | Where it runs |
 |---|---|---|
-| `website/` | Marketing site (React 19 + Vite, prerendered to static HTML), built on the same design and pipeline as the Boxx Finance site | `polished-insurance.com` (SiteGround) |
+| `website/` | Marketing site (React 19 + Vite, prerendered to static HTML), built on the same design and pipeline as the Boxx Finance site | `polished-insurance.co.uk` (SiteGround) |
 | `website/content-engine/` | Writes 1–2 detailed insurance guides a week for UK cleaning businesses, with internal links to enquiry pages | GitHub Actions (Tuesday + Friday) |
-| `crm/` | Staff CRM (PHP 8 + MySQL): leads, the full SSR cleaning questionnaire, automated email + SMS chasing | `crm.polished-insurance.com` (SiteGround) |
+| `crm/` | Staff CRM (PHP 8 + MySQL): leads, the full SSR cleaning questionnaire, automated email + SMS chasing | `crm.polished-insurance.co.uk` (SiteGround) |
 | `.github/workflows/` | Deploy website, deploy CRM, publish guides | GitHub |
 
 Nothing in the existing Boxx CRM, Boxx Commercial Finance, SSR Questionnaire or Polished Insurance folders was changed. Files were copied from them and adapted here.
@@ -19,7 +19,7 @@ Website quote form  ──POST──▶  crm/api/intake.php  ──▶  new lead
                                                          ├─ email + SMS: questionnaire link (message 1 of 3)
                                                          └─ team alert (email / optional Telegram)
 
-Client opens link  ──▶  polished-insurance.com/insurance-questionnaire?t=<token>
+Client opens link  ──▶  polished-insurance.co.uk/insurance-questionnaire?t=<token>
                         │  schema + saved answers + pre-filled contact details from crm/api/questionnaire.php
                         │  shows only the questions that apply (conditional logic), autosaves
                         └─ submit ──▶ lead → "Questionnaire Completed", reminders stop,

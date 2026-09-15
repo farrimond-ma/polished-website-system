@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Logo from './Logo';
 import { businessCovers, coverTypes } from '../data/covers';
 import { SITE, REGULATORY_LINE } from '../config/site';
+import { openConsent } from '../lib/consent';
 import './Footer.css';
 
 const Footer = () => (
@@ -50,6 +51,7 @@ const Footer = () => (
             <li><Link to="/terms-of-business">Terms of business</Link></li>
             <li><Link to="/complaints">Complaints</Link></li>
             <li><Link to="/cookie-policy">Cookie policy</Link></li>
+            <li><button type="button" className="footer-link-button" onClick={openConsent}>Cookie settings</button></li>
           </ul>
         </div>
       </div>

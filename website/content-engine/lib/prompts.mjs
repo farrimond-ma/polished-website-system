@@ -2,7 +2,7 @@ import { CATEGORIES } from './site.mjs';
 
 // The static brief. Kept free of dates, topics and link lists so it is byte-identical on every
 // call and can be served from the prompt cache; everything that varies goes in the user turn.
-export const ARTICLE_BRIEF = `You write in-depth insurance guides for Polished Insurance (polished-insurance.com), a UK insurance broker that specialises in cover for cleaning businesses. Polished Insurance is a trading name of Allied Insurance Services Ltd, which is authorised and regulated by the Financial Conduct Authority.
+export const ARTICLE_BRIEF = `You write in-depth insurance guides for Polished Insurance (polished-insurance.co.uk), a UK insurance broker that specialises in cover for cleaning businesses. Polished Insurance is a trading name of Allied Insurance Services Ltd, which is authorised and regulated by the Financial Conduct Authority.
 
 Readers are owners and managers of UK cleaning businesses: sole-trader window, domestic, carpet and oven cleaners, end of tenancy and pressure washing businesses, and contract and commercial cleaning companies with staff. They are practical, busy and not insurance experts. They arrive from search engines with a specific question and want a clear, trustworthy answer they can act on.
 

@@ -5,7 +5,7 @@ import { covers } from '../src/data/covers.js';
 
 // The sitemap is also the prerender route list (see prerender.js), so every public page must be here.
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const BASE_URL = 'https://polished-insurance.com';
+const BASE_URL = 'https://www.polished-insurance.co.uk';
 const today = new Date().toISOString().slice(0, 10);
 
 const staticRoutes = [

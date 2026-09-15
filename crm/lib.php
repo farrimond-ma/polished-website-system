@@ -184,7 +184,7 @@ function ensure_link_token(array &$lead): string {
     return $lead['link_token'];
 }
 function questionnaire_link(string $token): string {
-    return rtrim((string)cfg('questionnaire_url', 'https://polished-insurance.com/insurance-questionnaire'), '/') . '?t=' . urlencode($token);
+    return rtrim((string)cfg('questionnaire_url', 'https://www.polished-insurance.co.uk/insurance-questionnaire'), '/') . '?t=' . urlencode($token);
 }
 
 /* ---------- outgoing email ---------- */

@@ -13,7 +13,7 @@ function msg_first_name(array $lead): string {
 }
 
 function msg_email_wrap(string $innerHtml): string {
-    $phone = e(cfg('company_phone', '0330 056 8970'));
+    $phone = e(cfg('company_phone', '01942 403370'));
     return '<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.55;color:#1f2733;max-width:600px">'
         . '<div style="background:#0a192f;padding:18px 24px;border-radius:8px 8px 0 0">'
         . '<span style="color:#22d3ee;font-weight:bold;font-size:20px">Polished</span> '
@@ -37,7 +37,7 @@ function msg_button(string $link, string $label): string {
 function build_chase_email(array $lead, string $link, int $n = 1): array {
     $first = e(msg_first_name($lead));
     $started = ($lead['q_status'] ?? '') === 'in_progress';
-    $phone = cfg('company_phone', '0330 056 8970');
+    $phone = cfg('company_phone', '01942 403370');
     $btn = $started ? 'Continue my questionnaire' : 'Start my questionnaire';
 
     if ($n === 2) {
@@ -72,7 +72,7 @@ function build_chase_email(array $lead, string $link, int $n = 1): array {
 
 function build_chase_sms(array $lead, string $link, int $n = 1): string {
     $first = msg_first_name($lead);
-    $phone = cfg('company_phone', '0330 056 8970');
+    $phone = cfg('company_phone', '01942 403370');
     $started = ($lead['q_status'] ?? '') === 'in_progress';
     if ($n === 2) {
         return $started
@@ -88,7 +88,7 @@ function build_chase_sms(array $lead, string $link, int $n = 1): string {
 /** Confirmation to the client after they submit the questionnaire. */
 function build_submitted_email(array $lead): array {
     $first = e(msg_first_name($lead));
-    $phone = cfg('company_phone', '0330 056 8970');
+    $phone = cfg('company_phone', '01942 403370');
     $body = "<p>Hi {$first},</p><p>Thank you, we have received your completed insurance questionnaire (reference "
         . e(lead_ref((int)$lead['lead_id'])) . ').</p>'
         . '<p>One of our team will review your answers and approach our insurers. We will be in touch, usually within one working day, '

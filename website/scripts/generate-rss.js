@@ -3,7 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const BASE_URL = 'https://polished-insurance.com';
+const BASE_URL = 'https://www.polished-insurance.co.uk';
 const esc = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const posts = JSON.parse(fs.readFileSync(path.join(root, 'src/data/blogPosts.json'), 'utf8'))
   .filter((p) => p.status === 'published')

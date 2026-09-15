@@ -4,11 +4,11 @@
  * Run 3x a day by SiteGround cron, each run passing its "window" (1, 2 or 3). Each lead is
  * randomly assigned a window when scheduled, so reminders land at varied times of day.
  *
- *   php /home/customer/www/crm.polished-insurance.com/public_html/auto_chase.php 1   (e.g. 09:30)
- *   php /home/customer/www/crm.polished-insurance.com/public_html/auto_chase.php 2   (e.g. 13:00)
- *   php /home/customer/www/crm.polished-insurance.com/public_html/auto_chase.php 3   (e.g. 17:30)
+ *   php /home/customer/www/crm.polished-insurance.co.uk/public_html/auto_chase.php 1   (e.g. 09:30)
+ *   php /home/customer/www/crm.polished-insurance.co.uk/public_html/auto_chase.php 2   (e.g. 13:00)
+ *   php /home/customer/www/crm.polished-insurance.co.uk/public_html/auto_chase.php 3   (e.g. 17:30)
  *
- * Or by URL: https://crm.polished-insurance.com/auto_chase.php?key=<cron_key>&window=1
+ * Or by URL: https://crm.polished-insurance.co.uk/auto_chase.php?key=<cron_key>&window=1
  *
  * Message 1 is sent immediately when the lead arrives (or when staff click the button).
  * A lead stops being chased the moment the client submits the questionnaire.

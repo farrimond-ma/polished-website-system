@@ -16,11 +16,11 @@ return [
 
     // ---- app ----
     'app_name'     => 'Polished CRM',
-    'crm_base_url' => 'https://crm.polished-insurance.com',
+    'crm_base_url' => 'https://crm.polished-insurance.co.uk',
     // Client questionnaire page on the marketing website (the ?t=<token> is appended).
-    'questionnaire_url' => 'https://polished-insurance.com/insurance-questionnaire',
-    'site_url'     => 'https://polished-insurance.com',
-    'company_phone' => '0330 056 8970',
+    'questionnaire_url' => 'https://www.polished-insurance.co.uk/insurance-questionnaire',
+    'site_url'     => 'https://www.polished-insurance.co.uk',
+    'company_phone' => '01942 403370',
     'company_email' => 'hello@polished-insurance.co.uk',
 
     // ---- website -> CRM API ----
@@ -29,7 +29,7 @@ return [
     // honeypot, timing check and per-IP rate limit in api/intake.php do the real work.
     'intake_key' => 'CHANGE_ME',
     // Origins allowed to call api/intake.php and api/questionnaire.php from the browser.
-    'allowed_origins' => ['https://polished-insurance.com', 'https://www.polished-insurance.com'],
+    'allowed_origins' => ['https://www.polished-insurance.co.uk', 'https://polished-insurance.co.uk'],
 
     // ---- chasing ----
     // true  = a new website enquiry gets the questionnaire link (email + SMS) straight away.

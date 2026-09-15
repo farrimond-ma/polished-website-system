@@ -3,4 +3,4 @@ Allow: /
 Disallow: /insurance-questionnaire
 Disallow: /get-a-quote/thank-you
 
-Sitemap: https://polished-insurance.com/sitemap.xml
+Sitemap: https://www.polished-insurance.co.uk/sitemap.xml

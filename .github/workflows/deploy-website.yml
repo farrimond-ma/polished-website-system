@@ -71,5 +71,7 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftps
+          # SiteGround's certificate names its own server, not the FTP hostname: keep TLS, skip hostname check
+          security: loose
           local-dir: website/dist/
           server-dir: ${{ vars.WEBSITE_SERVER_DIR || 'polished-insurance.co.uk/public_html/' }}

@@ -30,6 +30,8 @@ jobs:
           username: ${{ secrets.CRM_FTP_USERNAME || secrets.FTP_USERNAME }}
           password: ${{ secrets.CRM_FTP_PASSWORD || secrets.FTP_PASSWORD }}
           protocol: ftps
+          # SiteGround's certificate names its own server, not the FTP hostname: keep TLS, skip hostname check
+          security: loose
           local-dir: crm/
           server-dir: ${{ vars.CRM_SERVER_DIR || 'crm.polished-insurance.co.uk/public_html/' }}
           exclude: |

@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             add_note($id, 'Contact details edited.', (int)current_user()['user_id']);
             flash('Lead updated.');
         } else {
-            $pdo->prepare('INSERT INTO lead (' . implode(',', $cols) . ', status, link_token, created_at, updated_at) VALUES (' . str_repeat('?,', count($cols)) . '?,?,?,?)')
+            $pdo->prepare('INSERT INTO leads (' . implode(',', $cols) . ', status, link_token, created_at, updated_at) VALUES (' . str_repeat('?,', count($cols)) . '?,?,?,?)')
                 ->execute([...$vals, 'New Enquiry', new_link_token(), now(), now()]);
             $id = (int)$pdo->lastInsertId();
             add_note($id, 'Lead added manually (' . $f['source'] . ').', (int)current_user()['user_id']);

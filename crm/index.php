@@ -6,19 +6,19 @@ $me = (int)current_user()['user_id'];
 $today = date('Y-m-d');
 
 $stat = fn(string $sql, array $a = []) => (function () use ($pdo, $sql, $a) { $s = $pdo->prepare($sql); $s->execute($a); return (int)$s->fetchColumn(); })();
-$newThisWeek = $stat('SELECT COUNT(*) FROM lead WHERE created_at >= ?', [date('Y-m-d 00:00:00', strtotime('monday this week'))]);
-$chasing = $stat('SELECT COUNT(*) FROM lead WHERE chasing = 1');
-$inProgress = $stat("SELECT COUNT(*) FROM lead WHERE q_status = 'in_progress'");
-$completed30 = $stat("SELECT COUNT(*) FROM lead WHERE q_status = 'submitted' AND q_submitted_at >= ?", [date('Y-m-d H:i:s', strtotime('-30 days'))]);
+$newThisWeek = $stat('SELECT COUNT(*) FROM leads WHERE created_at >= ?', [date('Y-m-d 00:00:00', strtotime('monday this week'))]);
+$chasing = $stat('SELECT COUNT(*) FROM leads WHERE chasing = 1');
+$inProgress = $stat("SELECT COUNT(*) FROM leads WHERE q_status = 'in_progress'");
+$completed30 = $stat("SELECT COUNT(*) FROM leads WHERE q_status = 'submitted' AND q_submitted_at >= ?", [date('Y-m-d H:i:s', strtotime('-30 days'))]);
 
 $attention = needs_attention_leads();
 
-$st = $pdo->prepare('SELECT t.*, l.first_name, l.last_name, l.company_name FROM lead_task t LEFT JOIN lead l ON l.lead_id = t.lead_id
+$st = $pdo->prepare('SELECT t.*, l.first_name, l.last_name, l.company_name FROM lead_task t LEFT JOIN leads l ON l.lead_id = t.lead_id
     WHERE t.done_at IS NULL AND t.due_date <= ? AND (t.assigned_to = ? OR t.assigned_to IS NULL) ORDER BY t.due_date LIMIT 30');
 $st->execute([$today, $me]);
 $tasks = $st->fetchAll();
 
-$recent = $pdo->query("SELECT n.*, l.first_name, l.last_name, l.company_name FROM lead_note n JOIN lead l ON l.lead_id = n.lead_id
+$recent = $pdo->query("SELECT n.*, l.first_name, l.last_name, l.company_name FROM lead_note n JOIN leads l ON l.lead_id = n.lead_id
     WHERE n.created_by IS NULL ORDER BY n.note_id DESC LIMIT 12")->fetchAll();
 
 layout_header('Dashboard');

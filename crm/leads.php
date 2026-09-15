@@ -8,7 +8,7 @@ $q = trim((string)param('q', ''));
 $qs = (string)param('qs', '');
 
 $counts = [];
-foreach ($pdo->query('SELECT status, COUNT(*) c FROM lead GROUP BY status') as $r) $counts[$r['status']] = (int)$r['c'];
+foreach ($pdo->query('SELECT status, COUNT(*) c FROM leads GROUP BY status') as $r) $counts[$r['status']] = (int)$r['c'];
 $openCount = 0;
 foreach ($counts as $s => $c) if (!in_array($s, terminal_statuses(), true)) $openCount += $c;
 
@@ -26,7 +26,7 @@ if ($q !== '') {
     $where[] = '(lead_id = ? OR first_name LIKE ? OR last_name LIKE ? OR company_name LIKE ? OR email LIKE ? OR phone LIKE ?)';
     array_push($args, $id, $like, $like, $like, $like, $like);
 }
-$sql = 'SELECT * FROM lead' . ($where ? ' WHERE ' . implode(' AND ', $where) : '') . ' ORDER BY lead_id DESC LIMIT 500';
+$sql = 'SELECT * FROM leads' . ($where ? ' WHERE ' . implode(' AND ', $where) : '') . ' ORDER BY lead_id DESC LIMIT 500';
 $st = $pdo->prepare($sql);
 $st->execute($args);
 $leads = $st->fetchAll();

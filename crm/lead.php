@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!is_admin()) { flash('Admins only.'); break; }
             $pdo->prepare('DELETE FROM lead_note WHERE lead_id = ?')->execute([$id]);
             $pdo->prepare('DELETE FROM lead_task WHERE lead_id = ?')->execute([$id]);
-            $pdo->prepare('DELETE FROM lead WHERE lead_id = ?')->execute([$id]);
+            $pdo->prepare('DELETE FROM leads WHERE lead_id = ?')->execute([$id]);
             flash(lead_ref($id) . ' and all its data have been deleted.');
             redirect('leads.php');
     }

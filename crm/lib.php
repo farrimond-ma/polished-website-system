@@ -217,13 +217,13 @@ function lead_name(array $lead): string {
 }
 
 function find_lead(int $id): ?array {
-    $st = db()->prepare('SELECT * FROM lead WHERE lead_id = ?');
+    $st = db()->prepare('SELECT * FROM leads WHERE lead_id = ?');
     $st->execute([$id]);
     return $st->fetch() ?: null;
 }
 function find_lead_by_token(string $token): ?array {
     if (!preg_match('/^[a-f0-9]{48}$/', $token)) return null;
-    $st = db()->prepare('SELECT * FROM lead WHERE link_token = ?');
+    $st = db()->prepare('SELECT * FROM leads WHERE link_token = ?');
     $st->execute([$token]);
     return $st->fetch() ?: null;
 }
@@ -236,7 +236,7 @@ function add_note(int $leadId, string $body, ?int $userId = null): void {
 function touch_lead(int $leadId, array $fields): void {
     $fields['updated_at'] = now();
     $sets = implode(', ', array_map(fn($k) => "$k = ?", array_keys($fields)));
-    db()->prepare("UPDATE lead SET $sets WHERE lead_id = ?")->execute([...array_values($fields), $leadId]);
+    db()->prepare("UPDATE leads SET $sets WHERE lead_id = ?")->execute([...array_values($fields), $leadId]);
 }
 
 /* ---------- client links ---------- */
@@ -415,7 +415,7 @@ function stop_chasing(int $leadId): void {
 }
 
 function auto_chaseable_leads(int $window): array {
-    $st = db()->prepare("SELECT * FROM lead
+    $st = db()->prepare("SELECT * FROM leads
         WHERE chasing = 1 AND auto_chase_count <= ? AND q_status <> 'submitted'
           AND next_chase_date IS NOT NULL AND next_chase_date <= ?
           AND (next_chase_window IS NULL OR next_chase_window <= ?)
@@ -427,7 +427,7 @@ function auto_chaseable_leads(int $window): array {
 /** Open leads that need a human: overdue follow-up, or chasing finished with no response. */
 function needs_attention_leads(): array {
     $terminal = implode(',', array_map(fn($s) => db()->quote($s), terminal_statuses()));
-    $st = db()->prepare("SELECT * FROM lead
+    $st = db()->prepare("SELECT * FROM leads
         WHERE status NOT IN ($terminal) AND chasing = 0
           AND ((next_follow_up IS NOT NULL AND next_follow_up <= ?) OR status IN ('New Enquiry','Questionnaire Completed'))
         ORDER BY COALESCE(next_follow_up, created_at) ASC LIMIT 50");

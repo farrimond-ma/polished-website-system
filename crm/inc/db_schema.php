@@ -1,6 +1,6 @@
 <?php
 /**
- * Database schema. Runs automatically (cheaply — guarded by a version number in the
+ * Database schema. (The main table is "leads": LEAD is a reserved word in MySQL 8 / MariaDB.) Runs automatically (cheaply — guarded by a version number in the
  * setting table) the first time db() connects after a deploy, so there are no SQL
  * files to remember to run in phpMyAdmin. Works on MySQL and on SQLite for local tests.
  *
@@ -27,7 +27,7 @@ function schema_migrations(bool $sqlite): array {
                 role VARCHAR(20) NOT NULL DEFAULT 'staff',
                 created_at $now
             )$tail",
-            "CREATE TABLE IF NOT EXISTS lead (
+            "CREATE TABLE IF NOT EXISTS leads (
                 lead_id $pk,
                 status VARCHAR(40) NOT NULL DEFAULT 'New Enquiry',
                 first_name VARCHAR(100) NOT NULL DEFAULT '',
@@ -81,9 +81,9 @@ function schema_migrations(bool $sqlite): array {
                 skey VARCHAR(80) NOT NULL PRIMARY KEY,
                 svalue $big NULL
             )$tail",
-            "CREATE INDEX idx_lead_status ON lead (status)",
-            "CREATE INDEX idx_lead_email ON lead (email)",
-            "CREATE INDEX idx_lead_chase ON lead (chasing, next_chase_date)",
+            "CREATE INDEX idx_lead_status ON leads (status)",
+            "CREATE INDEX idx_lead_email ON leads (email)",
+            "CREATE INDEX idx_lead_chase ON leads (chasing, next_chase_date)",
             "CREATE INDEX idx_note_lead ON lead_note (lead_id)",
             "CREATE INDEX idx_task_due ON lead_task (due_date)",
         ],

@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $where = [$show === 'open' ? 't.done_at IS NULL' : 't.done_at IS NOT NULL'];
 $args = [];
 if ($view === 'mine') { $where[] = '(t.assigned_to = ? OR t.assigned_to IS NULL)'; $args[] = $me; }
-$st = $pdo->prepare('SELECT t.*, l.first_name, l.last_name, l.company_name FROM lead_task t LEFT JOIN lead l ON l.lead_id = t.lead_id
+$st = $pdo->prepare('SELECT t.*, l.first_name, l.last_name, l.company_name FROM lead_task t LEFT JOIN leads l ON l.lead_id = t.lead_id
     WHERE ' . implode(' AND ', $where) . ' ORDER BY ' . ($show === 'open' ? 't.due_date ASC' : 't.done_at DESC') . ' LIMIT 300');
 $st->execute($args);
 $tasks = $st->fetchAll();

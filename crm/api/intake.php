@@ -48,13 +48,13 @@ $pdo = db();
 $ipHash = client_ip_hash();
 
 // Per-IP rate limit: 5 enquiries an hour is plenty for a real person.
-$st = $pdo->prepare('SELECT COUNT(*) FROM lead WHERE ip_hash = ? AND created_at >= ?');
+$st = $pdo->prepare('SELECT COUNT(*) FROM leads WHERE ip_hash = ? AND created_at >= ?');
 $st->execute([$ipHash, date('Y-m-d H:i:s', time() - 3600)]);
 if ((int)$st->fetchColumn() >= 5) json_out(['ok' => false, 'error' => 'Too many enquiries — please call us instead.'], 429);
 
 // Same person enquiring again within 30 days while their lead is still open: log it on that lead.
 $terminal = implode(',', array_map(fn($s) => $pdo->quote($s), terminal_statuses()));
-$st = $pdo->prepare("SELECT * FROM lead WHERE email = ? AND status NOT IN ($terminal) AND created_at >= ? ORDER BY lead_id DESC LIMIT 1");
+$st = $pdo->prepare("SELECT * FROM leads WHERE email = ? AND status NOT IN ($terminal) AND created_at >= ? ORDER BY lead_id DESC LIMIT 1");
 $st->execute([$email, date('Y-m-d H:i:s', time() - 30 * 86400)]);
 if ($existing = $st->fetch()) {
     add_note((int)$existing['lead_id'], 'Submitted the website enquiry form again'
@@ -67,7 +67,7 @@ if ($existing = $st->fetch()) {
 }
 
 $consentText = $str('consent_text', 500) ?: 'Agreed to be contacted by Polished Insurance about an insurance quote.';
-$pdo->prepare('INSERT INTO lead (status, first_name, last_name, company_name, email, phone, source, landing_page, cover_interest,
+$pdo->prepare('INSERT INTO leads (status, first_name, last_name, company_name, email, phone, source, landing_page, cover_interest,
         utm_source, utm_medium, utm_campaign, consent_text, consent_at, ip_hash, link_token, next_follow_up, created_at, updated_at)
         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)')
     ->execute(['New Enquiry', $first, $last, $str('company_name'), $email, $phone, 'Website form',

@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif ($action === 'delete') {
         if ($self) flash('You cannot delete yourself.');
         else {
-            $pdo->prepare('UPDATE lead SET assigned_to = NULL WHERE assigned_to = ?')->execute([$targetId]);
+            $pdo->prepare('UPDATE leads SET assigned_to = NULL WHERE assigned_to = ?')->execute([$targetId]);
             $pdo->prepare('UPDATE lead_task SET assigned_to = NULL WHERE assigned_to = ?')->execute([$targetId]);
             $pdo->prepare('DELETE FROM app_user WHERE user_id = ?')->execute([$targetId]);
             flash('User deleted.');

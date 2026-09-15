@@ -112,7 +112,7 @@ const Home = () => (
                 <div className="blog-card-content">
                   <h3>{p.title}</h3>
                   <p>{p.excerpt}</p>
-                  <p className="blog-card-date">Published {formatDate(p.publishedAt || p.date)}</p>
+                  <p className="blog-card-date">{p.updatedAt ? `Updated ${formatDate(p.updatedAt)}` : `Published ${formatDate(p.publishedAt || p.date)}`}</p>
                   <span className="read-more">Read guide &rarr;</span>
                 </div>
               </Link>

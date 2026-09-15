@@ -49,7 +49,7 @@ const GuidePost = () => {
     datePublished: post.publishedAt || post.date,
     dateModified: post.updatedAt || post.publishedAt || post.date,
     author: { '@type': 'Organization', name: post.author || `${SITE.name} team`, url: SITE.url },
-    publisher: { '@type': 'Organization', name: SITE.name, logo: { '@type': 'ImageObject', url: `${SITE.url}/favicon.svg` } },
+    publisher: { '@type': 'Organization', name: SITE.name, logo: { '@type': 'ImageObject', url: `${SITE.url}/images/brand/logo.png` } },
     mainEntityOfPage: { '@type': 'WebPage', '@id': url },
   };
   const cover = coversBySlug[post.coverSlug];

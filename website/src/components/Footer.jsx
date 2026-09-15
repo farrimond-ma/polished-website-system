@@ -11,7 +11,7 @@ const Footer = () => (
     <div className="container">
       <div className="footer-content">
         <div className="footer-brand">
-          <Link to="/" className="footer-logo" aria-label="Polished Insurance home"><Logo light /></Link>
+          <Link to="/" className="footer-logo" aria-label="Polished Insurance home"><Logo height={56} className="logo-footer" /></Link>
           <p>Specialist insurance for UK cleaning businesses, arranged by a team that understands your trade.</p>
           <p className="footer-contact-line">
             <a href={SITE.phoneHref}>{SITE.phoneDisplay}</a><br />

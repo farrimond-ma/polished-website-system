@@ -553,3 +553,7 @@ export const covers = [
 export const coversBySlug = Object.fromEntries(covers.map((c) => [c.slug, c]));
 export const businessCovers = covers.filter((c) => c.kind === 'business');
 export const coverTypes = covers.filter((c) => c.kind === 'cover');
+
+// Images (from the previous site, optimised into public/images/covers by the image pipeline).
+export const coverImage = (slug) => `/images/covers/${slug}.webp`;
+export const coverHeroImage = (slug) => `/images/covers/${slug}-hero.webp`;

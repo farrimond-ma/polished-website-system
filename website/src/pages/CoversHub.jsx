@@ -1,22 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
-import Icon from '../components/Icons';
+import CoverGrid from '../components/CoverGrid';
 import { ResourceHero, FinalCtaBand } from '../components/resource/ResourceHero';
 import { businessCovers, coverTypes } from '../data/covers';
-
-const Grid = ({ items }) => (
-  <div className="services-grid">
-    {items.map((c) => (
-      <Link to={`/cleaning-insurance/${c.slug}`} className="service-card" key={c.slug}>
-        <div className="service-icon"><Icon name={c.icon} size={28} /></div>
-        <h3>{c.title}</h3>
-        <p>{c.cardBlurb}</p>
-        <span className="service-link">Find out more &rarr;</span>
-      </Link>
-    ))}
-  </div>
-);
 
 const CoversHub = () => (
   <>
@@ -32,13 +18,13 @@ const CoversHub = () => (
     <section className="section services">
       <div className="container">
         <div className="section-header"><h2>By type of <span className="text-highlight">cleaning business</span></h2></div>
-        <Grid items={businessCovers} />
+        <CoverGrid items={businessCovers} />
       </div>
     </section>
     <section className="section">
       <div className="container">
         <div className="section-header"><h2>By type of <span className="text-highlight">cover</span></h2></div>
-        <Grid items={coverTypes} />
+        <CoverGrid items={coverTypes} />
       </div>
     </section>
     <FinalCtaBand />

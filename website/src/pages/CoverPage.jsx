@@ -7,7 +7,7 @@ import FaqAccordion from '../components/resource/FaqAccordion';
 import CoverCards from '../components/resource/CoverCards';
 import GuidesList from '../components/resource/GuidesList';
 import { MidCta } from '../components/ArticleCtas';
-import { coversBySlug } from '../data/covers';
+import { coversBySlug, coverImage, coverHeroImage } from '../data/covers';
 import { SITE } from '../config/site';
 import NotFound from './NotFound';
 import '../components/Article.css';
@@ -55,10 +55,11 @@ const CoverPage = () => {
 
   return (
     <div className="resource-page" data-page-type="cover-page">
-      <SEO title={cover.metaTitle} description={cover.metaDescription} canonical={`/cleaning-insurance/${cover.slug}`} type="website" schema={[serviceSchema, faqSchema, breadcrumb]} />
+      <SEO title={cover.metaTitle} description={cover.metaDescription} canonical={`/cleaning-insurance/${cover.slug}`} type="website" image={coverHeroImage(cover.slug)} schema={[serviceSchema, faqSchema, breadcrumb]} />
       <ResourceHero
         title={cover.title}
         description={cover.description}
+        heroImage={coverHeroImage(cover.slug)}
         primaryCtaTo={quoteTo}
         aside={<QuoteForm heading="Get your quote" coverInterest={cover.title} />}
       />
@@ -67,6 +68,7 @@ const CoverPage = () => {
           <Link to="/">Home</Link> <span>/</span> <Link to="/cleaning-insurance">Cleaning insurance</Link> <span>/</span> <span>{cover.title}</span>
         </nav>
         <div className="resource-main-card">
+          <figure className="cover-figure"><img src={coverImage(cover.slug)} alt={cover.title} width="800" height="600" /></figure>
           <div className="blog-post-content service-page-content">
             {cover.intro.map((p, i) => <p key={i}>{p}</p>)}
             {cover.sections.slice(0, midpoint).map(renderSection)}

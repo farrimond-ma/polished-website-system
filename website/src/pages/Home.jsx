@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
 import Icon from '../components/Icons';
 import QuoteForm from '../components/QuoteForm';
+import CoverGrid from '../components/CoverGrid';
 import { ResourceHero, FinalCtaBand } from '../components/resource/ResourceHero';
 import FaqAccordion from '../components/resource/FaqAccordion';
 import { businessCovers, coverTypes } from '../data/covers';
@@ -18,7 +19,7 @@ const orgSchema = {
   name: SITE.name,
   legalName: SITE.legalName,
   url: SITE.url,
-  logo: `${SITE.url}/favicon.svg`,
+  logo: `${SITE.url}/images/brand/logo.png`,
   telephone: '+44-1942-403370',
   email: SITE.email,
   address: { '@type': 'PostalAddress', streetAddress: '98 Standishgate', addressLocality: 'Wigan', postalCode: 'WN1 1XA', addressCountry: 'GB' },
@@ -40,6 +41,7 @@ const Home = () => (
       eyebrow="Specialist cleaning insurance"
       title={<>Insurance for <span className="text-highlight">cleaning businesses</span></>}
       description="From sole-trader window cleaners to contract cleaning companies with hundreds of staff, we arrange cover that matches the work you do, the premises you work in and the contracts you hold."
+      heroImage="/images/hero/home.webp"
       aside={<QuoteForm heading="Get a quote" />}
     />
 
@@ -65,16 +67,7 @@ const Home = () => (
           <h2>Cover for every kind of <span className="text-highlight">cleaning business</span></h2>
           <p>Choose your type of business to see the risks insurers look at and the covers most cleaners in your line of work choose.</p>
         </div>
-        <div className="services-grid">
-          {businessCovers.map((c) => (
-            <Link to={`/cleaning-insurance/${c.slug}`} className="service-card" key={c.slug}>
-              <div className="service-icon"><Icon name={c.icon} size={28} /></div>
-              <h3>{c.title}</h3>
-              <p>{c.cardBlurb}</p>
-              <span className="service-link">Find out more &rarr;</span>
-            </Link>
-          ))}
-        </div>
+        <CoverGrid items={businessCovers} />
       </div>
     </section>
 
@@ -100,16 +93,7 @@ const Home = () => (
           <p className="eyebrow">Covers</p>
           <h2>The covers cleaners <span className="text-highlight">ask us about</span></h2>
         </div>
-        <div className="services-grid">
-          {coverTypes.map((c) => (
-            <Link to={`/cleaning-insurance/${c.slug}`} className="service-card" key={c.slug}>
-              <div className="service-icon"><Icon name={c.icon} size={28} /></div>
-              <h3>{c.title}</h3>
-              <p>{c.cardBlurb}</p>
-              <span className="service-link">Find out more &rarr;</span>
-            </Link>
-          ))}
-        </div>
+        <CoverGrid items={coverTypes} />
       </div>
     </section>
 

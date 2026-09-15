@@ -468,10 +468,10 @@ function layout_header(string $title = '', string $bodyClass = ''): void {
     echo "<!doctype html><html lang='en'><head><meta charset='utf-8'>";
     echo "<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='robots' content='noindex,nofollow'>";
     echo "<title>" . ($title ? e($title) . ' · ' : '') . "Polished CRM</title>";
-    echo "<link rel='icon' href='" . asset('assets/img/favicon.svg') . "'>";
+    echo "<link rel='icon' type='image/png' href='" . asset('assets/img/favicon.png') . "'>";
     echo "<link rel='stylesheet' href='" . asset('assets/style.css') . "'></head><body class='" . e($bodyClass) . "'>";
     echo "<header class='topbar'><div class='wrap'>";
-    echo "<a class='logo' href='index.php'><span class='logo-mark'>P</span><span class='logo-text'>Polished <em>CRM</em></span></a>";
+    echo "<a class='logo' href='index.php'><img class='logo-mark' src='" . asset('assets/img/icon.png') . "' alt='' width='30' height='30'><span class='logo-text'>Polished <em>CRM</em></span></a>";
     if ($u) {
         $page = basename((string)($_SERVER['SCRIPT_NAME'] ?? ''));
         $nav = function (string $href, string $label, array $on) use ($page) {

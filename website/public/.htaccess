@@ -46,6 +46,8 @@
 Options -Indexes -MultiViews
 <IfModule mod_dir.c>
   DirectorySlash Off
+  # The static build's index.html always wins (the SiteGround folder may still hold an old index.php)
+  DirectoryIndex index.html
 </IfModule>
 
 <IfModule mod_rewrite.c>

@@ -19,6 +19,11 @@ concurrency:
 
 jobs:
   build-and-deploy:
+    # Safety switch: automatic deploys (pushes and guide publishing) only upload once the
+    # repository variable WEBSITE_DEPLOY_ENABLED is set to "true" (Settings -> Secrets and
+    # variables -> Actions -> Variables). Running "Deploy website" itself manually always deploys
+    # (github.workflow is the CALLER's name when "Publish guide" calls this, so that doesn't count).
+    if: ${{ vars.WEBSITE_DEPLOY_ENABLED == 'true' || (github.event_name == 'workflow_dispatch' && github.workflow == 'Deploy website') }}
     runs-on: ubuntu-latest
     defaults:
       run:

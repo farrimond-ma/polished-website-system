@@ -1,5 +1,7 @@
 # Polished CRM (crm.polished-insurance.co.uk)
 Options -Indexes
+# Load the CRM, not SiteGround's placeholder Default.html
+DirectoryIndex index.php
 
 # Force HTTPS
 <IfModule mod_rewrite.c>

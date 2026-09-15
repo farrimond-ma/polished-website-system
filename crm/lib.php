@@ -18,6 +18,16 @@ require_once __DIR__ . '/inc/db_schema.php';
 require_once __DIR__ . '/inc/questionnaire.php';
 require_once __DIR__ . '/inc/messages.php';
 
+// Any other unexpected error: log the detail, show a plain page instead of a blank 500.
+set_exception_handler(function (\Throwable $ex) {
+    error_log('Polished CRM unhandled ' . get_class($ex) . ': ' . $ex->getMessage() . ' in ' . basename($ex->getFile()) . ':' . $ex->getLine());
+    if (!headers_sent()) http_response_code(500);
+    if (defined('POLISHED_API')) { header('Content-Type: application/json'); echo json_encode(['ok' => false, 'error' => 'Something went wrong. Please try again or call us.']); return; }
+    echo '<!doctype html><meta charset="utf-8"><title>Polished CRM error</title><div style="font-family:Arial,sans-serif;max-width:620px;margin:10vh auto;padding:24px;border:1px solid #e2e8ef;border-top:4px solid #b42323;border-radius:8px">'
+        . '<h1 style="font-size:20px;margin:0 0 10px">Something went wrong</h1><p>Error type: ' . htmlspecialchars(get_class($ex)) . ' in '
+        . htmlspecialchars(basename($ex->getFile())) . ' line ' . (int)$ex->getLine() . '. The full detail is in the php_errorlog file in the CRM folder.</p></div>';
+});
+
 if (PHP_SAPI !== 'cli' && !defined('POLISHED_API')) {
     session_set_cookie_params([
         'httponly' => true,
@@ -55,7 +65,13 @@ function config(): array {
         if (!is_file($file)) {
             setup_problem('config.php has not been uploaded. Copy your completed config.php into this folder (next to index.php) using SiteGround File Manager.');
         }
-        $cfg = require $file;
+        try {
+            $cfg = require $file;
+        } catch (\ParseError $ex) {
+            error_log('Polished CRM config.php parse error: ' . $ex->getMessage() . ' line ' . $ex->getLine());
+            setup_problem('config.php has a typing error near line ' . $ex->getLine() . '. The most common cause is an apostrophe (\') or backslash (\\) inside a password: put a backslash before it (e.g. it\\\'s) or change the password. Also check every value is wrapped in single quotes and each line ends with a comma.');
+        }
+        if (!is_array($cfg)) setup_problem('config.php is not in the expected format. Start again from config.sample.php and fill in the values.');
         $unfilled = [];
         array_walk_recursive($cfg, function ($v, $k) use (&$unfilled) {
             if (is_string($v) && str_starts_with($v, 'ENTER_')) $unfilled[] = $k;
@@ -99,7 +115,16 @@ function db(): PDO {
     }
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-    ensure_schema($pdo, $sqlite);
+    try {
+        ensure_schema($pdo, $sqlite);
+    } catch (PDOException $ex) {
+        error_log('Polished CRM could not create database tables: ' . $ex->getMessage());
+        $code = (int)($ex->errorInfo[1] ?? 0);
+        setup_problem(match ($code) {
+            1142, 1044, 1227 => 'The database user is not allowed to create the CRM tables. In Site Tools → MySQL → Databases, make sure the user is added to this database with All Privileges.',
+            default => 'The database connected, but the CRM tables could not be created (database error ' . ($code ?: $ex->getCode()) . '). Send this number to your developer.',
+        });
+    }
     return $pdo;
 }
 

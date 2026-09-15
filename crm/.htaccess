@@ -11,7 +11,7 @@ DirectoryIndex index.php
 </IfModule>
 
 # Never serve config, docs, SQL, logs or JSON schema directly.
-<FilesMatch "(^config\.php$|\.(sql|md|log|sqlite|json)$)">
+<FilesMatch "(^config\.php$|^php_errorlog$|^error_log$|\.(sql|md|log|sqlite|json)$)">
     <IfModule mod_authz_core.c>
         Require all denied
     </IfModule>

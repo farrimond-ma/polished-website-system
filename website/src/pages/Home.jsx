@@ -45,8 +45,6 @@ const Home = () => (
       quoteAnchor="#quote"
     />
 
-    <QuoteSection image="/images/hero/home.webp" heading="Get your quote" />
-
     <section className="section">
       <div className="container">
         <div className="section-header">
@@ -61,6 +59,8 @@ const Home = () => (
         </div>
       </div>
     </section>
+
+    <QuoteSection heading="Get your quote" />
 
     <section className="section services" id="cleaning-businesses">
       <div className="container">

@@ -1,23 +1,13 @@
 import React from 'react';
 import QuoteForm from './QuoteForm';
-import { heroSrcSet } from '../lib/images';
 import './QuoteSection.css';
 
-// The quote form in its own section straight after the hero (target of the hero's
-// "Get your quote" button). Desktop: the hero image beside the form. Phones: a slim image
-// banner above the form, so the form is reached with minimal scrolling.
-const QuoteSection = ({ image, imageAlt = '', coverInterest = '', heading = 'Get your quote', compact = false }) => (
+// The full-width quote form (target of the hero's "Get your quote" button, #quote). It sits part-way
+// down the page, after the visitor has read how it works (home) or the first half of a cover page.
+// On desktop the fields sit side by side; on phones they stack.
+const QuoteSection = ({ coverInterest = '', heading = 'Get your quote', compact = false }) => (
   <section id="quote" className={`quote-section${compact ? ' is-compact' : ''}`}>
-    <div className="quote-section-grid">
-      {image && (
-        <div className="quote-section-image">
-          <img src={image} srcSet={heroSrcSet(image)} sizes="(max-width: 860px) 100vw, 590px" alt={imageAlt} loading="eager" width="1440" height="1024" />
-        </div>
-      )}
-      <div className="quote-section-form">
-        <QuoteForm heading={heading} coverInterest={coverInterest} compact />
-      </div>
-    </div>
+    <QuoteForm heading={heading} coverInterest={coverInterest} compact wide />
   </section>
 );
 

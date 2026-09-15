@@ -6,7 +6,6 @@ import { ResourceHero, FinalCtaBand } from '../components/resource/ResourceHero'
 import FaqAccordion from '../components/resource/FaqAccordion';
 import CoverCards from '../components/resource/CoverCards';
 import GuidesList from '../components/resource/GuidesList';
-import { MidCta } from '../components/ArticleCtas';
 import { coversBySlug, coverHeroImage } from '../data/covers';
 import { SITE } from '../config/site';
 import NotFound from './NotFound';
@@ -68,11 +67,12 @@ const CoverPage = () => {
           <Link to="/">Home</Link> <span>/</span> <Link to="/cleaning-insurance">Cleaning insurance</Link> <span>/</span> <span>{cover.title}</span>
         </nav>
         <div className="resource-main-card">
-          <QuoteSection compact image={coverHeroImage(cover.slug)} imageAlt={cover.title} coverInterest={cover.title} heading="Get your quote" />
           <div className="blog-post-content service-page-content">
             {cover.intro.map((p, i) => <p key={i}>{p}</p>)}
             {cover.sections.slice(0, midpoint).map(renderSection)}
-            <MidCta coverSlug={cover.slug} />
+          </div>
+          <QuoteSection compact coverInterest={cover.title} heading={`Get your ${cover.title.toLowerCase()} quote`} />
+          <div className="blog-post-content service-page-content">
             {cover.sections.slice(midpoint).map(renderSection)}
           </div>
         </div>

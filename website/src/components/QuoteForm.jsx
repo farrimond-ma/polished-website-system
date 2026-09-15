@@ -10,7 +10,7 @@ const CONSENT_TEXT =
 
 // Lead capture: contact details only. Everything else is collected afterwards by the
 // questionnaire link the CRM emails and texts to the client.
-const QuoteForm = ({ coverInterest = '', heading = 'Get a quote', intro, compact = false }) => {
+const QuoteForm = ({ coverInterest = '', heading = 'Get a quote', intro, compact = false, wide = false }) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const startedAt = useRef(Date.now());
@@ -72,7 +72,7 @@ const QuoteForm = ({ coverInterest = '', heading = 'Get a quote', intro, compact
   };
 
   const field = (name, label, props = {}) => (
-    <div className={`qf-field${errors[name] ? ' has-error' : ''}`}>
+    <div className={`qf-field qf-f-${name}${errors[name] ? ' has-error' : ''}`}>
       <label htmlFor={`qf-${name}`}>{label}</label>
       <input id={`qf-${name}`} name={name} value={values[name]} onChange={set} aria-invalid={!!errors[name]} {...props} />
       {errors[name] && <span className="qf-error">{errors[name]}</span>}
@@ -80,9 +80,10 @@ const QuoteForm = ({ coverInterest = '', heading = 'Get a quote', intro, compact
   );
 
   return (
-    <form className={`quote-form${compact ? ' is-compact' : ''}`} onSubmit={submit} noValidate>
+    <form className={`quote-form${compact ? ' is-compact' : ''}${wide ? ' is-wide' : ''}`} onSubmit={submit} noValidate>
       {heading && <h2 className="qf-heading">{heading}</h2>}
       <p className="qf-intro">{intro || 'Just your contact details for now. We will send you a short questionnaire to complete in your own time.'}</p>
+      <div className="qf-fields">
       <div className="qf-row">
         {field('first_name', 'First name', { autoComplete: 'given-name', required: true })}
         {field('last_name', 'Last name', { autoComplete: 'family-name', required: true })}
@@ -90,6 +91,7 @@ const QuoteForm = ({ coverInterest = '', heading = 'Get a quote', intro, compact
       {field('company_name', 'Business name (optional)', { autoComplete: 'organization' })}
       {field('email', 'Email address', { type: 'email', autoComplete: 'email', inputMode: 'email', required: true })}
       {field('phone', 'Mobile number', { type: 'tel', autoComplete: 'tel', inputMode: 'tel', required: true })}
+      </div>
 
       {/* Honeypot: hidden from people, filled in by bots. */}
       <div className="qf-hp" aria-hidden="true">
@@ -97,6 +99,9 @@ const QuoteForm = ({ coverInterest = '', heading = 'Get a quote', intro, compact
         <input id="qf-website" name="website" tabIndex={-1} autoComplete="off" value={values.website} onChange={set} />
       </div>
 
+      {serverError && <div className="qf-server-error" role="alert">{serverError}</div>}
+
+      <div className="qf-bottom">
       <div className={`qf-consent${errors.consent ? ' has-error' : ''}`}>
         <label>
           <input type="checkbox" name="consent" checked={values.consent} onChange={set} />
@@ -108,11 +113,10 @@ const QuoteForm = ({ coverInterest = '', heading = 'Get a quote', intro, compact
         {errors.consent && <span className="qf-error">{errors.consent}</span>}
       </div>
 
-      {serverError && <div className="qf-server-error" role="alert">{serverError}</div>}
-
       <button type="submit" className="btn btn-quote qf-submit" disabled={status === 'sending'}>
         {status === 'sending' ? 'Sending…' : 'Request my quote'}
       </button>
+      </div>
       <p className="qf-small">No obligation. Your details are handled in line with our privacy policy.</p>
     </form>
   );

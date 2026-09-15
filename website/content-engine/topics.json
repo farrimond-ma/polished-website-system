@@ -1,0 +1,362 @@
+[
+  {
+    "id": "t001",
+    "status": "queued",
+    "title": "Do cleaners need public liability insurance in the UK?",
+    "keyword": "do cleaners need public liability insurance",
+    "coverSlug": "public-liability-insurance-for-cleaners",
+    "angle": "Answer the legal position, why clients ask for it, what it covers and typical scenarios.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t002",
+    "status": "queued",
+    "title": "Employers' liability insurance for cleaning companies: what the law requires",
+    "keyword": "employers liability insurance cleaning company",
+    "coverSlug": "employers-liability-insurance-for-cleaners",
+    "angle": "Legal requirement, who counts as an employee, fines, ERN, certificates, subcontractors.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t003",
+    "status": "queued",
+    "title": "How much public liability cover does a cleaning contract need?",
+    "keyword": "public liability limit cleaning contract",
+    "coverSlug": "contract-cleaners-insurance",
+    "angle": "Explain £1m/£2m/£5m/£10m limits, how buyers set them, what to do when a tender asks for more.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t004",
+    "status": "queued",
+    "title": "What does contract cleaners insurance cover?",
+    "keyword": "contract cleaners insurance cover",
+    "coverSlug": "contract-cleaners-insurance",
+    "angle": "Section-by-section explanation for contract cleaning companies.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t005",
+    "status": "queued",
+    "title": "Window cleaners insurance and working at height explained",
+    "keyword": "window cleaners insurance working at height",
+    "coverSlug": "window-cleaners-insurance",
+    "angle": "Heights, ladders vs water-fed poles, what insurers ask, safety practice.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t006",
+    "status": "queued",
+    "title": "Loss of keys cover for cleaning businesses: is it worth it?",
+    "keyword": "loss of keys insurance cleaners",
+    "coverSlug": "loss-of-keys-insurance",
+    "angle": "Master key systems, fobs, costs, key handling procedures clients expect.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t007",
+    "status": "queued",
+    "title": "Insurance for domestic cleaners working in customers' homes",
+    "keyword": "domestic cleaners insurance",
+    "coverSlug": "domestic-cleaners-insurance",
+    "angle": "Sole traders vs agencies, breakages, keys, pets, accusations of theft.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t008",
+    "status": "queued",
+    "title": "Carpet cleaning insurance: damage to property worked upon",
+    "keyword": "carpet cleaners insurance damage to property worked upon",
+    "coverSlug": "carpet-cleaners-insurance",
+    "angle": "Shrinkage, colour run, water damage and why the extension matters.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t009",
+    "status": "queued",
+    "title": "What insurance do end of tenancy cleaners need?",
+    "keyword": "end of tenancy cleaning insurance",
+    "coverSlug": "end-of-tenancy-cleaning-insurance",
+    "angle": "Letting agent requirements, keys, empty properties, deep clean risks.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t010",
+    "status": "queued",
+    "title": "Oven cleaning insurance for franchisees and independents",
+    "keyword": "oven cleaning insurance",
+    "coverSlug": "oven-cleaners-insurance",
+    "angle": "Appliance damage, chemicals, franchise requirements, vans.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t011",
+    "status": "queued",
+    "title": "Pressure washing insurance: surfaces, runoff and roof cleaning",
+    "keyword": "pressure washing insurance",
+    "coverSlug": "pressure-washing-insurance",
+    "angle": "Damage to surfaces, water ingress, soft washing chemicals, height.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t012",
+    "status": "queued",
+    "title": "Cleaning equipment insurance: protecting machines and vans",
+    "keyword": "cleaning equipment insurance",
+    "coverSlug": "tools-and-equipment-insurance-for-cleaners",
+    "angle": "Theft from vehicles, security conditions, hired-in equipment, valuation.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t013",
+    "status": "queued",
+    "title": "Insurance for starting a cleaning business in the UK",
+    "keyword": "insurance for new cleaning business",
+    "coverSlug": "commercial-cleaning-insurance",
+    "angle": "Checklist for a new cleaning company: covers, cost drivers, what insurers ask.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t014",
+    "status": "queued",
+    "title": "Office cleaning insurance: out-of-hours access and alarm codes",
+    "keyword": "office cleaning insurance",
+    "coverSlug": "commercial-cleaning-insurance",
+    "angle": "Security risks, keyholding, damage to IT equipment, lone working.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t015",
+    "status": "queued",
+    "title": "Labour-only subcontractors and your cleaning insurance",
+    "keyword": "labour only subcontractors cleaning insurance",
+    "coverSlug": "employers-liability-insurance-for-cleaners",
+    "angle": "How insurers treat LOSC vs bona fide subcontractors, wages declarations, certificates.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t016",
+    "status": "queued",
+    "title": "Fidelity guarantee insurance for cleaning companies",
+    "keyword": "fidelity guarantee insurance cleaning",
+    "coverSlug": "contract-cleaners-insurance",
+    "angle": "Employee dishonesty, vetting, tender requirements from banks and offices.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t017",
+    "status": "queued",
+    "title": "How to answer insurance questions in a cleaning tender",
+    "keyword": "cleaning tender insurance requirements",
+    "coverSlug": "contract-cleaners-insurance",
+    "angle": "Typical PQQ/ITT questions, evidence, named interest, certificates, limits.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t018",
+    "status": "queued",
+    "title": "Biohazard and trauma cleaning insurance explained",
+    "keyword": "biohazard cleaning insurance",
+    "coverSlug": "specialist-cleaning-insurance",
+    "angle": "Declaring specialist work, training, waste, exclusions.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t019",
+    "status": "queued",
+    "title": "Builders cleans and construction site cleaning insurance",
+    "keyword": "builders clean insurance",
+    "coverSlug": "specialist-cleaning-insurance",
+    "angle": "Site risks, main contractor requirements, CSCS, damage to finished works.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t020",
+    "status": "queued",
+    "title": "What happens if a client slips on a wet floor you cleaned?",
+    "keyword": "slip claim cleaning company",
+    "coverSlug": "public-liability-insurance-for-cleaners",
+    "angle": "Walk through a claim: notification, investigation, defence, evidence, signage.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t021",
+    "status": "queued",
+    "title": "Cleaning business insurance renewal checklist",
+    "keyword": "cleaning insurance renewal",
+    "coverSlug": "contract-cleaners-insurance",
+    "angle": "What to review before renewal: turnover, wages, activities, limits, claims.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t022",
+    "status": "queued",
+    "title": "Fair presentation of risk: what cleaning businesses must tell insurers",
+    "keyword": "fair presentation of risk cleaning business",
+    "coverSlug": "commercial-cleaning-insurance",
+    "angle": "Insurance Act 2015 duty for commercial customers, examples of material facts.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t023",
+    "status": "queued",
+    "title": "COSHH and cleaning chemicals: how it affects your insurance",
+    "keyword": "coshh cleaning insurance",
+    "coverSlug": "commercial-cleaning-insurance",
+    "angle": "COSHH duties, assessments, records and how they support claims defence.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t024",
+    "status": "queued",
+    "title": "Do sole trader cleaners need employers' liability for a helper?",
+    "keyword": "sole trader cleaner employers liability helper",
+    "coverSlug": "employers-liability-insurance-for-cleaners",
+    "angle": "Family members, casual help, exemptions and when cover is needed.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t025",
+    "status": "queued",
+    "title": "Professional indemnity for cleaning and facilities management companies",
+    "keyword": "professional indemnity facilities management cleaning",
+    "coverSlug": "professional-indemnity-insurance-for-cleaning-companies",
+    "angle": "When advice, specifications and audits create PI exposure.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t026",
+    "status": "queued",
+    "title": "Hospital and healthcare cleaning contracts: insurance requirements",
+    "keyword": "healthcare cleaning contract insurance",
+    "coverSlug": "contract-cleaners-insurance",
+    "angle": "NHS and private healthcare expectations, infection control, higher limits.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t027",
+    "status": "queued",
+    "title": "School cleaning contracts: insurance and safeguarding expectations",
+    "keyword": "school cleaning contract insurance",
+    "coverSlug": "contract-cleaners-insurance",
+    "angle": "Local authority and academy requirements, DBS, limits and evidence.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t028",
+    "status": "queued",
+    "title": "Insurance for window cleaners using water-fed poles",
+    "keyword": "water fed pole insurance",
+    "coverSlug": "window-cleaners-insurance",
+    "angle": "Equipment values, van systems, theft conditions, reduced height risk.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t029",
+    "status": "queued",
+    "title": "Commercial kitchen and extraction cleaning insurance",
+    "keyword": "kitchen extraction cleaning insurance",
+    "coverSlug": "specialist-cleaning-insurance",
+    "angle": "Fire risk, industry cleaning standards, access, hot works exclusions.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t030",
+    "status": "queued",
+    "title": "How to reduce your cleaning insurance premium without cutting cover",
+    "keyword": "reduce cleaning insurance cost",
+    "coverSlug": "commercial-cleaning-insurance",
+    "angle": "Risk management, accurate declarations, excess choices, claims handling.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t031",
+    "status": "queued",
+    "title": "Accidental damage in customers' homes: what is and is not covered",
+    "keyword": "cleaner breaks something in house insurance",
+    "coverSlug": "domestic-cleaners-insurance",
+    "angle": "Real examples, exclusions, wear and tear, items worked upon.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t032",
+    "status": "queued",
+    "title": "Airbnb and holiday let cleaning insurance",
+    "keyword": "airbnb cleaning business insurance",
+    "coverSlug": "end-of-tenancy-cleaning-insurance",
+    "angle": "Changeover cleaning risks, keys and lockboxes, laundry, host requirements.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t033",
+    "status": "queued",
+    "title": "Industrial and warehouse cleaning insurance",
+    "keyword": "industrial cleaning insurance",
+    "coverSlug": "specialist-cleaning-insurance",
+    "angle": "Machinery, working at height, forklifts nearby, client site rules.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t034",
+    "status": "queued",
+    "title": "Insurance for cleaning companies with multi-site contracts across the UK",
+    "keyword": "multi site cleaning contract insurance",
+    "coverSlug": "contract-cleaners-insurance",
+    "angle": "Territory, travel, subcontractors in different regions, consistent certificates.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t035",
+    "status": "queued",
+    "title": "What to do if you lose a client's keys",
+    "keyword": "lost client keys cleaner",
+    "coverSlug": "loss-of-keys-insurance",
+    "angle": "Immediate steps, notifying client and insurer, costs, preventing repeats.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  },
+  {
+    "id": "t036",
+    "status": "queued",
+    "title": "Personal accident cover for self-employed cleaners",
+    "keyword": "personal accident insurance cleaners",
+    "coverSlug": "window-cleaners-insurance",
+    "angle": "Why liability cover does not pay you, options for sole traders.",
+    "addedAt": "2026-09-15",
+    "source": "seed"
+  }
+]

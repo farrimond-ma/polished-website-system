@@ -1,0 +1,21 @@
+.footer { background-color: var(--color-primary); color: rgba(255, 255, 255, 0.72); padding: 4rem 0 2rem; }
+.footer-content {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1fr 0.8fr;
+  gap: 2.5rem;
+  margin-bottom: 3rem;
+}
+@media (max-width: 960px) { .footer-content { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .footer-content { grid-template-columns: 1fr; } }
+.footer-logo { display: inline-block; margin-bottom: 1.25rem; }
+.footer-brand p { margin: 0 0 1rem; }
+.footer-contact-line a { color: #fff; font-weight: 600; }
+.footer-contact-line a:hover { color: var(--color-secondary-light); }
+.footer-links h4 { color: var(--color-white); margin-bottom: 1.1rem; font-size: 1.1rem; }
+.footer-h4-gap { margin-top: 1.75rem; }
+.footer-links ul { margin: 0; }
+.footer-links ul li { margin-bottom: 0.55rem; font-size: 0.95rem; }
+.footer-links a { color: rgba(255, 255, 255, 0.72); }
+.footer-links a:hover { color: var(--color-secondary-light); }
+.footer-bottom { border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 2rem; text-align: center; font-size: 0.9rem; }
+.footer-disclaimer { margin: 0 auto 1.1rem; font-size: 0.8rem; opacity: 0.65; max-width: 900px; line-height: 1.55; }

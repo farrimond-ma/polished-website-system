@@ -1,0 +1,15 @@
+/* Home FAQ — accordion internals restyled here (Boxx HomeFaq.css pattern). */
+.home-faq { background: var(--color-bg-light); }
+.home-faq .resource-faqs { max-width: 52rem; margin: 0 auto; }
+.home-faq .resource-faqs > h2 { display: none; }
+.home-faq .faq-item { background: #fff; border: 1px solid rgba(10, 25, 47, 0.08); border-radius: 8px; margin-bottom: 0.6rem; overflow: hidden; }
+.home-faq .faq-question {
+  width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: 1rem 1.25rem; background: none; border: 0; font-family: var(--font-heading);
+  font-size: 1.06rem; font-weight: 600; color: var(--color-primary); text-align: left;
+}
+.home-faq .faq-question:hover { background: rgba(6, 182, 212, 0.06); }
+.home-faq .faq-icon { font-size: 1.5rem; color: var(--color-secondary-dark); }
+.home-faq .faq-answer { padding: 0 1.25rem 1.25rem; }
+.home-faq .faq-answer p { margin: 0; line-height: 1.7; }
+.guide-teasers .blog-card { display: flex; }

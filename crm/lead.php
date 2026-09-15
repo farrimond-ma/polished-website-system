@@ -1,0 +1,260 @@
+<?php
+require __DIR__ . '/lib.php';
+require_login();
+$pdo = db();
+$id = (int)param('id', 0);
+$lead = find_lead($id);
+if (!$lead) { flash('Lead not found.'); redirect('leads.php'); }
+$me = (int)current_user()['user_id'];
+$back = 'lead.php?id=' . $id;
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrf_check();
+    switch ((string)post('action', '')) {
+        case 'status':
+            $new = (string)post('status', '');
+            if (in_array($new, statuses(), true) && $new !== $lead['status']) {
+                $fields = ['status' => $new];
+                if (in_array($new, terminal_statuses(), true)) {
+                    $fields += ['chasing' => 0, 'next_chase_date' => null, 'next_chase_window' => null, 'next_follow_up' => null];
+                }
+                touch_lead($id, $fields);
+                add_note($id, "Status changed from {$lead['status']} to $new." . ($lead['chasing'] && isset($fields['chasing']) ? ' Automatic reminders stopped.' : ''), $me);
+                flash("Status set to $new.");
+            }
+            break;
+        case 'assign':
+            touch_lead($id, ['assigned_to' => (int)post('assigned_to') ?: null]);
+            add_note($id, 'Assigned to ' . user_name((int)post('assigned_to') ?: null) . '.', $me);
+            flash('Assignment updated.');
+            break;
+        case 'follow_up':
+            touch_lead($id, ['next_follow_up' => post('next_follow_up') ?: null]);
+            flash('Follow-up date saved.');
+            break;
+        case 'start_chase':
+            $r = start_questionnaire_chase($lead, 'Questionnaire link sent by ' . (current_user()['display_name'] ?: current_user()['username']) . ' (message 1 of 3)', $me);
+            flash($r['message']);
+            break;
+        case 'resend_email':
+        case 'resend_sms':
+            $channel = post('action') === 'resend_email' ? 'email' : 'sms';
+            ensure_link_token($lead);
+            $link = questionnaire_link($lead['link_token']);
+            if ($channel === 'email') {
+                if (trim($lead['email']) === '') { flash('No email address on file.'); break; }
+                $m = build_chase_email($lead, $link, 1);
+                $r = send_email($lead['email'], lead_name($lead), $m['subject'], $m['html'], $m['text']);
+            } else {
+                if (!is_mobile_number($lead['phone'])) { flash('No UK mobile number on file.'); break; }
+                $r = send_sms($lead['phone'], build_chase_sms($lead, $link, 1));
+            }
+            add_note($id, "Questionnaire link re-sent by $channel: " . ($r['ok'] ? 'sent.' : 'FAILED — ' . $r['error']), $me);
+            flash($r['ok'] ? "Link sent by $channel." : "Could not send: {$r['error']}");
+            break;
+        case 'stop_chase':
+            stop_chasing($id);
+            add_note($id, 'Automatic reminders stopped.', $me);
+            flash('Automatic reminders stopped.');
+            break;
+        case 'regenerate_link':
+            touch_lead($id, ['link_token' => new_link_token()]);
+            add_note($id, 'Questionnaire link regenerated — the old link no longer works.', $me);
+            flash('New link created. The previous link has stopped working.');
+            break;
+        case 'reopen':
+            touch_lead($id, ['q_status' => 'in_progress', 'q_submitted_at' => null]);
+            add_note($id, 'Questionnaire reopened so the client can make changes.', $me);
+            flash('Questionnaire reopened — the client can edit it again using their link.');
+            break;
+        case 'mark_submitted':
+            $fields = ['q_status' => 'submitted', 'q_submitted_at' => now(), 'chasing' => 0, 'next_chase_date' => null, 'next_chase_window' => null];
+            if (in_array($lead['status'], pre_questionnaire_statuses(), true)) $fields['status'] = 'Questionnaire Completed';
+            touch_lead($id, $fields);
+            add_note($id, 'Questionnaire marked as completed by staff.', $me);
+            flash('Questionnaire marked as completed.');
+            break;
+        case 'note':
+            $body = trim((string)post('body', ''));
+            if ($body !== '') { add_note($id, $body, $me); flash('Note added.'); }
+            break;
+        case 'task':
+            $body = trim((string)post('body', ''));
+            if ($body !== '' && post('due_date')) {
+                $pdo->prepare('INSERT INTO lead_task (lead_id, body, due_date, assigned_to, created_by, created_at) VALUES (?,?,?,?,?,?)')
+                    ->execute([$id, mb_substr($body, 0, 500), post('due_date'), (int)post('assigned_to') ?: null, $me, now()]);
+                flash('Task added.');
+            }
+            break;
+        case 'task_done':
+            $pdo->prepare('UPDATE lead_task SET done_at = ? WHERE task_id = ? AND lead_id = ?')->execute([now(), (int)post('task_id'), $id]);
+            flash('Task completed.');
+            break;
+        case 'delete':
+            if (!is_admin()) { flash('Admins only.'); break; }
+            $pdo->prepare('DELETE FROM lead_note WHERE lead_id = ?')->execute([$id]);
+            $pdo->prepare('DELETE FROM lead_task WHERE lead_id = ?')->execute([$id]);
+            $pdo->prepare('DELETE FROM lead WHERE lead_id = ?')->execute([$id]);
+            flash(lead_ref($id) . ' and all its data have been deleted.');
+            redirect('leads.php');
+    }
+    redirect($back);
+}
+
+$notes = $pdo->prepare('SELECT n.*, u.display_name, u.username FROM lead_note n LEFT JOIN app_user u ON u.user_id = n.created_by WHERE n.lead_id = ? ORDER BY n.note_id DESC');
+$notes->execute([$id]);
+$notes = $notes->fetchAll();
+$tasks = $pdo->prepare('SELECT * FROM lead_task WHERE lead_id = ? ORDER BY done_at IS NOT NULL, due_date');
+$tasks->execute([$id]);
+$tasks = $tasks->fetchAll();
+
+$link = $lead['link_token'] ? questionnaire_link($lead['link_token']) : '';
+$progress = q_progress($lead);
+$today = date('Y-m-d');
+
+layout_header(lead_ref($id) . ' ' . lead_name($lead));
+?>
+<div class="page-head">
+  <div>
+    <h1><span class="mono"><?= e(lead_ref($id)) ?></span> · <?= e(lead_name($lead)) ?></h1>
+    <div class="sub"><?= e($lead['company_name']) ?> · <?= e($lead['source']) ?> · received <?= dt($lead['created_at']) ?></div>
+  </div>
+  <div>
+    <span class="pill pill-lg <?= status_class($lead['status']) ?>"><?= e($lead['status']) ?></span>
+    <?php if ($lead['chasing']): ?><span class="pill pill-lg chasing">Chasing <?= (int)$lead['auto_chase_count'] ?>/3</span><?php endif; ?>
+  </div>
+</div>
+
+<div class="cols">
+  <div class="col">
+    <div class="card">
+      <h2>Questionnaire</h2>
+      <div class="q-summary">
+        <span class="pill pill-lg q-<?= e($lead['q_status']) ?>"><?= e(q_status_label($lead['q_status'])) ?></span>
+        <div class="progress"><div style="width:<?= $progress['pct'] ?>%"></div></div>
+        <span class="sub"><?= $progress['answered'] ?> of <?= $progress['total'] ?> client questions answered</span>
+      </div>
+      <dl>
+        <dt>Started</dt><dd><?= dt($lead['q_started_at']) ?></dd>
+        <dt>Last saved</dt><dd><?= dt($lead['q_saved_at']) ?></dd>
+        <dt>Submitted</dt><dd><?= dt($lead['q_submitted_at']) ?></dd>
+      </dl>
+      <div class="btn-row">
+        <a class="btn" href="questionnaire.php?id=<?= $id ?>">Open full questionnaire</a>
+        <a class="btn ghost" href="questionnaire_print.php?id=<?= $id ?>" target="_blank">Print / PDF</a>
+        <a class="btn ghost" href="questionnaire_export.php?id=<?= $id ?>">Download CSV</a>
+      </div>
+
+      <h2 class="mt">Client link &amp; reminders</h2>
+      <?php if ($link): ?>
+        <div class="link-row">
+          <input class="link-field" id="client-link" value="<?= e($link) ?>" readonly>
+          <button type="button" class="btn small ghost" onclick="navigator.clipboard.writeText(document.getElementById('client-link').value);this.textContent='Copied ✓'">Copy</button>
+        </div>
+      <?php endif; ?>
+      <p class="chase-row">
+        <?php if ($lead['chasing']): ?>
+          Automatic reminders are <strong>on</strong>. Next reminder
+          <?= (int)$lead['auto_chase_count'] >= 3 ? '(auto-close check)' : '(message ' . ((int)$lead['auto_chase_count'] + 1) . ' of 3)' ?>
+          on <strong><?= d($lead['next_chase_date']) ?></strong>.
+        <?php elseif ($lead['q_status'] === 'submitted'): ?>
+          Questionnaire completed — no reminders needed.
+        <?php else: ?>
+          Automatic reminders are <strong>off</strong>.
+        <?php endif; ?>
+      </p>
+      <div class="btn-row">
+        <?php if ($lead['q_status'] !== 'submitted'): ?>
+          <?php if (!$lead['chasing']): ?>
+            <form method="post"><?= csrf_field() ?><input type="hidden" name="action" value="start_chase"><button class="btn" title="Emails and texts the link now, then sends 2 automatic reminders">Send questionnaire link + start reminders</button></form>
+          <?php else: ?>
+            <form method="post"><?= csrf_field() ?><input type="hidden" name="action" value="stop_chase"><button class="btn ghost">Stop reminders</button></form>
+          <?php endif; ?>
+          <form method="post"><?= csrf_field() ?><input type="hidden" name="action" value="resend_email"><button class="btn ghost small">Email link only</button></form>
+          <form method="post"><?= csrf_field() ?><input type="hidden" name="action" value="resend_sms"><button class="btn ghost small">Text link only</button></form>
+          <form method="post" onsubmit="return confirm('Mark the questionnaire as completed? The client will no longer be able to edit it.')"><?= csrf_field() ?><input type="hidden" name="action" value="mark_submitted"><button class="btn ghost small">Mark completed</button></form>
+        <?php else: ?>
+          <form method="post"><?= csrf_field() ?><input type="hidden" name="action" value="reopen"><button class="btn ghost small">Reopen for client edits</button></form>
+        <?php endif; ?>
+        <form method="post" onsubmit="return confirm('Create a new link? The current link will stop working.')"><?= csrf_field() ?><input type="hidden" name="action" value="regenerate_link"><button class="btn ghost small">New link</button></form>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>History</h2>
+      <form method="post" class="note-form"><?= csrf_field() ?><input type="hidden" name="action" value="note">
+        <textarea name="body" rows="3" placeholder="Add a note (calls, emails, quotes...)"></textarea>
+        <div><button type="submit" class="btn small">Add note</button></div>
+      </form>
+      <?php foreach ($notes as $n): ?>
+        <div class="note <?= $n['created_by'] ? '' : 'system' ?>">
+          <div class="note-meta"><?= dt($n['created_at']) ?> · <?= $n['created_by'] ? e($n['display_name'] ?: $n['username']) : 'System' ?></div>
+          <?= nl2br(e($n['body'])) ?>
+        </div>
+      <?php endforeach; ?>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <h2>Contact</h2>
+      <dl>
+        <dt>Name</dt><dd><?= e(trim($lead['first_name'] . ' ' . $lead['last_name'])) ?: '—' ?></dd>
+        <dt>Business</dt><dd><?= e($lead['company_name']) ?: '—' ?></dd>
+        <dt>Email</dt><dd><?= $lead['email'] ? "<a href='mailto:" . e($lead['email']) . "'>" . e($lead['email']) . '</a>' : '—' ?></dd>
+        <dt>Phone</dt><dd><?= $lead['phone'] ? "<a href='tel:" . e(normalise_uk_phone($lead['phone'])) . "'>" . e($lead['phone']) . '</a>' : '—' ?></dd>
+        <dt>Interest</dt><dd><?= e($lead['cover_interest']) ?: '—' ?></dd>
+        <dt>Renewal</dt><dd><?= d($lead['renewal_date']) ?></dd>
+        <?php if ($lead['landing_page']): ?><dt>Page</dt><dd class="sub"><?= e($lead['landing_page']) ?></dd><?php endif; ?>
+        <?php if ($lead['utm_source'] || $lead['utm_campaign']): ?><dt>Campaign</dt><dd class="sub"><?= e(trim($lead['utm_source'] . ' / ' . $lead['utm_medium'] . ' / ' . $lead['utm_campaign'], ' /')) ?></dd><?php endif; ?>
+        <?php if ($lead['consent_at']): ?><dt>Consent</dt><dd class="sub"><?= dt($lead['consent_at']) ?> — <?= e($lead['consent_text']) ?></dd><?php endif; ?>
+      </dl>
+      <p><a class="btn ghost small" href="lead_edit.php?id=<?= $id ?>">Edit details</a></p>
+    </div>
+
+    <div class="card">
+      <h2>Pipeline</h2>
+      <form method="post" class="status-form"><?= csrf_field() ?><input type="hidden" name="action" value="status">
+        <select name="status"><?php foreach (statuses() as $s): ?><option <?= $s === $lead['status'] ? 'selected' : '' ?>><?= e($s) ?></option><?php endforeach; ?></select>
+        <button class="btn small">Update</button>
+      </form>
+      <form method="post" class="status-form"><?= csrf_field() ?><input type="hidden" name="action" value="assign">
+        <select name="assigned_to"><option value="">— unassigned —</option>
+          <?php foreach (users() as $u): ?><option value="<?= (int)$u['user_id'] ?>" <?= (int)$lead['assigned_to'] === (int)$u['user_id'] ? 'selected' : '' ?>><?= e($u['display_name'] ?: $u['username']) ?></option><?php endforeach; ?>
+        </select>
+        <button class="btn small">Assign</button>
+      </form>
+      <form method="post" class="status-form"><?= csrf_field() ?><input type="hidden" name="action" value="follow_up">
+        <input type="date" name="next_follow_up" value="<?= e($lead['next_follow_up']) ?>">
+        <button class="btn small">Set follow-up</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Tasks</h2>
+      <?php foreach ($tasks as $t): ?>
+        <div class="task-row <?= $t['done_at'] ? 'done' : '' ?>">
+          <div><strong class="<?= !$t['done_at'] && $t['due_date'] < $today ? 'overdue' : '' ?>"><?= d($t['due_date']) ?></strong> — <?= e($t['body']) ?>
+            <div class="sub"><?= e(user_name($t['assigned_to'] ? (int)$t['assigned_to'] : null)) ?><?= $t['done_at'] ? ' · done ' . dt($t['done_at']) : '' ?></div></div>
+          <?php if (!$t['done_at']): ?>
+            <form method="post"><?= csrf_field() ?><input type="hidden" name="action" value="task_done"><input type="hidden" name="task_id" value="<?= (int)$t['task_id'] ?>"><button class="btn ghost small">Done</button></form>
+          <?php endif; ?>
+        </div>
+      <?php endforeach; ?>
+      <form method="post" class="task-form"><?= csrf_field() ?><input type="hidden" name="action" value="task">
+        <input name="body" placeholder="New task, e.g. Call to discuss quotes" required>
+        <input type="date" name="due_date" value="<?= e(date('Y-m-d', strtotime('+1 day'))) ?>" required>
+        <select name="assigned_to"><?php foreach (users() as $u): ?><option value="<?= (int)$u['user_id'] ?>" <?= (int)$u['user_id'] === $me ? 'selected' : '' ?>><?= e($u['display_name'] ?: $u['username']) ?></option><?php endforeach; ?></select>
+        <button class="btn small">Add task</button>
+      </form>
+    </div>
+
+    <?php if (is_admin()): ?>
+      <form method="post" onsubmit="return confirm('Permanently delete this lead, its questionnaire answers, notes and tasks? This cannot be undone.')">
+        <?= csrf_field() ?><input type="hidden" name="action" value="delete">
+        <button class="btn ghost danger small">Delete lead (GDPR erasure)</button>
+      </form>
+    <?php endif; ?>
+  </div>
+</div>
+<?php layout_footer();

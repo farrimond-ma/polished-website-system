@@ -1,0 +1,39 @@
+name: Deploy CRM
+
+# Uploads the PHP CRM to crm.polished-insurance.com. config.php and data/ live only on the
+# server and are excluded, so a deploy can never overwrite credentials or the local store.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'crm/**'
+      - '.github/workflows/deploy-crm.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-crm
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: PHP syntax check
+        run: find crm -name '*.php' -not -path 'crm/vendor/*' -print0 | xargs -0 -n1 php -l
+
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.CRM_FTP_SERVER || secrets.FTP_SERVER }}
+          username: ${{ secrets.CRM_FTP_USERNAME || secrets.FTP_USERNAME }}
+          password: ${{ secrets.CRM_FTP_PASSWORD || secrets.FTP_PASSWORD }}
+          protocol: ftps
+          local-dir: crm/
+          server-dir: ${{ vars.CRM_SERVER_DIR || 'crm.polished-insurance.com/public_html/' }}
+          exclude: |
+            **/.git*
+            **/.git*/**
+            config.php
+            data/**

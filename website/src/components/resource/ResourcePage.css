@@ -1,0 +1,585 @@
+/* Copied from the Boxx Finance site (src/components/resource/ResourcePage.css) and re-coloured: gold/cream panels -> cyan/pale-blue. */
+/* ── Resource page: shared single-column layout for articles + locations ─────
+   Pattern follows the best-performing broker content sites: hero with image,
+   one centered readable column, in-content CTAs, one floating CTA. ────────── */
+
+/* White edge-to-edge like the reference sites — a grey page with a floating
+   white card reads as a narrow boxed window on wide monitors */
+.resource-page {
+    background: #fff;
+}
+
+/* Hero — top padding clears the fixed navbar; fills the viewport on desktop */
+.resource-hero {
+    background: var(--color-primary);
+    color: #fff;
+    padding: 9rem 0 3.5rem;
+}
+/* Full-height background image blended out of the navy. The gradient sits
+   ON TOP of the image (listed first) — solid navy on the left for text
+   contrast, fading to reveal the photo on the right. Per-page image comes
+   in via the --hero-image custom property set inline. */
+@media (min-width: 769px) {
+    .resource-hero.has-hero-image {
+        background-image:
+            linear-gradient(100deg,
+                var(--color-primary) 0%,
+                var(--color-primary) 38%,
+                rgba(10, 25, 47, 0.75) 55%,
+                rgba(10, 25, 47, 0.25) 78%,
+                rgba(10, 25, 47, 0.1) 100%),
+            var(--hero-image);
+        background-size: cover;
+        background-position: center right;
+        background-repeat: no-repeat;
+    }
+}
+@media (min-width: 993px) {
+    .resource-hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        /* Was 7rem — genuinely less than the fixed navbar's own height
+           (1.5rem padding top+bottom + 4.9rem logo ≈ 7.9rem), so the eyebrow
+           text sat with no clearance under the navbar at exactly this
+           breakpoint. This affects every page through ResourceHero, not
+           just the homepage — flagged from the bridging hero, but the fix
+           is shared. */
+        padding: 9.5rem 0 4rem;
+    }
+    .resource-hero .container {
+        width: 100%;
+    }
+}
+.resource-hero-grid {
+    display: block;
+}
+/* Constrain the text so the blended image has room to show on the right */
+.resource-hero-text {
+    max-width: 620px;
+}
+/* Optional — only the homepage passes one today. Sits above the h1. */
+.resource-hero-eyebrow {
+    font-family: var(--font-heading);
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-secondary);
+    margin: 0 0 1rem;
+}
+.resource-hero h1 {
+    font-size: 2.3rem;
+    line-height: 1.15;
+    margin: 0 0 1.5rem;
+    color: #fff;
+}
+/* Longer, conversational titles (news/trigger-event content especially)
+   would otherwise wrap 4-5 lines at the standard size and dominate the
+   hero — see ResourceHero.jsx's isLongTitle. */
+.resource-hero h1.is-long-title {
+    font-size: 1.9rem;
+}
+@media (min-width: 993px) {
+    .resource-hero h1 {
+        font-size: 3.4rem;
+        line-height: 1.1;
+    }
+    .resource-hero h1.is-long-title {
+        font-size: 2.6rem;
+    }
+}
+.resource-hero .text-highlight {
+    color: var(--color-secondary-light);
+}
+.resource-hero-lead {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.82);
+    max-width: 58ch;
+    margin: 0 0 2rem;
+}
+.resource-hero-trust {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    padding: 0;
+    margin: 0;
+}
+.resource-hero-trust li {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.9);
+    padding-left: 1.4rem;
+    position: relative;
+}
+.resource-hero-trust li::before {
+    content: "✔";
+    position: absolute;
+    left: 0;
+    color: var(--color-secondary);
+}
+/* Optional, rendered via ResourceHero's afterTrust prop — only the homepage
+   uses this today, for its "also arranging..." line. */
+.resource-hero-secondary {
+    margin-top: 1.5rem;
+    margin-bottom: 0;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.72);
+    max-width: 42rem;
+}
+.resource-hero-secondary a {
+    color: var(--color-secondary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+.resource-hero-secondary a:hover,
+.resource-hero-secondary a:focus-visible {
+    color: var(--color-secondary-light);
+}
+.resource-hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+.resource-btn-phone {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+}
+/* Single centered readable rail — generous width, no card chrome */
+.resource-column {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2.75rem 2rem 3.5rem;
+}
+.resource-main-card {
+    background: transparent;
+}
+/* The global .blog-post-content padding belongs to the legal pages' card
+   layout — on the resource rail the text aligns flush with the column */
+.resource-main-card .blog-post-content {
+    padding: 0;
+}
+/* Deliberately quiet: useful context for the reader, not a headline. */
+.resource-date {
+    margin: 0 0 1.25rem;
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+.resource-skeleton {
+    min-height: 22rem;
+}
+.resource-video {
+    margin-top: 1.5rem;
+}
+
+/* "On this page" jump-box at the top of the article */
+.resource-toc {
+    background: var(--color-panel);
+    border: 1px solid var(--color-panel-border);
+    border-radius: 10px;
+    padding: 1.1rem 1.4rem;
+    margin-bottom: 1.75rem;
+}
+.resource-toc-title {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #5b7480;
+    margin: 0 0 0.6rem;
+    font-weight: 700;
+}
+.resource-toc ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.25rem 1.5rem;
+}
+.resource-toc li a {
+    display: block;
+    padding: 0.22rem 0;
+    font-size: 0.93rem;
+    color: #4b5563;
+    text-decoration: none;
+    line-height: 1.4;
+}
+.resource-toc li a::before {
+    content: "↓ ";
+    color: var(--color-secondary);
+    font-weight: 700;
+}
+.resource-toc li a:hover {
+    color: var(--color-primary);
+    text-decoration: underline;
+}
+
+/* Author */
+.resource-author {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+    background: #fff;
+    border: 1px solid #dbe7ec;
+    border-radius: 14px;
+    padding: 1.75rem 2rem;
+    margin-top: 1.75rem;
+}
+.resource-author-photo {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+.resource-author-info h3 {
+    margin: 0 0 0.15rem;
+    color: var(--color-primary);
+}
+.resource-author-title {
+    color: var(--color-secondary);
+    font-weight: 600;
+    margin: 0 0 0.5rem;
+    font-size: 0.9rem;
+}
+.resource-author-bio {
+    color: #4b5563;
+    line-height: 1.6;
+    margin: 0 0 0.75rem;
+    font-size: 0.95rem;
+}
+.resource-author-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1.25rem;
+    font-size: 0.9rem;
+}
+
+/* Funding cards — "You may also need". Panel treatment (see below) so it
+   reads as its own block against the plain guides list that follows it. */
+.resource-cover-cards {
+    margin-top: 1.75rem;
+    background: var(--color-panel);
+    border: 1px solid var(--color-panel-border);
+    border-radius: 12px;
+    padding: 1.75rem 2rem;
+}
+.resource-cover-cards h2 {
+    color: var(--color-primary);
+    margin: 0 0 1rem;
+    font-size: 1.75rem;
+}
+.cover-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+.cover-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    background: #ffffff;
+    border: 1px solid #dbe7ec;
+    border-radius: 12px;
+    padding: 1.1rem 1.25rem;
+    text-decoration: none;
+    transition: border-color 0.15s, transform 0.15s;
+}
+.cover-card:hover {
+    border-color: var(--color-secondary);
+    transform: translateY(-2px);
+}
+.cover-card-title {
+    font-weight: 700;
+    color: var(--color-primary);
+}
+.cover-card-blurb {
+    font-size: 0.88rem;
+    color: #5b6472;
+}
+
+/* More guides — comprehensive same-service guide listing */
+.resource-guides {
+    margin-top: 1.75rem;
+}
+.resource-guides h2 {
+    color: var(--color-primary);
+    margin: 0 0 1rem;
+    font-size: 1.75rem;
+}
+.resource-guides-grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0 2.5rem;
+}
+.resource-guides-grid li {
+    border-bottom: 1px solid #dbe7ec;
+}
+.resource-guides-grid a {
+    display: block;
+    padding: 0.8rem 0 0.8rem 1.6rem;
+    position: relative;
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.98rem;
+    line-height: 1.4;
+}
+/* Hanging indent — wrapped lines align with the text, not under the arrow */
+.resource-guides-grid a::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--color-secondary);
+}
+.resource-guides-grid a:hover {
+    color: var(--color-secondary-dark);
+}
+
+/* Popular locations — panel, mirroring "You may also need" above, with the
+   plain guides list between them so the page reads panel / plain / panel
+   rather than one long stripe. */
+.resource-locations {
+    margin-top: 1.75rem;
+    background: var(--color-panel);
+    border: 1px solid var(--color-panel-border);
+    border-radius: 12px;
+    padding: 1.75rem 2rem;
+}
+.resource-locations h2 {
+    color: var(--color-primary);
+    margin: 0 0 1rem;
+    font-size: 1.75rem;
+}
+.resource-locations-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+.resource-location-pill {
+    background: #ffffff;
+    border: 1px solid #dbe7ec;
+    border-radius: 999px;
+    padding: 0.5rem 1.1rem;
+    font-size: 0.92rem;
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: border-color 0.15s;
+}
+.resource-location-pill:hover {
+    border-color: var(--color-secondary);
+}
+
+/* FAQ accordion */
+.resource-faqs {
+    margin-top: 1.75rem;
+}
+.resource-faqs h2 {
+    color: var(--color-primary);
+    margin: 0 0 1rem;
+    font-size: 1.75rem;
+}
+.faq-item {
+    background: #fff;
+    border: 1px solid #dbe7ec;
+    border-radius: 10px;
+    margin-bottom: 0.6rem;
+    overflow: hidden;
+}
+.faq-question {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    font-family: inherit;
+}
+.faq-icon {
+    color: var(--color-secondary);
+    font-size: 1.4rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+.faq-answer {
+    padding: 0 1.25rem 1.1rem;
+}
+.faq-answer p {
+    margin: 0;
+    color: #4b5563;
+    line-height: 1.6;
+}
+
+/* Final CTA band — light grey so it separates from the navy footer below */
+.resource-final-cta {
+    background: #e9f2f5;
+    color: var(--color-primary);
+    padding: 3.5rem 0;
+    text-align: center;
+    border-top: 1px solid #d5e5ea;
+}
+.resource-final-cta h2 {
+    color: var(--color-primary);
+    margin: 0 0 0.75rem;
+    font-size: 1.9rem;
+}
+.resource-final-cta p {
+    max-width: 55ch;
+    margin: 0 auto 1.75rem;
+    color: #4a4a52;
+    line-height: 1.6;
+}
+.resource-final-cta-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+}
+/* Gold washes out on light grey — use the navy button so the CTA stays
+   prominent; keep it high-contrast rather than brand-consistent here */
+.resource-final-cta-actions .btn-primary {
+    background: var(--color-primary);
+    color: #fff;
+}
+.resource-final-cta-actions .btn-primary:hover {
+    background: #12203c;
+}
+.resource-final-cta-actions span {
+    color: #4a4a52;
+}
+.resource-final-cta-actions a:not(.btn) {
+    color: var(--color-secondary-dark);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+/* Floating CTA — the ONLY floating element on the page */
+.resource-float-cta {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 50;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    background: var(--color-secondary);
+    color: var(--color-primary);
+    font-family: inherit;
+    padding: 0;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    transition: transform 0.15s ease, background 0.15s ease;
+}
+.resource-float-cta:hover {
+    background: var(--color-secondary-light);
+    transform: scale(1.06);
+}
+
+/* ── Responsive ── */
+/* Below 769px the hero is solid navy (no background image) so the text
+   stays fully legible without an overlay fighting the photo */
+@media (max-width: 640px) {
+    .resource-hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        padding: 9.5rem 0 3rem;
+    }
+    /* Mobile previously dropped the hero image entirely (the desktop
+       left-to-right blend at min-width:769px doesn't apply below it) and
+       showed flat navy top to bottom. Same idea, rotated: image peeks
+       through at the very top, fading to solid navy by roughly where the
+       h1 ends, so the body copy/buttons/bullets below still sit on full
+       navy for contrast. */
+    .resource-hero.has-hero-image {
+        background-image:
+            linear-gradient(180deg,
+                rgba(10, 25, 47, 0.35) 0%,
+                rgba(10, 25, 47, 0.8) 30%,
+                var(--color-primary) 50%,
+                var(--color-primary) 100%),
+            var(--hero-image);
+        background-size: cover;
+        background-position: top center;
+        background-repeat: no-repeat;
+    }
+    .resource-hero h1 {
+        font-size: 2.3rem;
+    }
+    .resource-hero h1.is-long-title {
+        font-size: 1.9rem;
+    }
+    .resource-hero-text {
+        max-width: none;
+    }
+    .resource-hero-trust {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    .resource-column {
+        padding: 2rem 1.25rem 2.5rem;
+    }
+    .resource-toc ul {
+        grid-template-columns: 1fr;
+    }
+    .cover-cards-grid {
+        grid-template-columns: 1fr;
+    }
+    .resource-guides-grid {
+        grid-template-columns: 1fr;
+    }
+    /* The panel's own horizontal padding compounds with the rail's reduced
+       side padding above — ease it back so the cards inside don't feel
+       squeezed against the panel edge. */
+    .resource-cover-cards,
+    .resource-locations {
+        padding: 1.4rem 1.25rem;
+    }
+}
+
+/* ── Polished additions ─────────────────────────────────────────────────── */
+/* No photo: navy with a soft cyan glow + fine grid so the hero never looks flat. */
+.resource-hero.has-pattern {
+  background-color: var(--color-primary);
+  background-image:
+    radial-gradient(circle at 85% 20%, rgba(6, 182, 212, 0.28), transparent 45%),
+    radial-gradient(circle at 70% 90%, rgba(103, 232, 249, 0.12), transparent 40%),
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: auto, auto, 44px 44px, 44px 44px;
+}
+.resource-hero .text-highlight::after { opacity: 0.45; }
+@media (min-width: 993px) {
+  .resource-hero.has-aside { min-height: auto; padding: 8.5rem 0 4rem; }
+  .resource-hero.has-aside .resource-hero-grid {
+    display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(360px, 0.9fr); gap: 3.5rem; align-items: center;
+  }
+}
+.resource-hero-aside { margin-top: 2rem; }
+@media (min-width: 993px) { .resource-hero-aside { margin-top: 0; } }
+@media (max-width: 640px) {
+  .resource-hero.has-aside { min-height: auto; padding-top: 7.5rem; }
+}
+.gold-link { color: var(--color-secondary-dark); font-weight: 600; }

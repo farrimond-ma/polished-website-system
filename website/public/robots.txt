@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /insurance-questionnaire
+Disallow: /get-a-quote/thank-you
+
+Sitemap: https://polished-insurance.com/sitemap.xml

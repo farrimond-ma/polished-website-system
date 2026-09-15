@@ -1,0 +1,16 @@
+{
+  "name": "polished-content-engine",
+  "private": true,
+  "type": "module",
+  "description": "Publishes insurance guides for cleaning businesses to polished-insurance.com",
+  "scripts": {
+    "publish-guide": "node publish-guide.mjs",
+    "dry-run": "node publish-guide.mjs --dry-run",
+    "refill-topics": "node refill-topics.mjs",
+    "check": "node check-posts.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.125.0",
+    "sharp": "^0.34.5"
+  }
+}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>Polished Insurance guides</title>
+  <link>https://polished-insurance.com/guides</link>
+  <atom:link href="https://polished-insurance.com/rss.xml" rel="self" type="application/rss+xml" />
+  <description>Insurance guides for UK cleaning businesses.</description>
+  <language>en-gb</language>
+
+</channel>
+</rss>

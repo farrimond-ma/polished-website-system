@@ -1,0 +1,70 @@
+name: Deploy website
+
+# Builds the React site (with prerendering) and uploads dist/ to SiteGround over FTP.
+# Runs on pushes that touch the website, on demand, and after the guide publisher commits.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'website/**'
+      - '!website/content-engine/**'
+      - '.github/workflows/deploy-website.yml'
+  workflow_dispatch:
+  workflow_call:
+
+# Never run two FTP uploads to the same SiteGround account at once (same lesson as the Boxx site).
+concurrency:
+  group: deploy-website
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: website
+    steps:
+      - name: Checkout (latest main, so guides committed earlier in this run are included)
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: website/package-lock.json
+
+      - name: Setup Chrome (stable, for prerendering)
+        id: setup-chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
+
+      - name: Install dependencies
+        run: npm ci
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: 'true'
+
+      - name: Build site
+        run: npm run build
+        env:
+          VITE_CRM_URL: ${{ vars.VITE_CRM_URL || 'https://crm.polished-insurance.com' }}
+          VITE_INTAKE_KEY: ${{ secrets.VITE_INTAKE_KEY }}
+          PUPPETEER_EXECUTABLE_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+
+      - name: Check the enquiry form key is set
+        run: |
+          if [ -z "${{ secrets.VITE_INTAKE_KEY }}" ]; then
+            echo "::error::VITE_INTAKE_KEY secret is missing — the quote form would be rejected by the CRM."; exit 1
+          fi
+
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          local-dir: website/dist/
+          server-dir: ${{ vars.WEBSITE_SERVER_DIR || 'polished-insurance.com/public_html/' }}

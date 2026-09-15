@@ -1,0 +1,193 @@
+/* Polished CRM styles — based on the Boxx CRM stylesheet, re-coloured for Polished Insurance. */
+:root{--brand:#0a192f;--accent:#06b6d4}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;color:#1f2733;background:#f4f6f9;font-size:14px;line-height:1.45}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+a{color:var(--brand);text-decoration:none}a:hover{text-decoration:underline}
+h1{font-size:22px;margin:0 0 4px}h2{font-size:15px;margin:0 0 10px;color:#0a192f}
+.sub{color:#6b7785;font-size:12.5px}.mono{font-family:"Courier New",monospace}
+/* topbar */
+.topbar{background:#0a192f;color:#fff}
+.topbar .wrap{display:flex;align-items:center;gap:24px;height:56px}
+.logo{display:flex;align-items:center}.logo img{display:block}
+.topbar nav{display:flex;gap:10px;margin-left:10px}
+.topbar nav a.nav-btn{background:#fff;color:#0a192f;padding:6px 14px;border-radius:20px;font-weight:bold;font-size:13px;white-space:nowrap}
+.topbar nav a.nav-btn:hover{background:#eef2f6;text-decoration:none}
+.topbar nav a.nav-btn.active{background:#22d3ee;color:#1f2733}
+.who{margin-left:auto;color:#94a3b8;font-size:12.5px}.who a{color:#e2e8f0}
+main.wrap{padding-top:22px;padding-bottom:60px;min-height:70vh}
+.foot{border-top:1px solid #e2e8ef;color:#8a97a5;font-size:12px;padding:16px 0;margin-top:40px;background:#fff}
+/* buttons */
+.btn{display:inline-block;background:var(--brand);color:#fff;padding:8px 14px;border-radius:6px;font-weight:bold;border:0;cursor:pointer}
+.btn:hover{text-decoration:none;filter:brightness(.95)}
+.btn.ghost{background:#fff;color:#0a192f;border:1px solid #cdd6df}
+.btn.small{padding:5px 10px;font-size:12px}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+button{background:var(--brand);color:#fff;border:0;padding:9px 16px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:14px}
+.page-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:12px;flex-wrap:wrap}
+/* stage strip */
+.stage-strip{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.stage-chip{background:#fff;border:1px solid #e2e8ef;border-radius:20px;padding:6px 12px;font-size:12.5px;font-weight:bold;color:#54626f}
+.stage-chip span{display:inline-block;margin-left:6px;background:#eef2f6;border-radius:10px;padding:1px 7px;font-size:11px}
+.stage-chip.active{border-color:var(--brand);color:var(--brand)}
+.stage-chip.all{color:#8a97a5}
+/* filters */
+.filters{display:flex;gap:10px;margin-bottom:16px}
+.filters input,.filters select{padding:9px 12px;border:1px solid #cdd6df;border-radius:6px;font-size:14px}
+.filters input{flex:1}
+/* grid table */
+.grid{width:100%;border-collapse:collapse;background:#fff;border:1px solid #e2e8ef;border-radius:8px;overflow:hidden}
+.grid th{background:#eef2f6;text-align:left;padding:9px 12px;font-size:12px;color:#54626f;text-transform:uppercase;letter-spacing:.02em}
+.grid td{padding:9px 12px;border-top:1px solid #eef2f6}
+.grid tbody tr[onclick]{cursor:pointer}.grid tbody tr[onclick]:hover{background:#eefbfd}
+.grid .r{text-align:right}.grid .empty{color:#8a97a5;text-align:center;padding:20px}
+.grid.small td,.grid.small th{padding:7px 10px;font-size:13px}
+.count{color:#8a97a5;font-size:12px;margin-top:8px}
+/* pills / tags */
+/* Application status pills are deliberately all one neutral colour — amber (.chasing) is the only
+   override, reserved to mean "a chase is currently active", regardless of pipeline stage. */
+.pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11.5px;font-weight:bold;background:#e7edf2;color:#54626f;vertical-align:middle;white-space:nowrap}
+.pill-lg{padding:2.6px 12px;font-size:15px;border-radius:26px}
+.pill.chasing{background:#fff0d0;color:#96650a}
+/* (Boxx chatbot / quote styles removed) */
+/* two-col detail layout */
+.cols{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;align-items:start}
+.col{display:flex;flex-direction:column;gap:16px}
+.card{background:#fff;border:1px solid #e2e8ef;border-radius:8px;padding:14px 16px}
+/* case page tabs */
+.tabs{display:flex;gap:2px;border-bottom:2px solid #e2e8ef;margin-bottom:18px;flex-wrap:wrap}
+.tab-btn{background:transparent;border:0;padding:10px 16px;font-weight:bold;color:#6b7785;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;font-size:13.5px;border-radius:6px 6px 0 0}
+.tab-btn:hover{color:#0a192f;background:#f4f6f9}
+.tab-btn.active{color:var(--brand);border-bottom-color:var(--brand)}
+.tab-panel{display:none;flex-direction:column;gap:16px;max-width:760px}
+.tab-panel.active{display:flex}
+.card select{padding:8px 10px;border:1px solid #cdd6df;border-radius:6px;font-size:14px;width:100%}
+.status-form{display:flex;gap:8px}
+.status-form select{flex:1}
+.link-row{display:flex;gap:8px}
+.link-field{flex:1;padding:8px 10px;border:1px solid #cdd6df;border-radius:6px;font-size:12.5px;font-family:"Courier New",monospace;background:#f8fafb;color:#54626f}
+.chase-row{margin:10px 0 6px}
+.chase-row .overdue{color:#b42323}
+.diary-due{color:#b42323;font-weight:bold;font-size:15px}
+.task-view-toggle{display:flex;gap:8px}
+.task-view-toggle .btn.active{background:var(--brand);color:#fff;border-color:var(--brand)}
+td.overdue{color:#b42323;font-weight:bold}
+.chase-form{display:flex;gap:8px;margin-bottom:6px}
+.chase-form input[type=date]{flex:1;padding:7px 9px;border:1px solid #cdd6df;border-radius:6px;font-size:13px}
+.snooze-row{display:flex;gap:6px;flex-wrap:wrap}
+dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 14px}
+dl dt{color:#6b7785;font-size:12.5px}
+dl dd{margin:0}
+/* uploads / notes */
+.upload-form{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px}
+.upload-form input[type=file]{flex:1;min-width:180px}
+.hint{color:#8a97a5;font-size:12px;margin:0 0 10px}
+.note-form{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.note-form textarea{padding:8px 10px;border:1px solid #cdd6df;border-radius:6px;font-size:14px;font-family:inherit;resize:vertical}
+.note{background:#fbfcfd;border:1px solid #e8edf2;border-left:3px solid var(--brand);padding:10px 12px;margin-bottom:8px;border-radius:4px}
+.note-footer{display:flex;justify-content:flex-end;gap:8px;margin-top:8px}
+.note-meta{color:#8a97a5;font-size:11.5px;margin-bottom:4px}
+/* forms */
+.form{background:#fff;border:1px solid #e2e8ef;border-radius:8px;padding:18px}
+.form h2{margin-top:18px;padding-top:14px;border-top:1px solid #eef2f6}
+.form h2:first-child{margin-top:0;padding-top:0;border-top:0}
+/* colour-coded zones grouping related sections on the long Edit details form, so Client info,
+   Fact Find, Property/Exit, Contacts and Notes read as distinct bands rather than one long list */
+.form-section{border-left:4px solid transparent;background:#fafbfc;border-radius:0 8px 8px 0;padding:4px 16px 16px;margin-bottom:20px}
+.form-section h2:first-child{margin-top:14px}
+.form-section.sect-client{border-left-color:#1a56b0;background:#f3f7fd}
+.form-section.sect-client h2{color:#1a56b0}
+.form-section.sect-factfind{border-left-color:#0a7a3d;background:#f2faf5}
+.form-section.sect-factfind h2{color:#0a7a3d}
+.form-section.sect-property{border-left-color:#96650a;background:#fdf9f0}
+.form-section.sect-property h2{color:#96650a}
+.form-section.sect-contacts{border-left-color:#6a2fb0;background:#f8f5fd}
+.form-section.sect-contacts h2{color:#6a2fb0}
+.form-section.sect-notes{border-left-color:#54626f;background:#f7f8f9}
+.form-section.sect-notes h2{color:#54626f}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px 18px}
+.grid2 .span2{grid-column:1/-1}
+.form label,.login label{display:flex;flex-direction:column;font-size:12.5px;color:#54626f;gap:4px;font-weight:bold}
+.form input,.form select,.form textarea,.login input{padding:8px 10px;border:1px solid #cdd6df;border-radius:6px;font-size:14px;font-weight:normal;color:#1f2733;font-family:inherit}
+.form-actions{margin-top:16px;display:flex;gap:10px}
+.custom-email-form{background:none;border:0;padding:0;margin-top:10px;display:flex;flex-direction:column;gap:14px}
+.custom-email-form input,.custom-email-form textarea{width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid #cdd6df;border-radius:6px;font-size:14px;font-weight:normal;color:#1f2733;font-family:inherit;line-height:1.5}
+.custom-email-form textarea{resize:vertical}
+.custom-email-form input:focus,.custom-email-form textarea:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(1,8,22,.08)}
+.custom-email-form .form-actions{margin-top:0}
+/* login */
+.login{max-width:340px;margin:6vh auto;background:#fff;border:1px solid #e2e8ef;border-radius:10px;padding:26px}
+.login h1{margin-bottom:14px}.login label{margin-bottom:12px}.login button{width:100%}
+.login .hint{color:#8a97a5;font-size:12px;margin-top:12px}
+.err,.flash{padding:9px 12px;border-radius:6px;margin-bottom:14px;font-size:13px}
+.err{background:#fddede;color:#b42323}.flash{background:#d8f5e3;color:#0a7a3d}
+@media(max-width:760px){
+  .cols,.grid2,.quote-form-grid{grid-template-columns:1fr}
+  .wrap{padding:0 12px}
+
+  /* Header: let it grow to two rows instead of pushing "Log out" off the screen. */
+  .topbar .wrap{height:auto;flex-wrap:wrap;gap:8px;padding-top:10px;padding-bottom:10px}
+  .topbar nav{gap:6px;margin-left:0;order:3;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+  .topbar nav::-webkit-scrollbar{display:none}
+  .topbar nav a.nav-btn{padding:6px 12px;font-size:12.5px}
+  .who{margin-left:auto;font-size:11.5px;text-align:right}
+
+  /* Nine tabs can't wrap tidily — one scrollable row reads far better than a staircase. */
+  .tabs{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:0;margin-bottom:14px}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab-btn{white-space:nowrap;padding:10px 12px;font-size:13px;flex:0 0 auto}
+
+  /* Wide tables scroll sideways rather than squashing every column unreadably. */
+  table.grid{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:nowrap}
+
+  .page-head{flex-direction:column;align-items:flex-start;gap:10px}
+  .page-head h1{font-size:19px}
+  .quote-item-head{flex-direction:column;align-items:flex-start;gap:8px}
+  .link-row{flex-direction:column;align-items:stretch}
+  .link-field{width:100%}
+  .filters{flex-wrap:wrap}
+  .filters input{min-width:0;flex:1 1 100%}
+
+  /* Definition lists stack rather than squeezing the value column — a label like "Source of
+     deposit / repayment funds" would otherwise leave almost no room for its answer. */
+  dl{display:block}
+  dl dt{margin-top:10px;font-weight:bold}
+  dl dd{margin-left:0;margin-bottom:2px}
+}
+
+/* ---------- Polished additions ---------- */
+.btn.ghost.danger{color:#b42323;border-color:#f3c6c6}
+.logo{gap:10px;color:#fff;font-size:18px}.logo:hover{text-decoration:none}
+.logo-mark{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:8px;background:var(--accent);color:#0a192f;font-weight:bold}
+.logo-text{font-weight:bold;color:#fff}.logo-text em{font-style:normal;color:#22d3ee;font-weight:normal}
+.topbar nav a.nav-btn.active{color:#0a192f}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.kpi{background:#fff;border:1px solid #e2e8ef;border-left:4px solid var(--accent);border-radius:8px;padding:12px 14px;color:#1f2733}
+.kpi:hover{text-decoration:none;border-color:var(--accent)}
+.kpi strong{display:block;font-size:26px;color:#0a192f}.kpi span{color:#6b7785;font-size:12.5px}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0}
+.btn-row form{display:inline}
+.mt{margin-top:18px}
+.inline-form{display:inline-flex;gap:6px;align-items:center;margin:2px 6px 2px 0}
+.inline-form input,.inline-form select{padding:5px 8px;border:1px solid #cdd6df;border-radius:6px;font-size:13px}
+.status-form{margin-bottom:8px}.status-form input[type=date]{flex:1;padding:7px 9px;border:1px solid #cdd6df;border-radius:6px}
+.task-row{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid #eef2f6}
+.task-row.done{opacity:.55}
+.task-form{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.task-form input[name=body]{flex:1 1 220px}
+.task-form input,.task-form select{padding:7px 9px;border:1px solid #cdd6df;border-radius:6px;font-size:13px}
+.overdue{color:#b42323;font-weight:bold}
+.note.system{border-left-color:#94a3b8;background:#f8fafc}
+.q-summary{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.progress{flex:1;min-width:140px;height:8px;background:#eef2f6;border-radius:8px;overflow:hidden}
+.progress div{height:100%;background:var(--accent)}
+.pill.q-not_started{background:#eef2f6;color:#54626f}
+.pill.q-in_progress{background:#fff0d0;color:#96650a}
+.pill.q-submitted{background:#d8f5e3;color:#0a7a3d}
+.pill.st-new-enquiry{background:#e0f2fe;color:#075985}
+.pill.st-questionnaire-completed,.pill.st-quoting,.pill.st-quote-sent{background:#e6f7fb;color:#0e7490}
+.pill.st-won{background:#d8f5e3;color:#0a7a3d}
+.pill.st-lost,.pill.st-not-proceeding,.pill.st-closed{background:#f1f2f4;color:#8a97a5}
+.task-view-toggle .btn.active{color:#fff}
+body.is-login .topbar nav{display:none}
+@media(max-width:760px){.kpis{grid-template-columns:1fr 1fr}}

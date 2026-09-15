@@ -1,0 +1,1992 @@
+{
+  "title": "Cleaning Business Insurance Questionnaire",
+  "intro": "The information disclosed within this questionnaire will be used to obtain insurance quotations on your behalf. Please remember that a fair presentation of the risk must be given. Failure to do so may prevent part or all of a claim being paid and could render the policy invalid. If you are unsure whether or not information applies to giving a fair presentation, it should be disclosed.",
+  "sections": [
+    {
+      "id": "general",
+      "title": "General Information",
+      "items": [
+        {
+          "id": "insured_name",
+          "label": "Name of insured",
+          "type": "text",
+          "required": true,
+          "acturis": true,
+          "help": "The business or person the policy will be in the name of."
+        },
+        {
+          "id": "contact_name",
+          "label": "Main contact name",
+          "type": "text",
+          "required": true,
+          "acturis": false,
+          "client": true
+        },
+        {
+          "id": "contact_phone",
+          "label": "Main contact phone number",
+          "type": "text",
+          "required": true,
+          "acturis": false,
+          "client": true
+        },
+        {
+          "id": "trading_names",
+          "label": "Trading name(s)",
+          "type": "text",
+          "acturis": true
+        },
+        {
+          "id": "company_reg_number",
+          "label": "Company registration number",
+          "type": "text",
+          "acturis": false,
+          "client": true
+        },
+        {
+          "id": "entity_status",
+          "label": "Status of entity",
+          "type": "select",
+          "options": [
+            "Limited company (LTD)",
+            "Limited liability partnership (LLP)",
+            "Individual trading as (sole trader)",
+            "Partnership",
+            "Other"
+          ],
+          "acturis": true
+        },
+        {
+          "id": "address",
+          "label": "Address",
+          "type": "textarea",
+          "required": true,
+          "acturis": true
+        },
+        {
+          "id": "insured_email",
+          "label": "Insured's email address",
+          "type": "email",
+          "required": true,
+          "acturis": false,
+          "client": true
+        },
+        {
+          "id": "directors",
+          "label": "Directors, principals and partners",
+          "type": "table",
+          "addLabel": "Add person",
+          "columns": [
+            {
+              "id": "name",
+              "label": "Full name",
+              "type": "text"
+            },
+            {
+              "id": "dob",
+              "label": "Date of birth",
+              "type": "date"
+            }
+          ],
+          "acturis": true
+        },
+        {
+          "id": "business_established",
+          "label": "Business established date",
+          "type": "date",
+          "acturis": true
+        },
+        {
+          "id": "renewal_date",
+          "label": "Policy renewal or inception date",
+          "type": "date",
+          "acturis": true
+        },
+        {
+          "id": "experience_held",
+          "label": "Is at least 1 year's experience held in a relevant field to the business being proposed?",
+          "type": "yesno",
+          "acturis": false,
+          "client": true
+        },
+        {
+          "id": "experience_details",
+          "label": "Details of experience held",
+          "type": "textarea",
+          "acturis": false,
+          "client": true,
+          "showIf": {
+            "field": "experience_held",
+            "equals": "yes"
+          }
+        },
+        {
+          "id": "claims_5yr",
+          "label": "Has the company, any of its directors, principals, partners or senior managers had any claims, losses or incidents that may give rise to a claim in the last five years, whether insured or not, in respect of the sections of cover requested?",
+          "type": "yesno",
+          "required": true,
+          "help": "If yes, please provide details in the Claims History section at the end of this form.",
+          "acturis": true
+        },
+        {
+          "type": "heading",
+          "text": "Have any directors and/or principals/partners/senior officers ever:"
+        },
+        {
+          "id": "decl_convicted",
+          "label": "Been convicted or charged of a non-motoring offence",
+          "type": "yesno",
+          "required": true,
+          "acturis": true
+        },
+        {
+          "id": "decl_bankrupt",
+          "label": "Been declared bankrupt or the subject of bankruptcy proceedings",
+          "type": "yesno",
+          "required": true,
+          "acturis": true
+        },
+        {
+          "id": "decl_dissolved",
+          "label": "Had a previous company dissolve, wind up, liquidate, enter receivership or become insolvent",
+          "type": "yesno",
+          "required": true,
+          "acturis": true
+        },
+        {
+          "id": "decl_declined",
+          "label": "Had insurance declined, denied, cancelled or refused",
+          "type": "yesno",
+          "required": true,
+          "acturis": true
+        },
+        {
+          "id": "decl_special_terms",
+          "label": "Held insurance on which a special term or condition has been imposed",
+          "type": "yesno",
+          "required": true,
+          "acturis": true
+        },
+        {
+          "id": "decl_details",
+          "label": "If any of the above questions have been answered 'yes', please provide further details",
+          "type": "textarea",
+          "showIf": {
+            "anyYes": [
+              "decl_convicted",
+              "decl_bankrupt",
+              "decl_dissolved",
+              "decl_declined",
+              "decl_special_terms"
+            ]
+          },
+          "acturis": false,
+          "client": true
+        },
+        {
+          "id": "trade_associations",
+          "label": "Details of any trade association or inspectorate body memberships",
+          "type": "textarea",
+          "acturis": true
+        },
+        {
+          "id": "ern",
+          "label": "Employer Reference Number (ERN)",
+          "type": "text",
+          "acturis": true
+        },
+        {
+          "id": "ern_exempt",
+          "label": "ERN exempt",
+          "type": "checkbox",
+          "help": "Tick if the business is exempt from having an Employer Reference Number.",
+          "acturis": true
+        }
+      ]
+    },
+    {
+      "id": "financial",
+      "title": "Financial and Business Information",
+      "items": [
+        {
+          "id": "turnover",
+          "label": "Total estimated turnover",
+          "type": "currency",
+          "required": true,
+          "acturis": true
+        },
+        {
+          "id": "manual_wages",
+          "label": "Total estimated manual wages (including manual labour-only subcontractor payments)",
+          "type": "currency",
+          "acturis": true
+        },
+        {
+          "id": "clerical_wages",
+          "label": "Total estimated clerical wages",
+          "type": "currency",
+          "acturis": true
+        },
+        {
+          "id": "bfsc_payments",
+          "label": "Total bona fide subcontractor (BFSC) payments",
+          "type": "currency",
+          "acturis": false
+        },
+        {
+          "type": "heading",
+          "text": "Number of personnel"
+        },
+        {
+          "id": "num_clerical",
+          "label": "Clerical employees, directors, principals and clerical labour-only subcontractors",
+          "type": "number",
+          "acturis": true
+        },
+        {
+          "id": "num_manual_directors",
+          "label": "Manual directors, principals and partners",
+          "type": "number",
+          "acturis": true
+        },
+        {
+          "id": "num_manual_employees",
+          "label": "Manual employees",
+          "type": "number",
+          "acturis": true
+        },
+        {
+          "id": "num_losc",
+          "label": "Manual labour-only subcontractors",
+          "type": "number",
+          "acturis": true
+        },
+        {
+          "type": "percent_group",
+          "id": "env_split",
+          "label": "Business activity split by environment",
+          "mustTotal": 100,
+          "fields": [
+            {
+              "id": "env_domestic",
+              "label": "Domestic"
+            },
+            {
+              "id": "env_commercial",
+              "label": "Commercial"
+            },
+            {
+              "id": "env_industrial",
+              "label": "Industrial"
+            }
+          ],
+          "acturis": true
+        },
+        {
+          "type": "percent_group",
+          "id": "terr_split",
+          "label": "Business activity split by territory",
+          "mustTotal": 100,
+          "fields": [
+            {
+              "id": "terr_uk_eea",
+              "label": "Within the UK or European Economic Area (EEA)"
+            },
+            {
+              "id": "terr_row",
+              "label": "Rest of World excluding North America"
+            },
+            {
+              "id": "terr_na",
+              "label": "In or derived from North America"
+            }
+          ],
+          "acturis": true
+        },
+        {
+          "id": "bfsc_percent",
+          "label": "Percentage of work performed by bona fide subcontractors",
+          "type": "percent",
+          "acturis": true
+        }
+      ]
+    },
+    {
+      "id": "activities",
+      "title": "Trade Activity Details",
+      "description": "The business description must match the activities selected below. Failure to disclose works as an activity may impact the cover offered. If an activity is not listed, use 'Any other activities' and it will be reviewed by underwriters.",
+      "items": [
+        {
+          "id": "business_description",
+          "label": "Business description",
+          "type": "textarea",
+          "required": true,
+          "acturis": true
+        },
+        {
+          "type": "percent_group",
+          "id": "activity_split",
+          "label": "Business activity and percentage of works (must total 100%)",
+          "mustTotal": 100,
+          "columns": 2,
+          "fields": [
+            {
+              "id": "act_general_cleaning",
+              "label": "General cleaning (including industrial, builders cleans, carpet & upholstery cleaning and end of tenancy cleaning) — excluding domestic, office and supermarkets/shopping centres/leisure centres"
+            },
+            {
+              "id": "act_aircraft_interior",
+              "label": "Aircraft interior cleaning"
+            },
+            {
+              "id": "act_hospital",
+              "label": "Cleaning of hospital surgery areas, theatres, recovery rooms"
+            },
+            {
+              "id": "act_clinical_waste",
+              "label": "Collection / delivery of clinical waste including sharps or needles"
+            },
+            {
+              "id": "act_crime_scene",
+              "label": "Crime scene clean-up"
+            },
+            {
+              "id": "act_disinfection",
+              "label": "Disinfection fogging, misting or UV treatment / sanitisation cleaning"
+            },
+            {
+              "id": "act_waste_disposal",
+              "label": "Disposal of waste or effluent"
+            },
+            {
+              "id": "act_drain_rodding",
+              "label": "Drain rodding"
+            },
+            {
+              "id": "act_duct_cleaning",
+              "label": "Duct cleaning"
+            },
+            {
+              "id": "act_fire_flood",
+              "label": "Fire and flood restoration / cleaning"
+            },
+            {
+              "id": "act_floor_cleaning",
+              "label": "Floor cleaning, maintenance and restoration including stripping and resealing"
+            },
+            {
+              "id": "act_furniture_restoration",
+              "label": "Furniture restoration"
+            },
+            {
+              "id": "act_gardening",
+              "label": "Gardening, landscape gardening and grounds maintenance"
+            },
+            {
+              "id": "act_property_maintenance",
+              "label": "General property maintenance, non-structural refurbishment & redecoration excluding roofing work"
+            },
+            {
+              "id": "act_gritting",
+              "label": "Gritting / snow clearance"
+            },
+            {
+              "id": "act_home_help",
+              "label": "Home help services excluding medical or physical assistance"
+            },
+            {
+              "id": "act_ironing",
+              "label": "Ironing services"
+            },
+            {
+              "id": "act_litter_picking",
+              "label": "Litter picking / car park cleaning / street sweeping"
+            },
+            {
+              "id": "act_machinery",
+              "label": "Machinery cleaning"
+            },
+            {
+              "id": "act_media_blasting",
+              "label": "Media blasting"
+            },
+            {
+              "id": "act_office_domestic",
+              "label": "Office and domestic cleaning"
+            },
+            {
+              "id": "act_pest_control",
+              "label": "Pest control"
+            },
+            {
+              "id": "act_pressure_above_4000",
+              "label": "Pressure washing above 4000 PSI"
+            },
+            {
+              "id": "act_pressure_up_4000",
+              "label": "Pressure washing up to 4000 PSI"
+            },
+            {
+              "id": "act_supply_equipment",
+              "label": "Pure supply of cleaning equipment"
+            },
+            {
+              "id": "act_supply_products",
+              "label": "Pure supply of cleaning products"
+            },
+            {
+              "id": "act_school_caretaking",
+              "label": "School caretaking"
+            },
+            {
+              "id": "act_schools_unis",
+              "label": "Schools and/or university cleaning"
+            },
+            {
+              "id": "act_shop_cleaning",
+              "label": "Shop cleaning"
+            },
+            {
+              "id": "act_supermarket",
+              "label": "Supermarket cleaning, shopping centre cleaning, leisure centre cleaning"
+            },
+            {
+              "id": "act_tank_cleaning",
+              "label": "Tank cleaning"
+            },
+            {
+              "id": "act_valeting_no_movement",
+              "label": "Vehicle valeting (excluding movement of vehicles)"
+            },
+            {
+              "id": "act_valeting_movement",
+              "label": "Vehicle valeting including movement of vehicles"
+            },
+            {
+              "id": "act_window_cleaning",
+              "label": "Window cleaning and/or gutter, fascia or soffit cleaning"
+            },
+            {
+              "id": "act_window_rope",
+              "label": "Window cleaning and/or gutter, fascia or soffit cleaning by rope access or using slings or cradles"
+            },
+            {
+              "id": "act_other",
+              "label": "Any other activities not specified above"
+            }
+          ],
+          "acturis": true
+        },
+        {
+          "id": "act_other_details",
+          "label": "Please list any other activities",
+          "type": "textarea",
+          "showIf": {
+            "fieldGt0": "act_other"
+          },
+          "acturis": false,
+          "client": true
+        }
+      ]
+    },
+    {
+      "id": "high_risk",
+      "title": "High Risk Activities and Working Locations",
+      "description": "Please provide a percentage for all that apply and provide the additional information as requested, or confirm 0 percent.",
+      "items": [
+        {
+          "id": "hr_any",
+          "label": "Does any of your work involve high-risk locations or activities? For example: airports, working at height above 16 metres, nuclear, rail, petrochemical or power generation sites, cladding, roofing or high-rise buildings, offshore or on ships, depths over 3 metres, confined spaces, hazardous substances, asbestos, explosive atmospheres or hot works.",
+          "type": "yesno",
+          "required": true,
+          "acturis": false,
+          "client": true,
+          "help": "If you answer no, we will skip the detailed high-risk questions."
+        },
+        {
+          "id": "hr_airside",
+          "label": "Percentage of work undertaken airside or in aircraft operation areas or hangars",
+          "type": "percent",
+          "acturis": true,
+          "showIf": {
+            "field": "hr_any",
+            "equals": "yes"
+          }
+        },
+        {
+          "id": "hr_airside_10m",
+          "label": "Any work within 10 metres of aircraft or in hangars which occupy aircraft at time of work?",
+          "type": "yesno",
+          "showIf": {
+            "all": [
+              {
+                "field": "hr_any",
+                "equals": "yes"
+              },
+              {
+                "fieldGt0": "hr_airside"
+              }
+            ]
+          },
+          "acturis": false
+        },
+        {
+          "id": "hr_height",
+          "label": "Percentage of work undertaken at height with a drop greater than 16 metres",
+          "type": "percent",
+          "acturis": true,
+          "showIf": {
+            "field": "hr_any",
+            "equals": "yes"
+          }
+        },
+        {
+          "id": "hr_max_height",
+          "label": "Maximum height worked to (metres)",
+          "type": "number",
+          "showIf": {
+            "all": [
+              {
+                "field": "hr_any",
+                "equals": "yes"
+              },
+              {
+                "fieldGt0": "hr_height"
+              }
+            ]
+          },
+          "acturis": false,
+          "client": true
+        },
+        {
+          "id": "hr_access_methods",
+          "label": "Access methods used (e.g. MEWPs, ladders, rope access/slings/cradles, scaffolding)",
+          "type": "textarea",
+          "showIf": {
+            "all": [
+              {
+                "field": "hr_any",
+                "equals": "yes"
+              },
+              {
+                "fieldGt0": "hr_height"
+              }
+            ]
+          },
+          "acturis": false,
+          "client": true
+        },
+        {
+          "id": "hr_irata",
+          "label": "Are all relevant persons IRATA trained for rope access methods?",
+          "type": "yesno",
+          "acturis": false,
+          "showIf": {
+            "field": "hr_any",
+            "equals": "yes"
+          }
+        },
+        {
+          "id": "hr_ipaf",
+          "label": "Are all relevant persons IPAF trained where MEWPs are used?",
+          "type": "yesno",
+          "acturis": false,
+          "showIf": {
+            "field": "hr_any",
+            "equals": "yes"
+          }
+        },
+        {
+          "id": "hr_nuclear",
+          "label": "Percentage of work undertaken at nuclear installations or establishments (other than perimeter fences or offices)",
+          "type": "percent",
+          "acturis": true,
+          "showIf": {
+            "field": "hr_any",
+            "equals": "yes"
+          }
+        },
+        {
+          "id": "hr_pts",
+          "label": "Percentage of work undertaken which requires Personal Track Safety (PTS) or Sentinel Cards",
+          "type": "percent",
+          "acturis": true,
+          "showIf": {
+            "field": "hr_any",
+            "equals": "yes"
+          }
+        },
+        {
+          "id": "hr_railway",
+          "label": "Percentage of work undertaken involving railway tracks, signals, rolling stock or open line working",
+          "type": "percent",
+          "acturis": true,
+          "showIf": {
+            "field": "hr_any",
+            "equals": "yes"
+          }
+        },
+        {
+          "id": "hr_petrochem",
+          "label": "Percentage of work undertaken at safety critical locations in premises used for storage or processing of (petro)chemicals, gases or oils",
+          "type": "percent",
+          "acturis": true,
+          "showIf": {
+            "field": "hr_any",
+            "equals": "yes"
+          }
+        },
+        {
+          "id": "hr_petrochem_details",
+          "label": "Description of work within safety critical areas or on safety critical systems of premises used for storage or processing of (petro)chemicals, gases or oils",
+          "type": "textarea",
+          "showIf": {
+            "all": [
+              {
+                "field": "hr_any",
+                "equals": "yes"
+              },
+              {
+                "fieldGt0": "hr_petrochem"
+              }
+            ]
+          },
+          "acturis": false
+        },
+        {
+          "id": "hr_power_gen",
+          "label": "Percentage of work undertaken at safety critical locations of power generation facilities other than nuclear premises",
+          "type": "percent",
+          "acturis": true,
+          "showIf": {
+            "field": "hr_any",
+            "equals": "yes"
+          }
+        },
+        {
+          "id": "hr_power_gen_details",
+          "label": "Description of work within safety critical areas or on safety critical systems of power generation facilities",
+          "type": "textarea",
+          "showIf": {
+            "all": [
+              {
+                "field": "hr_any",
+                "equals": "yes"
+              },
+              {
+                "fieldGt0": "hr_power_gen"
+              }
+            ]
+          },
+          "acturis": false
+        },
+        {
+          "type": "heading",
+          "text": "Percentage of work undertaken in respect of:",
+          "showIf": {
+            "field": "hr_any",
+            "equals": "yes"
+          }
+        },
+        {
+          "id": "hr_cladding",
+          "label": "Cladding",
+          "type": "percent",
+          "acturis": true,
+          "showIf": {
+            "field": "hr_any",
+            "equals": "yes"
+          }
+        },
+        {
+          "id": "hr_roofing",
+          "label": "Roofing or erection, inspection or sign off of scaffolding (excluding mobile scaffolding towers)",
+          "type": "percent",
+          "acturis": true,
+          "showIf": {
+            "field": "hr_any",
+            "equals": "yes"
+          }
+        },
+        {
+          "id": "hr_high_rise",
+          "label": "High rise premises",
+          "type": "percent",
+          "acturis": true,
+          "showIf": {
+            "field": "hr_any",
+            "equals": "yes"
+          }
+        },
+        {
+          "id": "hr_cladding_details",
+          "label": "Details of works undertaken",
+          "type": "textarea",
+          "showIf": {
+            "all": [
+              {
+                "field": "hr_any",
+                "equals": "yes"
+              },
+              {
+                "anyGt0": [
+                  "hr_cladding",
+                  "hr_roofing",
+                  "hr_high_rise"
+                ]
+              }
+            ]
+          },
+          "acturis": false,
+          "client": true
+        },
+        {
+          "id": "hr_offshore",
+          "label": "Percentage of work undertaken offshore",
+          "type": "percent",
+          "acturis": true,
+          "showIf": {
+            "field": "hr_any",
+            "equals": "yes"
+          }
+        },
+        {
+          "id": "hr_offshore_transport",
+          "label": "Is the client transported offshore by a third party?",
+          "type": "yesno",
+          "showIf": {
+            "all": [
+              {
+                "field": "hr_any",
+                "equals": "yes"
+              },
+              {
+                "fieldGt0": "hr_offshore"
+              }
+            ]
+          },
+          "acturis": false
+        },
+        {
+          "id": "hr_offshore_trips",
+          "label": "Estimated number of trips offshore in the next 12 months",
+          "type": "number",
+          "showIf": {
+            "all": [
+              {
+                "field": "hr_any",
+                "equals": "yes"
+              },
+              {
+                "fieldGt0": "hr_offshore"
+              }
+            ]
+          },
+          "acturis": false
+        },
+        {
+          "id": "hr_offshore_mandays",
+          "label": "Estimated man days offshore in the next 12 months",
+          "type": "number",
+          "showIf": {
+            "all": [
+              {
+                "field": "hr_any",
+                "equals": "yes"
+              },
+              {
+                "fieldGt0": "hr_offshore"
+              }
+            ]
+          },
+          "acturis": false
+        },
+        {
+          "id": "hr_offshore_max_employees",
+          "label": "Maximum number of employees offshore at any one time",
+          "type": "number",
+          "showIf": {
+            "all": [
+              {
+                "field": "hr_any",
+                "equals": "yes"
+              },
+              {
+                "fieldGt0": "hr_offshore"
+              }
+            ]
+          },
+          "acturis": false
+        },
+        {
+          "id": "hr_offshore_max_trip",
+          "label": "Maximum length of any one trip offshore (days)",
+          "type": "number",
+          "showIf": {
+            "all": [
+              {
+                "field": "hr_any",
+                "equals": "yes"
+              },
+              {
+                "fieldGt0": "hr_offshore"
+              }
+            ]
+          },
+          "acturis": false
+        },
+        {
+          "id": "hr_offshore_locations",
+          "label": "Locations worked offshore and details of activities undertaken",
+          "type": "textarea",
+          "showIf": {
+            "all": [
+              {
+                "field": "hr_any",
+                "equals": "yes"
+              },
+              {
+                "fieldGt0": "hr_offshore"
+              }
+            ]
+          },
+          "acturis": false
+        },
+        {
+          "id": "hr_ships",
+          "label": "Percentage of work undertaken on ships whilst not in dock",
+          "type": "percent",
+          "acturis": true,
+          "showIf": {
+            "field": "hr_any",
+            "equals": "yes"
+          }
+        },
+        {
+          "id": "hr_depth",
+          "label": "Percentage of work undertaken at depths greater than 3 metres",
+          "type": "percent",
+          "acturis": true,
+          "showIf": {
+            "field": "hr_any",
+            "equals": "yes"
+          }
+        },
+        {
+          "id": "hr_max_depth",
+          "label": "Maximum depth worked to (metres)",
+          "type": "number",
+          "showIf": {
+            "all": [
+              {
+                "field": "hr_any",
+                "equals": "yes"
+              },
+              {
+                "fieldGt0": "hr_depth"
+              }
+            ]
+          },
+          "acturis": false
+        },
+        {
+          "id": "hr_confined",
+          "label": "Percentage of work undertaken within confined spaces that fall within the Confined Space Regulations",
+          "type": "percent",
+          "acturis": true,
+          "showIf": {
+            "field": "hr_any",
+            "equals": "yes"
+          }
+        },
+        {
+          "id": "hr_hazardous",
+          "label": "Percentage of work involving the use, handling, storage or transportation of any hazardous substances such as explosives, toxic or corrosive chemicals, siliceous materials, gases, isocyanates, radioactive substances or any materials which give rise to dust, fumes or vapours which are not common to the trade",
+          "type": "percent",
+          "acturis": true,
+          "showIf": {
+            "field": "hr_any",
+            "equals": "yes"
+          }
+        },
+        {
+          "id": "hr_hazardous_details",
+          "label": "Details of hazardous substances",
+          "type": "textarea",
+          "showIf": {
+            "all": [
+              {
+                "field": "hr_any",
+                "equals": "yes"
+              },
+              {
+                "fieldGt0": "hr_hazardous"
+              }
+            ]
+          },
+          "acturis": false,
+          "client": true
+        },
+        {
+          "id": "hr_asbestos",
+          "label": "Percentage of work with, handling, storage of or exposure to asbestos",
+          "type": "percent",
+          "acturis": true,
+          "showIf": {
+            "field": "hr_any",
+            "equals": "yes"
+          }
+        },
+        {
+          "id": "hr_asbestos_details",
+          "label": "Details of work with or involving exposure to asbestos",
+          "type": "textarea",
+          "showIf": {
+            "all": [
+              {
+                "field": "hr_any",
+                "equals": "yes"
+              },
+              {
+                "fieldGt0": "hr_asbestos"
+              }
+            ]
+          },
+          "acturis": false,
+          "client": true
+        },
+        {
+          "id": "hr_atex",
+          "label": "Is any work carried out in environments with explosive atmospheres or environments subject to ATEX adherence?",
+          "type": "yesno",
+          "acturis": false,
+          "client": true,
+          "showIf": {
+            "field": "hr_any",
+            "equals": "yes"
+          }
+        },
+        {
+          "id": "hr_heat",
+          "label": "Is work carried out using heat via oxyacetylene, electric arc and similar welding and cutting equipment, blow lamps or torches?",
+          "type": "yesno",
+          "acturis": true,
+          "showIf": {
+            "field": "hr_any",
+            "equals": "yes"
+          }
+        },
+        {
+          "id": "hr_heat_details",
+          "label": "If yes to either of the above, please provide details of the work including wages and turnover for these works",
+          "type": "textarea",
+          "showIf": {
+            "all": [
+              {
+                "field": "hr_any",
+                "equals": "yes"
+              },
+              {
+                "anyYes": [
+                  "hr_atex",
+                  "hr_heat"
+                ]
+              }
+            ]
+          },
+          "acturis": false,
+          "client": true
+        }
+      ]
+    },
+    {
+      "id": "covers",
+      "title": "Covers Required",
+      "items": [
+        {
+          "type": "heading",
+          "text": "Employers' Liability"
+        },
+        {
+          "id": "el_required",
+          "label": "Employers' Liability required? (£10,000,000 standard limit of indemnity, higher limits available)",
+          "type": "yesno",
+          "required": true,
+          "acturis": true
+        },
+        {
+          "id": "el_limit",
+          "label": "Limit required (£)",
+          "type": "currency",
+          "showIf": {
+            "field": "el_required",
+            "equals": "yes"
+          },
+          "acturis": true
+        },
+        {
+          "type": "heading",
+          "text": "Public & Products Liability (including inefficacy)"
+        },
+        {
+          "id": "pl_limit",
+          "label": "Limit required (£)",
+          "type": "currency",
+          "acturis": true
+        },
+        {
+          "type": "heading",
+          "text": "Optional Public Liability extensions"
+        },
+        {
+          "id": "ext_asbestos_buyback",
+          "label": "Asbestos buyback (work where a licence is not required or that is subject to Notifiable Non-licensed Work requirements)",
+          "type": "yesno",
+          "acturis": true,
+          "default": "no"
+        },
+        {
+          "id": "ext_part_worked_upon",
+          "label": "Damage to that part worked upon",
+          "type": "yesno",
+          "acturis": true,
+          "default": "yes"
+        },
+        {
+          "id": "ext_fidelity_bonding",
+          "label": "Fidelity bonding",
+          "type": "yesno",
+          "acturis": true,
+          "default": "yes"
+        },
+        {
+          "id": "ext_financial_loss",
+          "label": "Financial loss (including products)",
+          "type": "yesno",
+          "acturis": true,
+          "default": "yes"
+        },
+        {
+          "id": "ext_loss_of_keys",
+          "label": "Loss of keys",
+          "type": "yesno",
+          "acturis": true,
+          "default": "yes"
+        },
+        {
+          "id": "ext_misuse_telephones",
+          "label": "Misuse of telephones",
+          "type": "yesno",
+          "acturis": true,
+          "default": "yes"
+        },
+        {
+          "id": "ext_north_america",
+          "label": "North America (products)",
+          "type": "yesno",
+          "acturis": true,
+          "default": "no"
+        },
+        {
+          "id": "ext_defective_products",
+          "label": "Defective products and workmanship (where damage or injury has occurred)",
+          "type": "yesno",
+          "acturis": true,
+          "default": "no"
+        },
+        {
+          "id": "ext_metered_water",
+          "label": "Loss of metered water",
+          "type": "yesno",
+          "acturis": true,
+          "default": "no"
+        },
+        {
+          "id": "ext_temp_removal",
+          "label": "Temporary removal of customers' property for cleaning or treatment",
+          "type": "yesno",
+          "acturis": true,
+          "default": "no"
+        },
+        {
+          "id": "ext_trace_access",
+          "label": "Trace and access",
+          "type": "yesno",
+          "acturis": true,
+          "default": "no"
+        },
+        {
+          "id": "ext_firearms",
+          "label": "Use of firearms",
+          "type": "yesno",
+          "acturis": true,
+          "default": "no"
+        }
+      ]
+    },
+    {
+      "id": "contractors_all_risks",
+      "title": "Contractors All Risks",
+      "description": "Contract Works, Plant & Tools. Tick each cover the client requires and complete the sums insured.",
+      "items": [
+        {
+          "id": "cw_contract_works",
+          "label": "Contract Works",
+          "type": "checkbox",
+          "acturis": true
+        },
+        {
+          "id": "cw_contracting_turnover",
+          "label": "Contracting turnover (if different from total turnover) (£)",
+          "type": "currency",
+          "showIf": {
+            "field": "cw_contract_works",
+            "equals": true
+          },
+          "acturis": true
+        },
+        {
+          "id": "cw_max_contract",
+          "label": "Contract works — maximum contract value (£)",
+          "type": "currency",
+          "showIf": {
+            "field": "cw_contract_works",
+            "equals": true
+          },
+          "acturis": true
+        },
+        {
+          "id": "cw_own_plant_req",
+          "label": "Own Plant and other temporary property",
+          "type": "checkbox",
+          "acturis": true
+        },
+        {
+          "id": "cw_own_plant",
+          "label": "Own plant — sum insured (£)",
+          "type": "currency",
+          "showIf": {
+            "field": "cw_own_plant_req",
+            "equals": true
+          },
+          "acturis": true
+        },
+        {
+          "id": "cw_hired_plant_req",
+          "label": "Hired-in Plant",
+          "type": "checkbox",
+          "acturis": true
+        },
+        {
+          "id": "cw_hired_plant",
+          "label": "Hired-in plant — maximum any one occurrence (£)",
+          "type": "currency",
+          "showIf": {
+            "field": "cw_hired_plant_req",
+            "equals": true
+          },
+          "acturis": true
+        },
+        {
+          "id": "cw_hire_fees",
+          "label": "Hired-in plant — annual hiring fees (£)",
+          "type": "currency",
+          "showIf": {
+            "field": "cw_hired_plant_req",
+            "equals": true
+          },
+          "acturis": true
+        },
+        {
+          "id": "cw_tools_req",
+          "label": "Tools",
+          "type": "checkbox",
+          "acturis": true
+        },
+        {
+          "id": "cw_tools",
+          "label": "Tools — sum insured (£)",
+          "type": "currency",
+          "showIf": {
+            "field": "cw_tools_req",
+            "equals": true
+          },
+          "acturis": true
+        }
+      ]
+    },
+    {
+      "id": "commercial_all_risks",
+      "title": "Commercial All Risks",
+      "description": "Property cover for the client's own premises. Tick the covers required and complete the sums insured.",
+      "items": [
+        {
+          "id": "car_required",
+          "label": "Is Commercial All Risks (premises) cover required?",
+          "type": "yesno",
+          "acturis": true,
+          "help": "Where cover is required for more than one premises, describe each (a second premises can be noted in the additional details box)."
+        },
+        {
+          "id": "car_risk_address",
+          "label": "Risk address",
+          "type": "textarea",
+          "showIf": {
+            "field": "car_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "car_premises_use",
+          "label": "Primary use of premises (e.g. office, warehouse, storage facility)",
+          "type": "text",
+          "showIf": {
+            "field": "car_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "car_security",
+          "label": "Are external doors (including roller shutters), skylights and windows secured with appropriate locks, conforming to BS:3621 where applicable?",
+          "type": "yesno",
+          "showIf": {
+            "field": "car_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "car_heating",
+          "label": "Is the heating system fixed, and where it is not, it does not include naked flame-based heating?",
+          "type": "yesno",
+          "showIf": {
+            "field": "car_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "car_construction",
+          "label": "Is the property of a standard construction (brick, stone, metal or concrete with a roof of slate, tiles, concrete or metal)?",
+          "type": "yesno",
+          "showIf": {
+            "field": "car_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "car_flooded",
+          "label": "Has the property ever flooded?",
+          "type": "yesno",
+          "showIf": {
+            "field": "car_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "car_subsidence",
+          "label": "Does the property have a history of subsidence, landslip, heave or structural movement?",
+          "type": "yesno",
+          "showIf": {
+            "field": "car_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "car_details",
+          "label": "Additional details regarding premises security, heating, construction, flood history or subsidence (and any second premises)",
+          "type": "textarea",
+          "showIf": {
+            "field": "car_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "type": "heading",
+          "text": "Which covers does the client want? (tick all that apply)",
+          "showIf": {
+            "field": "car_required",
+            "equals": "yes"
+          }
+        },
+        {
+          "id": "contents_required",
+          "label": "Contents (machinery, plant, stock, equipment, tools, goods in transit)",
+          "type": "checkbox",
+          "showIf": {
+            "field": "car_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "sum_machinery",
+          "label": "Machinery, plant and all other contents (including tenants' improvements) — sum insured (£)",
+          "type": "currency",
+          "showIf": {
+            "field": "contents_required",
+            "equals": true
+          },
+          "acturis": false
+        },
+        {
+          "id": "sum_stock",
+          "label": "Stock — sum insured (£)",
+          "type": "currency",
+          "showIf": {
+            "field": "contents_required",
+            "equals": true
+          },
+          "acturis": false
+        },
+        {
+          "id": "sum_electronic",
+          "label": "Electronic business equipment and computers — sum insured (£)",
+          "type": "currency",
+          "showIf": {
+            "field": "contents_required",
+            "equals": true
+          },
+          "acturis": false
+        },
+        {
+          "id": "sum_portable_electronic",
+          "label": "Portable electronic business equipment — sum insured (£)",
+          "type": "currency",
+          "showIf": {
+            "field": "contents_required",
+            "equals": true
+          },
+          "acturis": false
+        },
+        {
+          "id": "sum_portable_tools",
+          "label": "Portable tools — sum insured (£)",
+          "type": "currency",
+          "showIf": {
+            "field": "contents_required",
+            "equals": true
+          },
+          "acturis": false
+        },
+        {
+          "id": "sum_stock_away",
+          "label": "Stock away from the premises — sum insured (£)",
+          "type": "currency",
+          "showIf": {
+            "field": "contents_required",
+            "equals": true
+          },
+          "acturis": false
+        },
+        {
+          "id": "sum_goods_transit",
+          "label": "Goods in transit — sum insured (£)",
+          "type": "currency",
+          "showIf": {
+            "field": "contents_required",
+            "equals": true
+          },
+          "acturis": false
+        },
+        {
+          "id": "sum_non_ferrous",
+          "label": "Non-ferrous metals — sum insured (£)",
+          "type": "currency",
+          "showIf": {
+            "field": "contents_required",
+            "equals": true
+          },
+          "acturis": false
+        },
+        {
+          "id": "customer_money",
+          "label": "Customer money",
+          "type": "checkbox",
+          "showIf": {
+            "field": "car_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "buildings_required",
+          "label": "Buildings",
+          "type": "checkbox",
+          "showIf": {
+            "field": "car_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "buildings_subsidence",
+          "label": "Subsidence cover required for buildings?",
+          "type": "yesno",
+          "showIf": {
+            "field": "buildings_required",
+            "equals": true
+          },
+          "acturis": false
+        },
+        {
+          "id": "sum_buildings",
+          "label": "Buildings — sum insured (£)",
+          "type": "currency",
+          "showIf": {
+            "field": "buildings_required",
+            "equals": true
+          },
+          "acturis": false
+        },
+        {
+          "id": "rent_payable_required",
+          "label": "Rent payable",
+          "type": "checkbox",
+          "showIf": {
+            "field": "car_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "sum_rent_payable",
+          "label": "Rent payable — sum insured (£) (total payable per the terms and duration of the lease)",
+          "type": "currency",
+          "showIf": {
+            "field": "rent_payable_required",
+            "equals": true
+          },
+          "acturis": false
+        },
+        {
+          "id": "floating_contents",
+          "label": "Floating contents (only if cover is needed across multiple premises)",
+          "type": "checkbox",
+          "showIf": {
+            "field": "car_required",
+            "equals": "yes"
+          },
+          "acturis": true
+        }
+      ]
+    },
+    {
+      "id": "business_interruption",
+      "title": "Business Interruption",
+      "items": [
+        {
+          "id": "bi_required",
+          "label": "Is Business Interruption cover required?",
+          "type": "yesno",
+          "acturis": true
+        },
+        {
+          "id": "bi_note",
+          "type": "note",
+          "text": "A 12 month indemnity period may not be enough to cover your business after a serious incident. We will talk you through the right indemnity period before arranging cover.",
+          "showIf": {
+            "field": "bi_required",
+            "equals": "yes"
+          }
+        },
+        {
+          "id": "bi_items",
+          "label": "Business Interruption items",
+          "type": "table",
+          "showIf": {
+            "field": "bi_required",
+            "equals": "yes"
+          },
+          "addLabel": "Add item",
+          "fixedRows": [
+            "Gross Profit",
+            "Gross Revenue",
+            "Increased Costs of Working (ICOW)",
+            "Additional Increased Costs of Working (AICOW)",
+            "Rent Receivable",
+            "Outstanding Debit Balances"
+          ],
+          "columns": [
+            {
+              "id": "item",
+              "label": "Item",
+              "type": "text",
+              "fixed": true
+            },
+            {
+              "id": "sum_insured",
+              "label": "Sum insured (12 month basis) £",
+              "type": "currency"
+            },
+            {
+              "id": "indemnity_months",
+              "label": "Indemnity period (months)",
+              "type": "number"
+            }
+          ],
+          "acturis": false
+        }
+      ]
+    },
+    {
+      "id": "professional_indemnity",
+      "title": "Professional Indemnity",
+      "items": [
+        {
+          "id": "pi_required",
+          "label": "Is Professional Indemnity cover required?",
+          "type": "yesno",
+          "acturis": true
+        },
+        {
+          "id": "pi_limit",
+          "label": "Limit of indemnity required (aggregate basis of indemnity) (£)",
+          "type": "currency",
+          "showIf": {
+            "field": "pi_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "pi_retro_date",
+          "label": "Retroactive continuous cover date (evidence of this cover date must be provided)",
+          "type": "date",
+          "showIf": {
+            "field": "pi_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "pi_excess",
+          "label": "Preferred level of excess (£)",
+          "type": "currency",
+          "showIf": {
+            "field": "pi_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "type": "heading",
+          "text": "Are any activities undertaken or services offered in the following areas:",
+          "showIf": {
+            "field": "pi_required",
+            "equals": "yes"
+          }
+        },
+        {
+          "id": "pi_biomass",
+          "label": "Industrial or commercial biomass systems or anaerobic digestors or waste disposal plants or recycling centres",
+          "type": "yesno",
+          "showIf": {
+            "field": "pi_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "pi_wind",
+          "label": "Wind turbines or hydro-electric premises",
+          "type": "yesno",
+          "showIf": {
+            "field": "pi_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "pi_heat_pumps",
+          "label": "Ground source / air source heat pumps",
+          "type": "yesno",
+          "showIf": {
+            "field": "pi_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "pi_sewerage",
+          "label": "Sewerage or water treatment or testing",
+          "type": "yesno",
+          "showIf": {
+            "field": "pi_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "pi_architectural",
+          "label": "Architectural services",
+          "type": "yesno",
+          "showIf": {
+            "field": "pi_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "pi_civil_structural",
+          "label": "Civil or structural engineering",
+          "type": "yesno",
+          "showIf": {
+            "field": "pi_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "pi_mainframe",
+          "label": "Mainframe computer suites",
+          "type": "yesno",
+          "showIf": {
+            "field": "pi_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "pi_chemical_soil",
+          "label": "Chemical or soil engineering",
+          "type": "yesno",
+          "showIf": {
+            "field": "pi_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "pi_high_rise",
+          "label": "High-rise premises",
+          "type": "yesno",
+          "showIf": {
+            "field": "pi_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "pi_nuclear",
+          "label": "Nuclear engineering",
+          "type": "yesno",
+          "showIf": {
+            "field": "pi_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "pi_surveying",
+          "label": "Surveying (either land/quantity or building)",
+          "type": "yesno",
+          "showIf": {
+            "field": "pi_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "pi_area_details",
+          "label": "Details of work at these locations",
+          "type": "textarea",
+          "showIf": {
+            "anyYes": [
+              "pi_biomass",
+              "pi_wind",
+              "pi_heat_pumps",
+              "pi_sewerage",
+              "pi_architectural",
+              "pi_civil_structural",
+              "pi_mainframe",
+              "pi_chemical_soil",
+              "pi_high_rise",
+              "pi_nuclear",
+              "pi_surveying"
+            ]
+          },
+          "acturis": false
+        },
+        {
+          "id": "pi_turnover",
+          "label": "Turnover for all insured entities in most recent financial year (if new venture without previous financial year, please use an estimated figure) (£)",
+          "type": "currency",
+          "showIf": {
+            "field": "pi_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "pi_pct_design",
+          "label": "Percentage of turnover for fees where you provide pure design, consultancy, technical, software design or other professional services only",
+          "type": "percent",
+          "showIf": {
+            "field": "pi_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "pi_pct_turnkey",
+          "label": "Percentage of turnover for works where you provide bespoke and/or turn-key solutions, or you are responsible for the full design of an entire system",
+          "type": "percent",
+          "showIf": {
+            "field": "pi_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "pi_pct_tried_tested",
+          "label": "Percentage of turnover for works where you use tried and tested installation methods but are not responsible for the creation of the product installed, or you work to the designs of others",
+          "type": "percent",
+          "showIf": {
+            "field": "pi_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "pi_pct_other",
+          "label": "Percentage of all other remaining turnover (that does not fit into any of the above specified categories)",
+          "type": "percent",
+          "showIf": {
+            "field": "pi_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "pi_experience",
+          "label": "Is at least 5 years' relevant experience held by the persons carrying out, controlling or signing off the works in respect of the professional activities undertaken, or does this person have suitable professional qualifications?",
+          "type": "yesno",
+          "showIf": {
+            "field": "pi_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "pi_claims",
+          "label": "Any claims, losses or incidents, whether insured or not, in respect of Professional Indemnity? (If yes, please provide details in the Claims History section)",
+          "type": "yesno",
+          "showIf": {
+            "field": "pi_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "pi_manufacturing",
+          "label": "Is manufacturing work undertaken?",
+          "type": "yesno",
+          "showIf": {
+            "field": "pi_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "pi_asbestos_ext",
+          "label": "Is the Professional Indemnity asbestos extension required?",
+          "type": "yesno",
+          "showIf": {
+            "field": "pi_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        }
+      ]
+    },
+    {
+      "id": "other_covers",
+      "title": "Directors' & Officers' Liability and Other Optional Covers",
+      "items": [
+        {
+          "id": "do_required",
+          "label": "Is Directors' & Officers' Liability cover required?",
+          "type": "yesno",
+          "acturis": true
+        },
+        {
+          "type": "heading",
+          "text": "Tick to confirm that the following statements are true:",
+          "showIf": {
+            "field": "do_required",
+            "equals": "yes"
+          }
+        },
+        {
+          "id": "do_not_sole_trader",
+          "label": "The firm or company is not a sole trader, partnership or listed on a stock exchange",
+          "type": "checkbox",
+          "showIf": {
+            "field": "do_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "do_positive_net_worth",
+          "label": "The last consolidated annual accounts had a positive net worth (total assets exceed total liabilities)",
+          "type": "checkbox",
+          "showIf": {
+            "field": "do_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "do_pays_debts",
+          "label": "The firm or company is able to pay its debts as they fall due",
+          "type": "checkbox",
+          "showIf": {
+            "field": "do_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "do_trading_24m",
+          "label": "The firm or company has been trading for not less than 24 months",
+          "type": "checkbox",
+          "showIf": {
+            "field": "do_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "do_no_circumstances",
+          "label": "There are no circumstances that might reasonably be expected to give rise to any claim against any of the Directors or Officers of the firm or company",
+          "type": "checkbox",
+          "showIf": {
+            "field": "do_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "id": "do_no_claims",
+          "label": "There have been no claims against any of the Directors (including past Directors) or Officers of the firm or company or any of its subsidiaries in the last 5 years",
+          "type": "checkbox",
+          "showIf": {
+            "field": "do_required",
+            "equals": "yes"
+          },
+          "acturis": false
+        },
+        {
+          "type": "heading",
+          "text": "Other optional covers"
+        },
+        {
+          "id": "oc_fidelity",
+          "label": "Fidelity guarantee",
+          "type": "yesno",
+          "acturis": true
+        },
+        {
+          "id": "oc_legal",
+          "label": "Legal expenses",
+          "type": "yesno",
+          "acturis": true
+        },
+        {
+          "id": "oc_personal_accident",
+          "label": "Personal accident",
+          "type": "yesno",
+          "acturis": true
+        },
+        {
+          "id": "oc_terrorism",
+          "label": "Property terrorism",
+          "type": "yesno",
+          "acturis": true
+        }
+      ]
+    },
+    {
+      "id": "previous_insurer",
+      "title": "Previous Insurer Details",
+      "items": [
+        {
+          "id": "prev_insurer_details",
+          "label": "Details of previous insurer and target premium",
+          "type": "textarea",
+          "acturis": true
+        },
+        {
+          "id": "prev_qbe_ssr",
+          "label": "Do you currently have a policy with QBE and/or Sutton Specialist Risks?",
+          "type": "yesno",
+          "acturis": true
+        }
+      ]
+    },
+    {
+      "id": "claims_history",
+      "title": "Claims History",
+      "description": "If the company, any of its directors, principals, partners or senior managers have had any claims, losses or incidents that may give rise to a claim in the last five years, whether insured or not, in respect of the sections of cover requested, please provide details below.",
+      "items": [
+        {
+          "id": "claims",
+          "label": "Claims, losses and incidents in the last five years",
+          "type": "table",
+          "addLabel": "Add claim",
+          "columns": [
+            {
+              "id": "date_of_loss",
+              "label": "Date of loss",
+              "type": "date"
+            },
+            {
+              "id": "insurance_section",
+              "label": "Insurance section",
+              "type": "text"
+            },
+            {
+              "id": "description",
+              "label": "Claim description",
+              "type": "text"
+            },
+            {
+              "id": "payment",
+              "label": "Payment (£)",
+              "type": "currency"
+            },
+            {
+              "id": "reserve",
+              "label": "Reserve (£)",
+              "type": "currency"
+            },
+            {
+              "id": "status",
+              "label": "Open / Closed",
+              "type": "select",
+              "options": [
+                "Open",
+                "Closed"
+              ]
+            }
+          ],
+          "acturis": true,
+          "required": true,
+          "help": "Please list each claim, loss or incident in the last five years, whether insured or not."
+        }
+      ],
+      "showIf": {
+        "field": "claims_5yr",
+        "equals": "yes"
+      }
+    }
+  ]
+}

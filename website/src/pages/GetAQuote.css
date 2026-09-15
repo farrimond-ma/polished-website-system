@@ -1,0 +1,31 @@
+.quote-page { background: #fff; }
+.quote-page-hero {
+  background-color: var(--color-primary);
+  background-image: radial-gradient(circle at 90% 10%, rgba(6, 182, 212, 0.25), transparent 45%);
+  color: rgba(255, 255, 255, 0.85);
+  padding: 8.5rem 0 4rem;
+}
+.quote-page-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 3.5rem; align-items: start; }
+@media (max-width: 900px) { .quote-page-grid { grid-template-columns: 1fr; gap: 2rem; } .quote-page-hero { padding-top: 7rem; } }
+.quote-page h1 { color: #fff; font-size: 2.6rem; margin: 0 0 1.2rem; }
+.quote-page .eyebrow { color: var(--color-secondary-light); }
+.quote-page .text-highlight { color: #fff; }
+.quote-page-lead { font-size: 1.1rem; line-height: 1.65; margin: 0 0 1.75rem; max-width: 56ch; }
+.quote-steps { list-style: none; padding: 0; margin: 0 0 1.75rem; display: grid; gap: 0.9rem; }
+.quote-steps li { display: flex; gap: 0.85rem; align-items: flex-start; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 0.9rem 1rem; }
+.quote-steps svg { color: var(--color-secondary-light); flex: none; margin-top: 3px; }
+.quote-steps strong { color: #fff; }
+.quote-page-call a { color: var(--color-secondary-light); font-weight: 700; }
+.quote-page-links { padding: 2.5rem 1rem 3.5rem; text-align: center; }
+.quote-page-links p { font-weight: 600; color: var(--color-primary); }
+.quote-page-links div { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; }
+.quote-page-links a { border: 1px solid #dbe7ec; border-radius: 999px; padding: 0.5rem 1rem; color: var(--color-primary); font-weight: 600; font-size: 0.92rem; }
+.quote-page-links a:hover { border-color: var(--color-secondary); }
+
+/* Thank-you page */
+.thanks { max-width: 720px; margin: 0 auto; padding: 8.5rem 1.25rem 4rem; text-align: center; }
+.thanks-icon { width: 72px; height: 72px; border-radius: 50%; background: var(--color-panel); color: var(--color-secondary-dark); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 1.25rem; }
+.thanks h1 { font-size: 2.3rem; }
+.thanks p { font-size: 1.08rem; color: #4b5563; line-height: 1.7; }
+.thanks .notice { text-align: left; margin: 1.75rem 0; }
+.thanks .notice li { margin-bottom: 0.4rem; }

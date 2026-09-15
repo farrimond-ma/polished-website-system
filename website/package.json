@@ -1,0 +1,29 @@
+{
+  "name": "polished-insurance-site",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "split": "node scripts/split-content.js",
+    "predev": "npm run split",
+    "dev": "vite",
+    "prebuild": "npm run split",
+    "build": "vite build && npm run sitemap && npm run rss && npm run llms && npm run prerender",
+    "build:noprerender": "npm run split && vite build && npm run sitemap && npm run rss && npm run llms",
+    "sitemap": "node scripts/generate-sitemap.js",
+    "rss": "node scripts/generate-rss.js",
+    "llms": "node scripts/generate-llms-txt.js",
+    "prerender": "node scripts/prerender.js",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.13.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.1.1",
+    "puppeteer": "^24.37.4",
+    "vite": "^7.3.1"
+  }
+}

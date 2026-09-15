@@ -1,0 +1,78 @@
+name: Publish guide
+
+# The content engine: writes one detailed guide per run from website/content-engine/topics.json,
+# commits it, then deploys the site. Two scheduled runs a week (Tuesday and Friday mornings, UK).
+# For ONE post a week, delete one of the cron lines.
+on:
+  schedule:
+    - cron: '15 7 * * 2'   # Tuesday 07:15 UTC
+    - cron: '15 7 * * 5'   # Friday 07:15 UTC
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Generate without publishing (prints the article to the log)'
+        type: boolean
+        default: false
+      topic:
+        description: 'Optional topic id from topics.json, e.g. t005'
+        required: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-guide
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    outputs:
+      published: ${{ steps.commit.outputs.published }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install content engine
+        working-directory: website/content-engine
+        run: npm ci
+
+      - name: Generate guide
+        id: generate
+        working-directory: website/content-engine
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+        run: |
+          ARGS=""
+          if [ "${{ inputs.dry_run }}" = "true" ]; then ARGS="--dry-run"; fi
+          if [ -n "${{ inputs.topic }}" ]; then ARGS="$ARGS --topic ${{ inputs.topic }}"; fi
+          node publish-guide.mjs $ARGS
+          if [ "${{ inputs.dry_run }}" = "true" ]; then cat dry-run-output.json; fi
+
+      - name: Commit new guide
+        id: commit
+        if: ${{ inputs.dry_run != true }}
+        run: |
+          git config user.name "polished-content-engine"
+          git config user.email "actions@users.noreply.github.com"
+          git add website/src/data/blogPosts.json website/content-engine/topics.json website/public/images/guides || true
+          if git diff --cached --quiet; then
+            echo "Nothing to commit."; echo "published=false" >> "$GITHUB_OUTPUT"
+          else
+            git commit -m "Publish guide: ${{ steps.generate.outputs.title }}"
+            git push origin HEAD:main
+            echo "published=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  # Pushes made with the workflow token don't trigger other workflows, so deploy explicitly.
+  deploy:
+    needs: publish
+    if: ${{ needs.publish.outputs.published == 'true' }}
+    uses: ./.github/workflows/deploy-website.yml
+    secrets: inherit

@@ -1,0 +1,13 @@
+# Secrets and server-only files
+crm/config.php
+crm/data/*
+!crm/data/.htaccess
+.env
+*.sqlite
+
+# Build output / dependencies
+node_modules/
+website/dist/
+website/src/data/blogIndex.json
+website/public/content/
+website/content-engine/dry-run-output.json

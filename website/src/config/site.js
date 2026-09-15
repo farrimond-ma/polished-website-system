@@ -9,7 +9,7 @@ export const SITE = {
   fcaNumber: '309497',
   companyNumber: '4319831',
   address: '98 Standishgate, Wigan, WN1 1XA',
-  hours: 'Monday to Friday, 9am to 5:30pm',
+  hours: 'Monday to Friday, 9am to 5pm',
 };
 
 // Website -> CRM. VITE_* values are baked in at build time (see .env.example and deploy.yml).

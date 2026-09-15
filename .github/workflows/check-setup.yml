@@ -1,0 +1,46 @@
+name: Check setup (read-only)
+
+# Run this from the Actions tab before the first deploy. It confirms the GitHub secrets exist and
+# lists the SiteGround FTP folders so the deploy paths can be checked. It never uploads,
+# changes or deletes anything, and never prints secret values.
+on:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Which secrets are set (values are never shown)
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          VITE_INTAKE_KEY: ${{ secrets.VITE_INTAKE_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+        run: |
+          for name in FTP_SERVER FTP_USERNAME FTP_PASSWORD VITE_INTAKE_KEY ANTHROPIC_API_KEY PEXELS_API_KEY; do
+            if [ -n "${!name}" ]; then echo "✅ $name is set"; else echo "❌ $name is MISSING"; fi
+          done
+          if [ -n "$VITE_INTAKE_KEY" ]; then echo "VITE_INTAKE_KEY length: ${#VITE_INTAKE_KEY} (expected 64)"; fi
+          echo "Website deploy path: ${{ vars.WEBSITE_SERVER_DIR || 'polished-insurance.co.uk/public_html/' }}"
+          echo "CRM deploy path:     ${{ vars.CRM_SERVER_DIR || 'crm.polished-insurance.co.uk/public_html/' }}"
+
+      - name: List SiteGround FTP folders (read-only)
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          WEBSITE_DIR: ${{ vars.WEBSITE_SERVER_DIR || 'polished-insurance.co.uk/public_html/' }}
+          CRM_DIR: ${{ vars.CRM_SERVER_DIR || 'crm.polished-insurance.co.uk/public_html/' }}
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq lftp > /dev/null
+          ftp() { lftp -u "$FTP_USERNAME","$FTP_PASSWORD" -e "set ftp:ssl-allow true; set ssl:verify-certificate no; set net:max-retries 1; set net:timeout 20; $1; bye" "$FTP_SERVER" 2>&1; }
+          echo "=== FTP account's starting folder ==="
+          ftp "pwd; cls -1 --sort=name"
+          echo
+          echo "=== Website folder: $WEBSITE_DIR ==="
+          ftp "cls -1 --sort=name $WEBSITE_DIR" || true
+          echo
+          echo "=== CRM folder: $CRM_DIR ==="
+          ftp "cls -1 --sort=name $CRM_DIR" || true

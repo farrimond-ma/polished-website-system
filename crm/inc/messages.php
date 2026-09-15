@@ -16,7 +16,7 @@ function msg_email_wrap(string $innerHtml): string {
     $phone = e(cfg('company_phone', '01942 403370'));
     return '<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.55;color:#1f2733;max-width:600px">'
         . '<div style="background:#ffffff;padding:18px 24px;border:1px solid #e2e8ef;border-bottom:3px solid #1664f0;border-radius:8px 8px 0 0">'
-        . '<img src="' . e(rtrim((string)cfg('site_url', 'https://www.polished-insurance.co.uk'), '/')) . '/images/brand/logo-email.png" width="180" alt="Polished Insurance" style="display:block;border:0;height:auto"></div>'
+        . '<img src="' . e(rtrim((string)cfg('site_url', 'https://www.polished-insurance.co.uk'), '/')) . '/images/brand/logo-email-allied.png" width="180" alt="Polished Insurance" style="display:block;border:0;height:auto"></div>'
         . '<div style="border:1px solid #e2e8ef;border-top:0;padding:22px 24px;border-radius:0 0 8px 8px">'
         . $innerHtml
         . '<p style="margin-top:26px">Kind regards,<br>The Polished Insurance team<br>'

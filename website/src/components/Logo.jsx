@@ -6,7 +6,7 @@ import React from 'react';
 const VARIANTS = {
   // Phones and small tablets (menu collapsed, logo 50px tall) get the version without the small
   // "Part of the Allied Insurance Group" line, which is unreadable at that size.
-  default: { base: '/images/brand/logo', mobile: '/images/brand/logo-mobile', w: 398, h: 240 },
+  default: { base: '/images/brand/logo-allied', mobile: '/images/brand/logo-mobile', w: 398, h: 240 },
   footer: { base: '/images/brand/logo-footer', w: 193, h: 120 },
 };
 

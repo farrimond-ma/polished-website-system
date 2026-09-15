@@ -10,7 +10,7 @@ export const homeFaqs = [
   },
   {
     q: 'How does getting a quote work?',
-    a: 'You send us your contact details, and we email and text you a link to a short online questionnaire about your business. It only shows the questions that apply to you and saves as you go. Once it is complete, we approach insurers and come back to you with options.',
+    a: 'You send us your contact details, and our team sends you a link to a short online questionnaire about your business by email and text. It only shows the questions that apply to you and saves as you go. Once it is complete, we approach insurers and come back to you with options.',
   },
   {
     q: 'How much does cleaning business insurance cost?',

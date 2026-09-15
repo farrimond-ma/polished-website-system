@@ -16,8 +16,10 @@ Nothing in the existing Boxx CRM, Boxx Commercial Finance, SSR Questionnaire or 
 ```
 Website quote form  ──POST──▶  crm/api/intake.php  ──▶  new lead (POL-0001), status "New Enquiry"
 (contact details only)                                   │
-                                                         ├─ email + SMS: questionnaire link (message 1 of 3)
                                                          └─ team alert (email / optional Telegram)
+
+Team member clicks "Send questionnaire link + start reminders" on the lead
+                        └─ email + SMS: questionnaire link (message 1 of 3)
 
 Client opens link  ──▶  polished-insurance.co.uk/insurance-questionnaire?t=<token>
                         │  schema + saved answers + pre-filled contact details from crm/api/questionnaire.php

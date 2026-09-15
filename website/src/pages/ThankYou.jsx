@@ -19,9 +19,9 @@ const ThankYou = () => {
         <div className="notice">
           <strong>What happens next</strong>
           <ul>
-            <li>In the next few minutes we will email and text you a secure link to your insurance questionnaire.</li>
+            <li>A member of our team will review your enquiry and send you a secure link to your insurance questionnaire by email and text, usually within one working day.</li>
             <li>It usually takes 10 to 15 minutes. Your answers save as you go, so you can finish it later using the same link.</li>
-            <li>If you cannot see the email, please check your junk or spam folder.</li>
+            <li>When it arrives, please check your junk or spam folder if you cannot see the email.</li>
           </ul>
         </div>
         <p>Questions? Call us on <a href={SITE.phoneHref}>{SITE.phoneDisplay}</a>.</p>

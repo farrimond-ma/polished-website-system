@@ -59,7 +59,7 @@ openssl rand -hex 32
    Check the exact path in Site Tools; it is shown when you create a cron job.
 8. Add staff under **Users**.
 
-**Chasing behaviour** (in `config.php`): `auto_chase_new_leads => true` sends the questionnaire link as soon as a website lead arrives. Set it to `false` to have staff start the chase from the lead page instead, as in the Boxx CRM. Timings are `first_auto_chase_days`, `second_auto_chase_days` and `auto_close_after_days`.
+**Chasing behaviour**: nothing is sent to a client automatically when an enquiry arrives. The lead appears under **Needs attention**, and the team is alerted. A team member opens it and clicks **Send questionnaire link + start reminders**, which sends message 1 straight away; reminders 2 and 3 then follow automatically until the questionnaire is completed. Timings are `first_auto_chase_days`, `second_auto_chase_days` and `auto_close_after_days` in `config.php`. (`send_questionnaire_automatically => true` would send message 1 as soon as an enquiry arrives.)
 
 ## 3. SiteGround: the website
 

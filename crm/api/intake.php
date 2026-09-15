@@ -78,10 +78,13 @@ add_note($leadId, 'Enquiry received from the website' . ($str('landing_page', 25
 
 json_out_then(['ok' => true, 'reference' => lead_ref($leadId)], function () use ($leadId) {
     $lead = find_lead($leadId);
-    $chaseNote = '';
-    if (cfg('auto_chase_new_leads', true)) {
+    // Default: nothing is sent to the client until a team member clicks "Send questionnaire link +
+    // start reminders" on the lead. (The old 'auto_chase_new_leads' setting is deliberately ignored.)
+    if (cfg('send_questionnaire_automatically', false) === true) {
         $r = start_questionnaire_chase($lead, 'Automatic questionnaire link sent (message 1 of 3)');
         $chaseNote = "\n" . $r['message'];
+    } else {
+        $chaseNote = "\nNo message has been sent to the client yet. Open the lead and click \"Send questionnaire link + start reminders\" to begin.";
     }
     notify_team('New enquiry: ' . lead_ref($leadId) . ' ' . lead_name($lead),
         lead_name($lead) . ($lead['company_name'] ? ' (' . $lead['company_name'] . ')' : '') . "\n"

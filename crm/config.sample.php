@@ -32,9 +32,10 @@ return [
     'allowed_origins' => ['https://www.polished-insurance.co.uk', 'https://polished-insurance.co.uk'],
 
     // ---- chasing ----
-    // true  = a new website enquiry gets the questionnaire link (email + SMS) straight away.
-    // false = staff start the chase from the lead page ("Send questionnaire link").
-    'auto_chase_new_leads'   => true,
+    // false (recommended) = nothing is sent until a team member clicks "Send questionnaire link +
+    //                       start reminders" on the lead; reminders 2 and 3 then follow automatically.
+    // true                = a new website enquiry gets the questionnaire link straight away.
+    'send_questionnaire_automatically' => false,
     'first_auto_chase_days'  => 2,   // message 2 goes this many days after message 1
     'second_auto_chase_days' => 3,   // message 3 goes this many days after message 2
     'auto_close_after_days'  => 5,   // lead auto-closes this many days after message 3

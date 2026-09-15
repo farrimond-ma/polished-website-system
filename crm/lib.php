@@ -389,7 +389,8 @@ function send_chase_message(array $lead, int $n, string $label, ?int $userId = n
 
 /**
  * Message 1 of 3 — starts the automatic chase sequence. Used for new website leads
- * (when auto_chase_new_leads is on) and by the "Send questionnaire link" button.
+ * by the "Send questionnaire link + start reminders" button (and for new leads only if
+ * send_questionnaire_automatically is switched on).
  */
 function start_questionnaire_chase(array $lead, string $label = 'Questionnaire link sent (message 1 of 3)', ?int $userId = null): array {
     if (($lead['q_status'] ?? '') === 'submitted') {

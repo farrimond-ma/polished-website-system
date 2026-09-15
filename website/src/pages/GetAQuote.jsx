@@ -31,7 +31,7 @@ const GetAQuote = () => {
             </p>
             <ol className="quote-steps">
               <li><Icon name="check" size={18} /><div><strong>Now:</strong> your name, email and mobile number.</div></li>
-              <li><Icon name="clipboard" size={18} /><div><strong>Next:</strong> we email and text you a link to your questionnaire. It only asks what applies to you, and saves as you go.</div></li>
+              <li><Icon name="clipboard" size={18} /><div><strong>Next:</strong> our team sends you a secure link to your questionnaire by email and text. It only asks what applies to you, and saves as you go.</div></li>
               <li><Icon name="search" size={18} /><div><strong>Then:</strong> we take your answers to insurers and come back to you with options.</div></li>
             </ol>
             <p className="quote-page-call">

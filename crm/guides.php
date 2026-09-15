@@ -6,7 +6,6 @@ require_login();
 
 $g = guides_dashboard(param('refresh') === '1');
 $lastRun = $g['runs'][0] ?? null;
-$repoUrl = 'https://github.com/' . $g['repo'];
 $days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 $scheduleText = $g['slots']
     ? implode(', ', array_map(fn($s) => $days[$s['dow']], $g['slots'])) . ' at ' . guides_uk((new DateTimeImmutable('now', new DateTimeZone('UTC')))->setTime($g['slots'][0]['hour'], $g['slots'][0]['min']), 'H:i') . ' (UK time)'
@@ -17,7 +16,6 @@ layout_header('Guides');
 <div class="page-head">
   <h1>Guides</h1>
   <div class="btn-row">
-    <a class="btn ghost small" href="<?= e($repoUrl) ?>/actions/workflows/publish-guide.yml" target="_blank" rel="noopener">Publishing runs on GitHub</a>
     <a class="btn ghost small" href="guides.php?refresh=1">Refresh now</a>
   </div>
 </div>
@@ -36,16 +34,15 @@ layout_header('Guides');
 
 <h2 class="guides-h2">Recent publishing runs</h2>
 <div class="table-scroll"><table class="grid small">
-  <thead><tr><th>Started</th><th>Trigger</th><th>Result</th><th>Guide</th><th></th></tr></thead>
+  <thead><tr><th>Started</th><th>Trigger</th><th>Result</th><th>Guide</th></tr></thead>
   <tbody>
-  <?php if (!$g['runs']): ?><tr><td colspan="5" class="empty">No publishing runs yet. The first one runs on <?= $g['nextRun'] ? e(guides_uk($g['nextRun'])) : 'the next scheduled day' ?>.</td></tr><?php endif; ?>
+  <?php if (!$g['runs']): ?><tr><td colspan="4" class="empty">No publishing runs yet. The first one runs on <?= $g['nextRun'] ? e(guides_uk($g['nextRun'])) : 'the next scheduled day' ?>.</td></tr><?php endif; ?>
   <?php foreach ($g['runs'] as $r): ?>
     <tr>
       <td><?= e(guides_uk($r['when'])) ?></td>
       <td><?= e($r['trigger']) ?></td>
       <td><span class="pill <?= e($r['class']) ?>"><?= e($r['result']) ?></span></td>
       <td><?= $r['guide'] ? '<a href="' . e($r['guide']['url']) . '" target="_blank" rel="noopener">' . e($r['guide']['title']) . '</a>' : '<span class="sub">—</span>' ?></td>
-      <td class="r"><?php if ($r['url']): ?><a class="sub" href="<?= e($r['url']) ?>" target="_blank" rel="noopener">Details</a><?php endif; ?></td>
     </tr>
   <?php endforeach; ?>
   </tbody>

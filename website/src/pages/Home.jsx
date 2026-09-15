@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
 import Icon from '../components/Icons';
-import QuoteForm from '../components/QuoteForm';
+import QuoteSection from '../components/QuoteSection';
 import CoverGrid from '../components/CoverGrid';
 import { ResourceHero, FinalCtaBand } from '../components/resource/ResourceHero';
 import FaqAccordion from '../components/resource/FaqAccordion';
@@ -42,8 +42,10 @@ const Home = () => (
       title={<>Insurance for <span className="text-highlight">cleaning businesses</span></>}
       description="From sole-trader window cleaners to contract cleaning companies with hundreds of staff, we arrange cover that matches the work you do, the premises you work in and the contracts you hold."
       heroImage="/images/hero/home.webp"
-      aside={<QuoteForm heading="Get a quote" />}
+      quoteAnchor="#quote"
     />
+
+    <QuoteSection image="/images/hero/home.webp" heading="Get your quote" />
 
     <section className="section">
       <div className="container">

@@ -41,3 +41,4 @@
   }
   .navbar-menu-minimal .navbar-btn { padding: 0.55rem 0.9rem; font-size: 0.9rem; }
 }
+.navbar-btn.btn-quote { font-size: 1rem; padding: 0.65rem 1.25rem; box-shadow: none; }

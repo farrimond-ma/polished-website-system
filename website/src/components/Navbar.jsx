@@ -26,7 +26,7 @@ const Navbar = ({ minimal = false }) => {
               <a href={SITE.phoneHref} className="navbar-link navbar-phone">
                 <Icon name="phone" size={16} /> {SITE.phoneDisplay}
               </a>
-              <Link to="/get-a-quote" className="btn btn-primary navbar-btn">Get a quote</Link>
+              <Link to="/get-a-quote" className="btn btn-quote navbar-btn">Get a quote</Link>
             </>
           )}
           {minimal && (

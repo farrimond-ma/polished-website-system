@@ -105,3 +105,11 @@ html { scroll-behavior: smooth; }
     min-height: 44px; display: inline-flex; align-items: center;
   }
 }
+
+/* Orange "Get your quote" call-to-action. Large bold text on #ea580c meets WCAG AA for large text. */
+:root { --color-quote: #ea580c; --color-quote-hover: #c2410c; }
+.btn-quote {
+  background-color: var(--color-quote); color: #fff; font-weight: 700; font-size: 1.15rem;
+  padding: 0.9rem 1.8rem; letter-spacing: 0.01em; box-shadow: 0 8px 20px rgba(234, 88, 12, 0.3);
+}
+.btn-quote:hover { background-color: var(--color-quote-hover); color: #fff; transform: translateY(-2px); }

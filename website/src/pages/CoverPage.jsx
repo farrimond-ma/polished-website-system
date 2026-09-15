@@ -1,13 +1,13 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import SEO from '../components/SEO';
-import QuoteForm from '../components/QuoteForm';
+import QuoteSection from '../components/QuoteSection';
 import { ResourceHero, FinalCtaBand } from '../components/resource/ResourceHero';
 import FaqAccordion from '../components/resource/FaqAccordion';
 import CoverCards from '../components/resource/CoverCards';
 import GuidesList from '../components/resource/GuidesList';
 import { MidCta } from '../components/ArticleCtas';
-import { coversBySlug, coverImage, coverHeroImage } from '../data/covers';
+import { coversBySlug, coverHeroImage } from '../data/covers';
 import { SITE } from '../config/site';
 import NotFound from './NotFound';
 import '../components/Article.css';
@@ -61,14 +61,14 @@ const CoverPage = () => {
         description={cover.description}
         heroImage={coverHeroImage(cover.slug)}
         primaryCtaTo={quoteTo}
-        aside={<QuoteForm heading="Get your quote" coverInterest={cover.title} />}
+        quoteAnchor="#quote"
       />
       <div className="resource-column">
         <nav className="breadcrumbs" aria-label="Breadcrumb">
           <Link to="/">Home</Link> <span>/</span> <Link to="/cleaning-insurance">Cleaning insurance</Link> <span>/</span> <span>{cover.title}</span>
         </nav>
         <div className="resource-main-card">
-          <figure className="cover-figure"><img src={coverImage(cover.slug)} alt={cover.title} width="800" height="600" /></figure>
+          <QuoteSection compact image={coverHeroImage(cover.slug)} imageAlt={cover.title} coverInterest={cover.title} heading="Get your quote" />
           <div className="blog-post-content service-page-content">
             {cover.intro.map((p, i) => <p key={i}>{p}</p>)}
             {cover.sections.slice(0, midpoint).map(renderSection)}

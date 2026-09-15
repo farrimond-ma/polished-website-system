@@ -5,8 +5,9 @@ import { SITE } from '../../config/site';
 import './ResourcePage.css';
 
 // Shared navy hero + final CTA band (same visual language as the Boxx site's ResourceHero).
-// `aside` renders a panel on the right on desktop — used for the quote form on cover pages.
-export const ResourceHero = ({ eyebrow, title, description, heroImage, primaryCtaTo = '/get-a-quote', primaryLabel = 'Get a quote', aside, showTrust = true }) => {
+// Text and background image only; the orange "Get your quote" button either jumps to the quote
+// form on the same page (quoteAnchor="#quote") or links to an enquiry page (primaryCtaTo).
+export const ResourceHero = ({ eyebrow, title, description, heroImage, primaryCtaTo = '/get-a-quote', primaryLabel = 'Get your quote', quoteAnchor, showTrust = true }) => {
   const isString = typeof title === 'string';
   const colonIdx = isString ? title.indexOf(':') : -1;
   const titleMain = isString ? (colonIdx !== -1 ? title.slice(0, colonIdx + 1) : title) : title;
@@ -15,7 +16,7 @@ export const ResourceHero = ({ eyebrow, title, description, heroImage, primaryCt
 
   return (
     <div
-      className={`resource-hero${heroImage ? ' has-hero-image' : ' has-pattern'}${aside ? ' has-aside' : ''}`}
+      className={`resource-hero${heroImage ? ' has-hero-image' : ' has-pattern'}`}
       style={heroImage ? { '--hero-image': `url("${heroImage}")` } : undefined}
     >
       <div className="container resource-hero-grid">
@@ -28,7 +29,9 @@ export const ResourceHero = ({ eyebrow, title, description, heroImage, primaryCt
           {description && <p className="resource-hero-lead">{description}</p>}
 
           <div className="resource-hero-actions">
-            {!aside && <Link to={primaryCtaTo} className="btn btn-primary">{primaryLabel}</Link>}
+            {quoteAnchor
+              ? <a href={quoteAnchor} className="btn btn-quote">{primaryLabel}</a>
+              : <Link to={primaryCtaTo} className="btn btn-quote">{primaryLabel}</Link>}
             <a href={SITE.phoneHref} className="btn btn-outline resource-btn-phone">
               <Icon name="phone" size={18} /> {SITE.phoneDisplay}
             </a>
@@ -42,7 +45,6 @@ export const ResourceHero = ({ eyebrow, title, description, heroImage, primaryCt
             </ul>
           )}
         </div>
-        {aside && <div className="resource-hero-aside">{aside}</div>}
       </div>
     </div>
   );
@@ -57,7 +59,7 @@ export const FinalCtaBand = ({ ctaTo = '/get-a-quote', heading = 'Ready to get y
         approach insurers for cover that fits the way you actually work.
       </p>
       <div className="resource-final-cta-actions">
-        <Link to={ctaTo} className="btn btn-primary">Start your quote</Link>
+        <Link to={ctaTo} className="btn btn-quote">Get your quote</Link>
         <span>or call <a href={SITE.phoneHref}>{SITE.phoneDisplay}</a></span>
       </div>
     </div>

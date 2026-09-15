@@ -571,15 +571,4 @@
   background-size: auto, auto, 44px 44px, 44px 44px;
 }
 .resource-hero .text-highlight::after { opacity: 0.45; }
-@media (min-width: 993px) {
-  .resource-hero.has-aside { min-height: auto; padding: 8.5rem 0 4rem; }
-  .resource-hero.has-aside .resource-hero-grid {
-    display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(360px, 0.9fr); gap: 3.5rem; align-items: center;
-  }
-}
-.resource-hero-aside { margin-top: 2rem; }
-@media (min-width: 993px) { .resource-hero-aside { margin-top: 0; } }
-@media (max-width: 640px) {
-  .resource-hero.has-aside { min-height: auto; padding-top: 7.5rem; }
-}
 .gold-link { color: var(--color-secondary-dark); font-weight: 600; }

@@ -84,3 +84,4 @@
 .service-card-body p { color: #5b6472; margin: 0 0 1rem; line-height: 1.55; flex: 1; }
 .cover-figure { margin: 0 0 1.75rem; border-radius: 12px; overflow: hidden; aspect-ratio: 16 / 9; background: #e8eef5; }
 .cover-figure img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mobile-cta-bar .btn-quote { font-size: 1rem; padding: 0.75rem 0.5rem; box-shadow: none; }

@@ -28,3 +28,4 @@
 .qf-submit { width: 100%; font-size: 1.05rem; padding: 0.95rem 1rem; }
 .qf-small { font-size: 0.78rem; color: #6b7280; margin: 0.75rem 0 0; text-align: center; }
 .quote-form.is-compact { box-shadow: var(--shadow-lg); }
+.qf-submit.btn-quote { font-size: 1.1rem; box-shadow: none; }

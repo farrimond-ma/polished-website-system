@@ -110,7 +110,7 @@ const QuoteForm = ({ coverInterest = '', heading = 'Get a quote', intro, compact
 
       {serverError && <div className="qf-server-error" role="alert">{serverError}</div>}
 
-      <button type="submit" className="btn btn-primary qf-submit" disabled={status === 'sending'}>
+      <button type="submit" className="btn btn-quote qf-submit" disabled={status === 'sending'}>
         {status === 'sending' ? 'Sending…' : 'Request my quote'}
       </button>
       <p className="qf-small">No obligation. Your details are handled in line with our privacy policy.</p>

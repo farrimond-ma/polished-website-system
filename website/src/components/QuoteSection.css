@@ -1,0 +1,19 @@
+.quote-section { scroll-margin-top: 90px; max-width: 1200px; margin: 0 auto; padding: 3rem 1rem 1rem; }
+.quote-section.is-compact { padding: 0 0 2.5rem; }
+.quote-section-grid {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2rem; align-items: stretch;
+}
+.quote-section-image {
+  border-radius: 14px; overflow: hidden; background: var(--color-primary); min-height: 320px;
+  box-shadow: var(--shadow-lg);
+}
+.quote-section-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.quote-section-form .quote-form { height: 100%; }
+@media (max-width: 860px) {
+  .quote-section { padding: 1.5rem 1rem 0.5rem; }
+  .quote-section.is-compact { padding: 0 0 2rem; }
+  .quote-section-grid { grid-template-columns: 1fr; gap: 0; }
+  .quote-section-image { min-height: 0; height: 150px; border-radius: 14px 14px 0 0; box-shadow: none; }
+  .quote-section-image + .quote-section-form .quote-form { border-radius: 0 0 14px 14px; border-top-width: 5px; }
+  .quote-form { padding: 1.4rem 1.15rem 1.2rem; }
+}

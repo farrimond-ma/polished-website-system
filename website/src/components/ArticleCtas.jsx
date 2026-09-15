@@ -31,7 +31,7 @@ export const MidCta = ({ coverSlug }) => (
       <li>Loss of keys, equipment and damage to property worked upon</li>
       <li>Quotes from a panel of UK insurers</li>
     </ul>
-    <Link to={quoteLinkFor(coverSlug)} className="btn btn-primary">Get a quote</Link>
+    <Link to={quoteLinkFor(coverSlug)} className="btn btn-quote">Get a quote</Link>
   </aside>
 );
 
@@ -43,7 +43,7 @@ export const EndCta = ({ coverSlug }) => (
       hold all affect the cover you need. Send us your contact details and we will take it from there.
     </p>
     <div className="article-cta-actions">
-      <Link to={quoteLinkFor(coverSlug)} className="btn btn-primary">Start your quote</Link>
+      <Link to={quoteLinkFor(coverSlug)} className="btn btn-quote">Get your quote</Link>
       <span className="article-cta-or">or call <a href={SITE.phoneHref}>{SITE.phoneDisplay}</a></span>
     </div>
   </aside>

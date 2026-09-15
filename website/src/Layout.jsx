@@ -15,6 +15,8 @@ const Layout = () => {
   const { pathname } = useLocation();
   const isFunnel = FUNNEL.includes(pathname);
   const isQuotePage = pathname.startsWith('/get-a-quote');
+  // Home and cover pages have the quote form (#quote) just below the hero: jump to it instead of leaving the page.
+  const hasQuoteSection = pathname === '/' || /^\/cleaning-insurance\/[^/]+$/.test(pathname);
 
   const firstRender = React.useRef(true);
   useEffect(() => { captureAttribution(); initConsent(); }, []);
@@ -35,7 +37,9 @@ const Layout = () => {
       {!isFunnel && !isQuotePage && (
         <div className="mobile-cta-bar">
           <a href={SITE.phoneHref} className="btn btn-outline-dark"><Icon name="phone" size={16} /> Call us</a>
-          <Link to="/get-a-quote" className="btn btn-primary">Get a quote</Link>
+          {hasQuoteSection
+            ? <a href="#quote" className="btn btn-quote">Get your quote</a>
+            : <Link to="/get-a-quote" className="btn btn-quote">Get your quote</Link>}
         </div>
       )}
     </div>

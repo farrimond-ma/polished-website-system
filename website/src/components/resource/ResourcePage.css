@@ -91,7 +91,11 @@
 }
 .resource-hero .text-highlight {
     color: var(--color-secondary-light);
+    /* Flows straight on after the colon and wraps like normal text (inline-block forced the
+       whole phrase onto a new line whenever it did not fit). */
+    display: inline;
 }
+.resource-hero .text-highlight::after { display: none; }
 .resource-hero-lead {
     font-size: 1.1rem;
     line-height: 1.6;
@@ -570,5 +574,4 @@
     linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
   background-size: auto, auto, 44px 44px, 44px 44px;
 }
-.resource-hero .text-highlight::after { opacity: 0.45; }
 .gold-link { color: var(--color-secondary-dark); font-weight: 600; }

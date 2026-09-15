@@ -9,6 +9,10 @@ import './ResourcePage.css';
 // Shared navy hero + final CTA band (same visual language as the Boxx site's ResourceHero).
 // Text and background image only; the orange "Get your quote" button either jumps to the quote
 // form on the same page (quoteAnchor="#quote") or links to an enquiry page (primaryCtaTo).
+// Hyphenated words ("Step-by-Step", "end-of-tenancy") never split across two lines of a heading, and
+// a one- or two-letter word ("A", "of") stays with the word after it instead of dangling at a line end.
+const keepHyphenated = (text) => text.replace(/(^|\s)(\S{1,2})\s+(?=\S)/g, '$1$2 ').split(/(\S+-\S+)/).map((part, i) => (/\S-\S/.test(part) ? <span key={i} style={{ whiteSpace: 'nowrap' }}>{part}</span> : part));
+
 export const ResourceHero = ({ eyebrow, title: rawTitle, description, heroImage, primaryCtaTo = '/get-a-quote', primaryLabel = 'Get your quote', quoteAnchor, showTrust = true }) => {
   // H1s are always Title Case (section headings below them are sentence case).
   const title = typeof rawTitle === 'string' ? titleCase(rawTitle) : rawTitle;
@@ -27,8 +31,8 @@ export const ResourceHero = ({ eyebrow, title: rawTitle, description, heroImage,
         <div className="resource-hero-text">
           {eyebrow && <p className="resource-hero-eyebrow">{eyebrow}</p>}
           <h1 className={isLongTitle ? 'is-long-title' : undefined}>
-            {titleMain}
-            {titleAccent && <> <span className="text-highlight">{titleAccent}</span></>}
+            {isString ? keepHyphenated(titleMain) : titleMain}
+            {titleAccent && <> <span className="text-highlight">{keepHyphenated(titleAccent)}</span></>}
           </h1>
           {description && <p className="resource-hero-lead">{description}</p>}
 

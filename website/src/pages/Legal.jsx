@@ -13,7 +13,7 @@ import { breadcrumbSchema, webPageSchema } from '../lib/schema';
 const LegalPage = ({ title, description, path, children }) => (
   <div className="page-plain">
     <SEO title={title} description={description} canonical={path} schema={[webPageSchema('WebPage', title, description, path), breadcrumbSchema([['Home', '/'], [title, path]])]} />
-    <ResourceHero title={title} showTrust={false} description={description} />
+    <ResourceHero title={title} showTrust={false} description={description} heroImage="/images/hero/legal.webp" />
     <div className="content">
       {children}
       <p className="updated">{REGULATORY_LINE}</p>

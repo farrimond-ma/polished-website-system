@@ -29,6 +29,7 @@ const Guides = () => {
       />
       <ResourceHero
         title="Insurance guides for cleaning businesses"
+        heroImage="/images/hero/guides.webp"
         description="Plain-English guides to the cover, contracts and risks that matter when you run a cleaning business in the UK. General guidance, not personal advice."
       />
       <section className="section">

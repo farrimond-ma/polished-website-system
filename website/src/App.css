@@ -51,11 +51,11 @@
 /* ── Plain content pages (legal, about) ── */
 .page-plain { background: #fff; }
 .page-plain .content { max-width: 820px; margin: 0 auto; padding: 3rem 1.25rem 4rem; }
-.page-plain h2 { font-size: 1.5rem; margin: 2rem 0 0.75rem; }
-.page-plain h3 { font-size: 1.15rem; margin: 1.5rem 0 0.5rem; }
-.page-plain p, .page-plain li { color: #3d4652; line-height: 1.75; }
-.page-plain ul { list-style: disc; padding-left: 1.4rem; }
-.page-plain a { color: var(--color-secondary-dark); text-decoration: underline; font-weight: 600; }
+.page-plain :is(.content, .thanks) h2 { font-size: 1.5rem; margin: 2rem 0 0.75rem; }
+.page-plain :is(.content, .thanks) h3 { font-size: 1.15rem; margin: 1.5rem 0 0.5rem; }
+.page-plain :is(.content, .thanks) :is(p, li) { color: #3d4652; line-height: 1.75; }
+.page-plain :is(.content, .thanks) ul { list-style: disc; padding-left: 1.4rem; }
+.page-plain :is(.content, .thanks) a:not(.btn) { color: var(--color-secondary-dark); text-decoration: underline; font-weight: 600; }
 .page-plain .updated { color: #6b7280; font-size: 0.9rem; }
 .notice { background: var(--color-panel); border: 1px solid var(--color-panel-border); border-radius: 10px; padding: 1rem 1.25rem; }
 

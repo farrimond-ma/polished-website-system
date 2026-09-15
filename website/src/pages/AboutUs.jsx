@@ -10,7 +10,7 @@ const DESCRIPTION = 'About Polished Insurance: specialist insurance for UK clean
 const AboutUs = () => (
   <div className="page-plain">
     <SEO title="About Us: Cleaning Insurance Brokers" description={DESCRIPTION} canonical="/about-us" schema={[webPageSchema('AboutPage', 'About Polished Insurance', DESCRIPTION, '/about-us'), breadcrumbSchema([['Home', '/'], ['About us', '/about-us']])]} />
-    <ResourceHero title="About Polished Insurance" description="Specialist insurance for cleaning businesses, from a broker that takes the time to understand how you work." />
+    <ResourceHero title="About Polished Insurance" heroImage="/images/hero/about.webp" description="Specialist insurance for cleaning businesses, from a broker that takes the time to understand how you work." />
     <div className="content">
       <h2>Insurance built around cleaning</h2>
       <p>{SITE.name} was set up to make insurance simpler for cleaning businesses. Generic business insurance forms rarely ask the questions that matter to cleaners, such as the keys you hold, the heights you work at, the premises you clean or the equipment you rely on. Missing those details can leave gaps that only show up when you need to make a claim.</p>

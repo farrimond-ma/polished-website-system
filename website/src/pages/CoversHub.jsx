@@ -18,6 +18,7 @@ const CoversHub = () => (
     />
     <ResourceHero
       title="Cleaning insurance: find the right cover"
+      heroImage="/images/hero/cleaning-insurance.webp"
       description="Start with your type of cleaning business, or read about a specific cover. Every page explains the risks insurers look at and links straight to a quote."
     />
     <section className="section services">

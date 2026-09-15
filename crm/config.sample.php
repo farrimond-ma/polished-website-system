@@ -42,6 +42,12 @@ return [
     'follow_up_days'         => 2,   // default "needs attention" follow-up for open leads
     'cron_key'               => 'CHANGE_ME', // for URL-triggered cron runs (?key=)
 
+    // ---- Guides page (content engine dashboard) ----
+    // The repository the content engine publishes from. Only add a (read-only) github_token if the
+    // repository is made private; while it is public the page needs no token.
+    'github_repo'  => 'farrimond-ma/polished-website-system',
+    'github_token' => 'CHANGE_ME',
+
     // ---- outgoing email (SMTP via PHPMailer) ----
     'mail' => [
         'smtp_host'   => 'CHANGE_ME',

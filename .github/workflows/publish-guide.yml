@@ -1,11 +1,13 @@
 name: Publish guide
 
 # The content engine: writes one detailed guide per run from website/content-engine/topics.json,
-# commits it, then deploys the site. Two scheduled runs a week (Tuesday and Friday mornings, UK).
-# For ONE post a week, delete one of the cron lines.
+# commits it, then deploys the site. Three scheduled runs a week (Monday, Wednesday and Friday
+# mornings, UK). To change the frequency, add or delete cron lines — the CRM "Guides" page reads
+# these lines to work out upcoming publish dates.
 on:
   schedule:
-    - cron: '15 7 * * 2'   # Tuesday 07:15 UTC
+    - cron: '15 7 * * 1'   # Monday 07:15 UTC
+    - cron: '15 7 * * 3'   # Wednesday 07:15 UTC
     - cron: '15 7 * * 5'   # Friday 07:15 UTC
   workflow_dispatch:
     inputs:

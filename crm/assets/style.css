@@ -191,3 +191,8 @@ dl dd{margin:0}
 .task-view-toggle .btn.active{color:#fff}
 body.is-login .topbar nav{display:none}
 @media(max-width:760px){.kpis{grid-template-columns:1fr 1fr}}
+
+/* Guides page status pills */
+.pill.ok{background:#d8f5e3;color:#0a7a3d}.pill.bad{background:#fde2e2;color:#b42323}.pill.run{background:#fff0d0;color:#96650a}
+.table-scroll{overflow-x:auto;margin-bottom:6px}.table-scroll .grid{min-width:640px}
+.guides-h2{margin:26px 0 8px;font-size:18px}

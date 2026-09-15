@@ -508,6 +508,7 @@ function layout_header(string $title = '', string $bodyClass = ''): void {
             . $nav('index.php', 'Dashboard', ['index.php'])
             . $nav('leads.php', 'Leads', ['leads.php', 'lead.php', 'lead_edit.php', 'questionnaire.php'])
             . $nav('tasks.php', 'Tasks', ['tasks.php'])
+            . $nav('guides.php', 'Guides', ['guides.php'])
             . (is_admin() ? $nav('users.php', 'Users', ['users.php']) : '')
             . '</nav>';
         echo "<div class='who'>" . e($u['display_name'] ?: $u['username']) . " · <a href='set_password.php'>Password</a> · <a href='logout.php'>Log out</a></div>";

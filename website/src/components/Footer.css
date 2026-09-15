@@ -11,8 +11,8 @@
 .footer-brand p { margin: 0 0 1rem; }
 .footer-contact-line a { color: #fff; font-weight: 600; }
 .footer-contact-line a:hover { color: var(--color-secondary-light); }
-.footer-links h4 { color: var(--color-white); margin-bottom: 1.1rem; font-size: 1.1rem; }
-.footer-h4-gap { margin-top: 1.75rem; }
+.footer-heading { font-family: var(--font-heading); font-weight: 700; line-height: 1.2; color: var(--color-white); margin: 0 0 1.1rem; font-size: 1.1rem; }
+.footer-heading-gap { margin-top: 1.75rem; }
 .footer-links ul { margin: 0; }
 .footer-links ul li { margin-bottom: 0.55rem; font-size: 0.95rem; }
 .footer-links a { color: rgba(255, 255, 255, 0.72); }

@@ -13,7 +13,7 @@ const coverName = (coverSlug) => (coverSlug && coversBySlug[coverSlug] ? coversB
 
 export const SoftCta = ({ coverSlug }) => (
   <aside className="article-cta article-cta-soft">
-    <h3>Not sure what cover your cleaning business needs?</h3>
+    <p className="article-cta-title">Not sure what cover your cleaning business needs?</p>
     <p>
       We specialise in insurance for cleaners. Tell us how to reach you and we will send a short questionnaire,
       then approach insurers on your behalf.
@@ -24,7 +24,7 @@ export const SoftCta = ({ coverSlug }) => (
 
 export const MidCta = ({ coverSlug }) => (
   <aside className="article-cta article-cta-mid">
-    <h3>Looking for {coverName(coverSlug).toLowerCase().startsWith('cleaning') ? 'cleaning business insurance' : coverName(coverSlug)}?</h3>
+    <p className="article-cta-title">Looking for {coverName(coverSlug).toLowerCase().startsWith('cleaning') ? 'cleaning business insurance' : coverName(coverSlug)}?</p>
     <p>Cover arranged by people who understand how cleaning businesses work.</p>
     <ul className="article-cta-ticks">
       <li>Public and employers&rsquo; liability limits to match your contracts</li>
@@ -37,7 +37,7 @@ export const MidCta = ({ coverSlug }) => (
 
 export const EndCta = ({ coverSlug }) => (
   <aside className="article-cta article-cta-end">
-    <h3>Get the right cover for your cleaning business</h3>
+    <p className="article-cta-title">Get the right cover for your cleaning business</p>
     <p>
       Every cleaning business is different: the premises you work in, the equipment you use and the contracts you
       hold all affect the cover you need. Send us your contact details and we will take it from there.

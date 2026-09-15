@@ -10,7 +10,7 @@ const QuoteSection = ({ image, imageAlt = '', coverInterest = '', heading = 'Get
     <div className="quote-section-grid">
       {image && (
         <div className="quote-section-image">
-          <img src={image} alt={imageAlt} loading="eager" />
+          <img src={image} alt={imageAlt} loading="eager" width="1440" height="1024" />
         </div>
       )}
       <div className="quote-section-form">

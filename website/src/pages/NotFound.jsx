@@ -4,9 +4,9 @@ import SEO from '../components/SEO';
 
 const NotFound = () => (
   <div className="page-plain" data-page-type="not-found">
-    <SEO title="Page not found" description="The page you requested could not be found." noIndex />
+    <SEO title="Page Not Found" description="The page you requested could not be found." noIndex />
     <div className="content" style={{ paddingTop: '9rem', textAlign: 'center' }}>
-      <h1>Page not found</h1>
+      <h1>Page Not Found</h1>
       <p>Sorry, we could not find that page. It may have moved.</p>
       <p>
         <Link to="/" className="btn btn-navy">Home</Link>{' '}

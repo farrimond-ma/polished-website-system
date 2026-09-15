@@ -31,7 +31,7 @@ const Home = () => (
   <>
     <SEO
       title="Cleaning Business Insurance UK"
-      description="Specialist insurance for UK cleaning businesses: public liability, employers' liability, loss of keys and equipment cover for contract, commercial, domestic and window cleaners."
+      description="Specialist cleaning business insurance for UK cleaners: public liability, employers' liability, loss of keys and equipment cover. Get your quote online."
       keywords="cleaning business insurance, cleaners insurance, public liability insurance for cleaners, contract cleaners insurance, window cleaners insurance"
       canonical="/"
       schema={[orgSchema, { '@context': 'https://schema.org', '@type': 'WebSite', name: SITE.name, url: SITE.url }, homeFaqSchema]}
@@ -39,7 +39,7 @@ const Home = () => (
 
     <ResourceHero
       eyebrow="Specialist cleaning insurance"
-      title={<>Insurance for <span className="text-highlight">cleaning businesses</span></>}
+      title={<>Insurance for <span className="text-highlight">Cleaning Businesses</span></>}
       description="From sole-trader window cleaners to contract cleaning companies with hundreds of staff, we arrange cover that matches the work you do, the premises you work in and the contracts you hold."
       heroImage="/images/hero/home.webp"
       quoteAnchor="#quote"

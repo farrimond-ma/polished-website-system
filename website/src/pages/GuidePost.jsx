@@ -11,6 +11,8 @@ import { postsBySlug, formatDate } from '../data/posts';
 import { coversBySlug } from '../data/covers';
 import { SITE } from '../config/site';
 import NotFound from './NotFound';
+import { titleCase } from '../lib/titleCase';
+import { breadcrumbSchema } from '../lib/schema';
 import '../components/Article.css';
 
 const CONTENT_ID = 'guide-article-body';
@@ -53,6 +55,7 @@ const GuidePost = () => {
     mainEntityOfPage: { '@type': 'WebPage', '@id': url },
   };
   const cover = coversBySlug[post.coverSlug];
+  const breadcrumb = breadcrumbSchema([['Home', '/'], ['Guides', '/guides'], [titleCase(post.title), `/guides/${post.slug}`]]);
 
   return (
     <div className="resource-page">
@@ -63,7 +66,7 @@ const GuidePost = () => {
         type="article"
         canonical={`/guides/${post.slug}`}
         image={post.heroImage}
-        schema={faqSchema ? [articleSchema, faqSchema] : articleSchema}
+        schema={[articleSchema, breadcrumb, ...(faqSchema ? [faqSchema] : [])]}
       />
       <ResourceHero title={post.title} description={post.metaDescription || post.excerpt} heroImage={post.heroImage} primaryCtaTo={quoteLinkFor(post.coverSlug)} />
       <div className="resource-column">

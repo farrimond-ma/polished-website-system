@@ -21,7 +21,7 @@ const Footer = () => (
         </div>
 
         <div className="footer-links">
-          <h4>Cleaning businesses</h4>
+          <p className="footer-heading">Cleaning businesses</p>
           <ul>
             {businessCovers.map((c) => (
               <li key={c.slug}><Link to={`/cleaning-insurance/${c.slug}`}>{c.title}</Link></li>
@@ -30,13 +30,13 @@ const Footer = () => (
         </div>
 
         <div className="footer-links">
-          <h4>Covers</h4>
+          <p className="footer-heading">Covers</p>
           <ul>
             {coverTypes.map((c) => (
               <li key={c.slug}><Link to={`/cleaning-insurance/${c.slug}`}>{c.title.replace(/ (for|&) Clean.*$/, '')}</Link></li>
             ))}
           </ul>
-          <h4 className="footer-h4-gap">Help</h4>
+          <p className="footer-heading footer-heading-gap">Help</p>
           <ul>
             <li><Link to="/get-a-quote">Get a quote</Link></li>
             <li><Link to="/guides">Insurance guides</Link></li>
@@ -45,7 +45,7 @@ const Footer = () => (
         </div>
 
         <div className="footer-links">
-          <h4>Legal</h4>
+          <p className="footer-heading">Legal</p>
           <ul>
             <li><Link to="/privacy-policy">Privacy policy</Link></li>
             <li><Link to="/terms-of-business">Terms of business</Link></li>

@@ -30,8 +30,8 @@ HTML format for contentHtml:
 - Length: 2,000 to 2,800 words in contentHtml.
 
 Metadata:
-- title: specific and natural, 45 to 70 characters, includes the main keyword, no colon-stuffed clickbait.
-- metaTitle: up to 60 characters (the site appends "| Polished Insurance").
+- title: specific and natural, 45 to 70 characters, in UK Title Case (e.g. "Public Liability Insurance for Window Cleaners Explained"), includes the main keyword, no colon-stuffed clickbait.
+- metaTitle: 35 to 60 characters in Title Case, starting with the main keyword (the site adds "| Polished Insurance" only when it still fits in 60 characters).
 - metaDescription: 140 to 158 characters, a clear benefit and the keyword.
 - excerpt: 1 to 2 sentences for listing cards.
 - slug: lowercase words separated by hyphens, 3 to 8 words, keyword-led.

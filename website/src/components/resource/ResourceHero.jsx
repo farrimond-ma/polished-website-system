@@ -2,12 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Icon from '../Icons';
 import { SITE } from '../../config/site';
+import { titleCase } from '../../lib/titleCase';
 import './ResourcePage.css';
 
 // Shared navy hero + final CTA band (same visual language as the Boxx site's ResourceHero).
 // Text and background image only; the orange "Get your quote" button either jumps to the quote
 // form on the same page (quoteAnchor="#quote") or links to an enquiry page (primaryCtaTo).
-export const ResourceHero = ({ eyebrow, title, description, heroImage, primaryCtaTo = '/get-a-quote', primaryLabel = 'Get your quote', quoteAnchor, showTrust = true }) => {
+export const ResourceHero = ({ eyebrow, title: rawTitle, description, heroImage, primaryCtaTo = '/get-a-quote', primaryLabel = 'Get your quote', quoteAnchor, showTrust = true }) => {
+  // H1s are always Title Case (section headings below them are sentence case).
+  const title = typeof rawTitle === 'string' ? titleCase(rawTitle) : rawTitle;
   const isString = typeof title === 'string';
   const colonIdx = isString ? title.indexOf(':') : -1;
   const titleMain = isString ? (colonIdx !== -1 ? title.slice(0, colonIdx + 1) : title) : title;

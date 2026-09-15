@@ -5,7 +5,7 @@ import React from 'react';
 const Logo = ({ height = 68, className = '' }) => (
   <picture className={`logo ${className}`.trim()}>
     <source srcSet="/images/brand/logo.webp" type="image/webp" />
-    <img src="/images/brand/logo.png" alt="Polished Insurance" height={height} style={{ height, width: 'auto' }} />
+    <img src="/images/brand/logo.png" alt="Polished Insurance" width={Math.round((height * 193) / 120)} height={height} style={{ height, width: 'auto' }} />
   </picture>
 );
 

@@ -5,9 +5,11 @@ import QuoteForm from '../components/QuoteForm';
 import Icon from '../components/Icons';
 import { coversBySlug, covers } from '../data/covers';
 import { SITE } from '../config/site';
+import { breadcrumbSchema, webPageSchema } from '../lib/schema';
 import './GetAQuote.css';
 
-// Enquiry pages: /get-a-quote and /get-a-quote/:slug (one per cover page). Guides and cover
+// Enquiry pages: /get-a-quote and /get-a-quote/:slug (one per cover page). The per-cover pages share one
+// template, so they are noindex,follow and left out of the sitemap; /get-a-quote is the indexed page. Guides and cover
 // pages link here so the enquiry is tagged with the cover the visitor was reading about.
 const GetAQuote = () => {
   const { slug } = useParams();
@@ -18,14 +20,18 @@ const GetAQuote = () => {
     <div className="quote-page" data-page-type="quote-page">
       <SEO
         title={cover ? `${cover.title} Quote` : 'Get a Cleaning Insurance Quote'}
-        description={`Request a ${label.toLowerCase()} quote from Polished Insurance. Send your contact details and we will send you a short questionnaire to complete online.`}
+        description={cover
+          ? `Request a ${label.toLowerCase()} quote. Send your contact details and we will send a short online questionnaire.`
+          : 'Get a cleaning insurance quote from Polished Insurance. Send your contact details and we will send you a short questionnaire to complete online.'}
         canonical={cover ? `/get-a-quote/${cover.slug}` : '/get-a-quote'}
+        robots={cover ? 'noindex, follow' : undefined}
+        schema={cover ? undefined : [webPageSchema('ContactPage', 'Get a Cleaning Insurance Quote', 'Request a cleaning insurance quote from Polished Insurance.', '/get-a-quote'), breadcrumbSchema([['Home', '/'], ['Get a quote', '/get-a-quote']])]}
       />
       <div className="quote-page-hero">
         <div className="container quote-page-grid">
           <div className="quote-page-copy">
             <p className="eyebrow">Get a quote</p>
-            <h1>{cover ? <>{cover.title} <span className="text-highlight">quote</span></> : <>Get a cleaning insurance <span className="text-highlight">quote</span></>}</h1>
+            <h1>{cover ? <>{cover.title} <span className="text-highlight">Quote</span></> : <>Get a Cleaning Insurance <span className="text-highlight">Quote</span></>}</h1>
             <p className="quote-page-lead">
               {cover ? cover.description : 'Tell us how to reach you. We will send you a secure link to a short questionnaire about your business, then approach insurers on your behalf.'}
             </p>

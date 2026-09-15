@@ -17,6 +17,7 @@ import { generateJSON } from './lib/claude.mjs';
 import { ARTICLE_BRIEF, articleSchema } from './lib/prompts.mjs';
 import { sanitiseHtml, auditArticle, wordCount } from './lib/html.mjs';
 import { fetchHeroImage } from './lib/images.mjs';
+import { titleCase } from '../src/lib/titleCase.js';
 import { POSTS_FILE, TOPICS_FILE, ENGINE_DIR, readJSON, writeJSON, allowedLinks, slugify, similarity } from './lib/site.mjs';
 import { refillTopics } from './refill-topics.mjs';
 
@@ -140,9 +141,9 @@ async function main() {
     id: Date.now(),
     status: 'published',
     slug,
-    title: article.title.trim(),
+    title: titleCase(article.title),
     excerpt: article.excerpt.trim(),
-    metaTitle: article.metaTitle.trim().slice(0, 70),
+    metaTitle: titleCase(article.metaTitle).slice(0, 60),
     metaDescription: article.metaDescription.trim().slice(0, 170),
     keywords: article.keywords.slice(0, 8),
     category: article.category,

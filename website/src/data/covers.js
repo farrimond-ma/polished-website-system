@@ -14,7 +14,7 @@ export const covers = [
     title: 'Contract Cleaners Insurance',
     metaTitle: 'Contract Cleaners Insurance UK',
     metaDescription: 'Insurance for contract cleaning companies: public liability, employers\' liability, loss of keys, tools and equipment. Specialist cover arranged by UK brokers.',
-    description: 'Cover built around commercial cleaning contracts: the liability limits your clients ask for, employers\' liability for your teams, and the extras that contract work really needs.',
+    description: 'Contract cleaners insurance built around commercial cleaning contracts: the liability limits your clients ask for, employers\' liability for your teams, and the extras contract work needs.',
     cardBlurb: 'For companies cleaning offices, schools, retail and industrial sites under contract.',
     intro: [
       'Contract cleaning companies carry more risk than most people realise. Your staff work unsupervised in other people\'s premises, often out of hours, with access keys, alarm codes and expensive equipment. One slip on a wet floor, a flooded server room or a lost master key can turn into a claim that runs into tens of thousands of pounds.',
@@ -62,8 +62,8 @@ export const covers = [
     icon: 'briefcase',
     title: 'Commercial & Office Cleaning Insurance',
     metaTitle: 'Commercial & Office Cleaning Insurance',
-    metaDescription: 'Specialist insurance for commercial and office cleaning businesses. Public liability, employers\' liability, keys cover and more, arranged by cleaning insurance specialists.',
-    description: 'Office, retail and commercial cleaners need cover that matches how you actually work: out-of-hours access, client keys and alarm codes, and staff on multiple sites.',
+    metaDescription: 'Commercial and office cleaning insurance: public liability, employers\' liability, loss of keys and more, arranged by cleaning insurance specialists.',
+    description: 'Commercial and office cleaning insurance that matches how you actually work: out-of-hours access, client keys and alarm codes, and staff on multiple sites.',
     cardBlurb: 'For office, shop, gym and commercial premises cleaners.',
     intro: [
       'Commercial cleaners are trusted with access to their clients\' premises, often when nobody else is there. That trust comes with responsibility for injuries, damage, lost keys and security breaches, and the right insurance protects your business when something goes wrong.',
@@ -107,7 +107,7 @@ export const covers = [
     title: 'Domestic Cleaners Insurance',
     metaTitle: 'Domestic Cleaners Insurance UK',
     metaDescription: 'Insurance for domestic cleaners and home cleaning businesses: public liability, loss of keys, equipment and employers\' liability if you take on staff.',
-    description: 'Protection for cleaners working in private homes, from sole traders to domestic cleaning agencies with a team of cleaners.',
+    description: 'Domestic cleaners insurance for anyone cleaning private homes, from sole traders to domestic cleaning agencies with a team of cleaners.',
     cardBlurb: 'For self-employed home cleaners and domestic cleaning agencies.',
     intro: [
       'Working in people\'s homes means working around their belongings, pets, flooring and furniture. Most jobs go smoothly, but an accident such as a broken ornament, a stained sofa or a lost house key can quickly become an expensive dispute. Insurance gives your customers confidence and protects your income.',
@@ -147,7 +147,7 @@ export const covers = [
     title: 'Window Cleaners Insurance',
     metaTitle: 'Window Cleaners Insurance UK',
     metaDescription: 'Insurance for window cleaners: public liability, employers\' liability, tools and ladders, water-fed pole systems and working at height. Specialist UK cover.',
-    description: 'Cover for traditional and water-fed pole window cleaners, including the working-at-height questions insurers will ask.',
+    description: 'Window cleaners insurance for traditional and water-fed pole window cleaners, including the working-at-height questions insurers will ask.',
     cardBlurb: 'For residential and commercial window cleaners, including water-fed pole systems.',
     intro: [
       'Window cleaning is one of the higher-risk trades in the cleaning sector because much of the work is carried out at height. Insurers want to understand how you work, how high you go and what access equipment you use, so the right questions up front help you get cover that will actually pay out.',
@@ -184,7 +184,7 @@ export const covers = [
     title: 'Carpet & Upholstery Cleaners Insurance',
     metaTitle: 'Carpet Cleaners Insurance UK',
     metaDescription: 'Insurance for carpet and upholstery cleaners, covering shrinkage, colour run and damage to property worked upon, plus liability and equipment cover.',
-    description: 'Specialist cover for carpet, rug and upholstery cleaners, including damage to the items you are treating.',
+    description: 'Carpet and upholstery cleaners insurance for carpet, rug and upholstery specialists, including damage to the items you are treating.',
     cardBlurb: 'For carpet, rug and upholstery cleaning specialists.',
     intro: [
       'Carpet and upholstery cleaners use heat, water, chemicals and powerful machinery on expensive items that customers care about. Shrinkage, colour run, water damage and chemical reactions are genuine risks, and a standard liability policy may not cover damage to the carpet or sofa you are working on.',
@@ -220,7 +220,7 @@ export const covers = [
     title: 'End of Tenancy Cleaning Insurance',
     metaTitle: 'End of Tenancy Cleaning Insurance',
     metaDescription: 'Insurance for end of tenancy and deep cleaning businesses: liability, loss of keys, equipment and employers\' liability for your cleaning teams.',
-    description: 'Cover for end of tenancy, move-in and deep cleaning businesses working for tenants, landlords and letting agents.',
+    description: 'End of tenancy cleaning insurance for move-out, move-in and deep cleaning businesses working for tenants, landlords and letting agents.',
     cardBlurb: 'For end of tenancy, move-in and deep cleaning businesses.',
     intro: [
       'End of tenancy cleaning combines heavy-duty deep cleaning with tight deadlines, empty properties and keys collected from letting agents. The risks include damage to fixtures, chemical staining, water leaks and lost keys, and letting agents increasingly ask to see insurance before they add you to their supplier list.',
@@ -255,7 +255,7 @@ export const covers = [
     title: 'Oven Cleaners Insurance',
     metaTitle: 'Oven Cleaners Insurance UK',
     metaDescription: 'Insurance for oven cleaning businesses and franchisees: liability, damage to appliances worked upon, chemicals, equipment and vans.',
-    description: 'Cover for oven, hob and extractor cleaning specialists, including the risk of damage to the appliances you work on.',
+    description: 'Oven cleaners insurance for oven, hob and extractor cleaning specialists, including the risk of damage to the appliances you work on.',
     cardBlurb: 'For oven, range and extractor cleaning specialists and franchisees.',
     intro: [
       'Oven cleaners work with caustic chemicals, dip tanks and delicate appliance components in customers\' kitchens. Damage to an expensive range cooker, a chemical burn to a worktop or a fault after reassembly can all lead to claims.',
@@ -287,7 +287,7 @@ export const covers = [
     title: 'Pressure Washing & Driveway Cleaning Insurance',
     metaTitle: 'Pressure Washing Insurance UK',
     metaDescription: 'Insurance for pressure washing, driveway, roof and exterior cleaning businesses: liability, damage to surfaces, equipment and working at height.',
-    description: 'Cover for driveway, patio, render, roof and exterior cleaning businesses using pressure washers and soft-wash systems.',
+    description: 'Pressure washing insurance for driveway, patio, render, roof and exterior cleaning businesses using pressure washers and soft-wash systems.',
     cardBlurb: 'For driveway, patio, render, roof and exterior cleaning.',
     intro: [
       'Exterior cleaning uses high-pressure water and chemicals on surfaces that can be damaged surprisingly easily. Etched block paving, damaged render, water getting into a property, overspray onto cars and slippery runoff are all common sources of claims.',
@@ -325,7 +325,7 @@ export const covers = [
     title: 'Specialist & Deep Cleaning Insurance',
     metaTitle: 'Specialist Cleaning Insurance UK',
     metaDescription: 'Insurance for specialist cleaning businesses: deep cleans, builders cleans, kitchen extraction, biohazard, hoarder and industrial cleaning.',
-    description: 'For higher-risk and specialist work, from builders cleans and kitchen extract systems to trauma, biohazard and industrial cleaning.',
+    description: 'Specialist cleaning insurance for higher-risk work, from deep cleans, builders cleans and kitchen extract systems to trauma, biohazard and industrial cleaning.',
     cardBlurb: 'For builders cleans, kitchen extraction, biohazard and industrial cleaning.',
     intro: [
       'Specialist cleaning covers a wide range of work, and insurers treat each activity differently. The more clearly you describe what you do, where you do it and the percentage of your work in each area, the more accurate and reliable your cover will be.',
@@ -364,7 +364,7 @@ export const covers = [
     title: 'Public Liability Insurance for Cleaners',
     metaTitle: 'Public Liability Insurance for Cleaners',
     metaDescription: 'Public liability insurance for UK cleaning businesses. What it covers, what limits clients ask for, and how to get the right cover for your cleaning work.',
-    description: 'The cover your clients ask for first: protection if your cleaning work injures someone or damages their property.',
+    description: 'Public liability insurance for cleaners is the cover clients ask for first: protection if your cleaning work injures someone or damages their property.',
     cardBlurb: 'Injury to the public and damage to third-party property.',
     intro: [
       'Public liability insurance pays compensation and legal costs if someone makes a claim against your business for injury or property damage caused by your work. For cleaners, that might be a slip on a wet floor, a broken fixture, or water damage from a leak.',
@@ -409,7 +409,7 @@ export const covers = [
     title: 'Employers\' Liability Insurance for Cleaning Companies',
     metaTitle: 'Employers\' Liability Insurance for Cleaners',
     metaDescription: 'Employers\' liability insurance for cleaning businesses: the legal requirement, who counts as an employee, subcontractors and the £5 million minimum.',
-    description: 'Compulsory for most cleaning businesses with staff. Protects you if an employee is injured or made ill by their work.',
+    description: 'Employers\' liability insurance is compulsory for most cleaning businesses with staff. It protects you if an employee is injured or made ill by their work.',
     cardBlurb: 'The legal requirement once you employ cleaners.',
     intro: [
       'Under the Employers\' Liability (Compulsory Insurance) Act 1969, most businesses that employ people must hold employers\' liability insurance with a limit of at least £5 million. In practice most policies are written at £10 million.',
@@ -453,7 +453,7 @@ export const covers = [
     title: 'Tools & Equipment Insurance for Cleaners',
     metaTitle: 'Cleaning Equipment Insurance',
     metaDescription: 'Insurance for cleaning equipment: floor machines, carpet cleaners, pressure washers and water-fed pole systems against theft and accidental damage.',
-    description: 'Protect the machines and equipment your business depends on against theft, fire and accidental damage.',
+    description: 'Tools and equipment insurance for cleaners protects the machines and equipment your business depends on against theft, fire and accidental damage.',
     cardBlurb: 'Machines, vacuums, pressure washers and pole systems.',
     intro: [
       'Losing your equipment means losing working days. Tools and equipment cover pays to repair or replace cleaning machinery and kit that is stolen or damaged, whether it is in use on site, stored at your premises or kept in your vehicle.',
@@ -489,7 +489,7 @@ export const covers = [
     title: 'Loss of Keys Insurance for Cleaners',
     metaTitle: 'Loss of Keys Insurance for Cleaning Businesses',
     metaDescription: 'Loss of keys cover for cleaning businesses: replacement keys, fobs and locks when client keys in your care are lost or stolen.',
-    description: 'If a client key, fob or access card in your care goes missing, this cover pays for replacement keys and locks.',
+    description: 'Loss of keys insurance pays for replacement keys and locks if a client key, fob or access card in your care goes missing.',
     cardBlurb: 'Replacement keys, fobs and locks for client premises.',
     intro: [
       'Cleaners regularly hold keys to homes, offices and commercial buildings. Replacing a single door lock is inexpensive, but losing a master key for an office block or a fob for a building access system can mean re-keying an entire site.',
@@ -523,7 +523,7 @@ export const covers = [
     title: 'Professional Indemnity for Cleaning & Facilities Companies',
     metaTitle: 'Professional Indemnity for Cleaning Companies',
     metaDescription: 'Professional indemnity insurance for cleaning and facilities companies that provide advice, specifications, audits or hygiene consultancy.',
-    description: 'For cleaning and facilities businesses that give advice, write specifications or carry out audits and inspections.',
+    description: 'Professional indemnity insurance for cleaning and facilities companies that give advice, write specifications or carry out audits and inspections.',
     cardBlurb: 'For advice, specifications, audits and consultancy.',
     intro: [
       'Most cleaning businesses do not need professional indemnity insurance. It becomes relevant when you are paid for your advice or expertise, for example writing cleaning specifications, carrying out hygiene audits, advising on infection control or managing other contractors.',

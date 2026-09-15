@@ -3,6 +3,7 @@ import path from 'path';
 import http from 'http';
 import { fileURLToPath } from 'url';
 import puppeteer from 'puppeteer';
+import { covers } from '../src/data/covers.js';
 
 // Renders every sitemap URL to static HTML so search engines and AI crawlers that don't run
 // JavaScript see real content. Adapted from the Boxx site's scripts/prerender.js: the sitemap is
@@ -41,7 +42,16 @@ function sitemapRoutes() {
   return [...new Set(routes)];
 }
 
-const outputPath = (route) => (route === '/' ? path.join(distDir, 'index.html') : path.join(distDir, route.slice(1), 'index.html'));
+// Pages that are NOT in the sitemap (noindex) but must still exist as real HTML, because the
+// .htaccess no longer sends unknown URLs to the app shell (that caused soft 404s).
+const EXTRA_ROUTES = [
+  ...covers.map((c) => `/get-a-quote/${c.slug}`),
+  '/get-a-quote/thank-you',
+  '/insurance-questionnaire',
+];
+const NOT_FOUND_ROUTE = '/404'; // any unknown path renders the Not Found page -> saved as dist/404.html
+
+const outputPath = (route) => (route === '/' ? path.join(distDir, 'index.html') : route === NOT_FOUND_ROUTE ? path.join(distDir, '404.html') : path.join(distDir, route.slice(1), 'index.html'));
 
 async function render(browser, route) {
   const page = await browser.newPage();
@@ -52,7 +62,8 @@ async function render(browser, route) {
   const html = await page.content();
   await page.close();
 
-  if (html.includes('data-page-type="not-found"')) throw new Error(`Prerender failed for ${route}: rendered the Not Found page.`);
+  if (route !== NOT_FOUND_ROUTE && html.includes('data-page-type="not-found"')) throw new Error(`Prerender failed for ${route}: rendered the Not Found page.`);
+  if (route === NOT_FOUND_ROUTE && !html.includes('data-page-type="not-found"')) throw new Error('Prerender failed for the 404 page.');
   if (!html.includes('og:title')) throw new Error(`Prerender failed for ${route}: no OpenGraph tags.`);
   if ((route.startsWith('/guides/') || route.startsWith('/cleaning-insurance/')) && !html.includes('application/ld+json')) {
     throw new Error(`Prerender failed for ${route}: no JSON-LD schema.`);
@@ -65,7 +76,7 @@ async function render(browser, route) {
 
 async function main() {
   if (!fs.existsSync(distDir)) throw new Error('dist/ not found — run vite build first.');
-  const routes = sitemapRoutes();
+  const routes = [...new Set([...sitemapRoutes(), ...EXTRA_ROUTES, NOT_FOUND_ROUTE])];
   const executablePath = process.env.PUPPETEER_EXECUTABLE_PATH || process.env.CHROME_BIN || undefined;
   const browser = await puppeteer.launch({
     headless: true,

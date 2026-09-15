@@ -91,9 +91,12 @@ Options -Indexes -MultiViews
   RewriteCond %{REQUEST_FILENAME}/index.html -f
   RewriteRule ^(.+)$ $1/index.html [L]
 
-  # Everything else: real files as-is, otherwise the SPA shell
+  # Everything else: real files as-is. Every page is prerendered (including the noindex quote,
+  # thank-you and questionnaire pages), so an unknown URL is a genuine 404 — never the app shell
+  # with a 200, which search engines treat as a "soft 404".
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
-  RewriteRule ^ index.html [L]
 </IfModule>
+
+ErrorDocument 404 /404.html

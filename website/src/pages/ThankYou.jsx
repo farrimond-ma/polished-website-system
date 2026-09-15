@@ -11,10 +11,10 @@ const ThankYou = () => {
 
   return (
     <div className="page-plain">
-      <SEO title="Thank you" description="Thanks for your enquiry." noIndex />
+      <SEO title="Thank You" description="Thanks for your enquiry." noIndex />
       <div className="thanks">
         <div className="thanks-icon"><Icon name="check" size={36} strokeWidth={3} /></div>
-        <h1>Thank you{first ? `, ${first}` : ''}</h1>
+        <h1>Thank You{first ? `, ${first}` : ''}</h1>
         <p>We have received your details{state?.reference ? <> (reference <strong>{state.reference}</strong>)</> : null}.</p>
         <div className="notice">
           <strong>What happens next</strong>

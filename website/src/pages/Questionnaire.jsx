@@ -314,7 +314,7 @@ const Questionnaire = () => {
   /* ───── render states ───── */
   const shell = (children) => (
     <div className="q-page">
-      <SEO title="Your insurance questionnaire" description="Complete your cleaning business insurance questionnaire." noIndex />
+      <SEO title="Your Insurance Questionnaire" description="Complete your cleaning business insurance questionnaire." noIndex />
       <div className="q-container" ref={topRef}>{children}</div>
     </div>
   );
@@ -322,7 +322,7 @@ const Questionnaire = () => {
   if (state.status === 'nolink') {
     return shell(
       <div className="q-card q-center">
-        <h1>Your insurance questionnaire</h1>
+        <h1>Your Insurance Questionnaire</h1>
         <p>This page needs the personal link we sent you by email or text message. Please open the link from your message.</p>
         <p>Not received one yet? <Link to="/get-a-quote">Request a quote</Link> or call <a href={SITE.phoneHref}>{SITE.phoneDisplay}</a>.</p>
       </div>,
@@ -332,7 +332,7 @@ const Questionnaire = () => {
   if (state.status === 'error') {
     return shell(
       <div className="q-card q-center">
-        <h1>We could not open your questionnaire</h1>
+        <h1>We Could Not Open Your Questionnaire</h1>
         <p>{state.message}</p>
         <p>Call us on <a href={SITE.phoneHref}>{SITE.phoneDisplay}</a> and we will send you a new link.</p>
       </div>,
@@ -342,7 +342,7 @@ const Questionnaire = () => {
     return shell(
       <div className="q-card q-center">
         <div className="q-done-icon"><Icon name="check" size={38} strokeWidth={3} /></div>
-        <h1>Thank you{state.firstName ? `, ${state.firstName}` : ''}</h1>
+        <h1>Thank You{state.firstName ? `, ${state.firstName}` : ''}</h1>
         <p>We have received your questionnaire{state.reference ? <> (reference <strong>{state.reference}</strong>)</> : null}. We have also sent you a confirmation email.</p>
         <p>One of our team will review your answers and approach insurers. We will be in touch if we need anything else, or when your quotes are ready.</p>
         <p>Need to change something? Call <a href={SITE.phoneHref}>{SITE.phoneDisplay}</a>.</p>
@@ -377,7 +377,7 @@ const Questionnaire = () => {
 
       {step === 0 && (
         <div className="q-card">
-          <h1>Hi{state.firstName ? ` ${state.firstName}` : ''}, let&rsquo;s get your cover sorted</h1>
+          <h1>Hi{state.firstName ? ` ${state.firstName}` : ''}, Let&rsquo;s Get Your Cover Sorted</h1>
           <p className="q-lead">These questions help us describe your business accurately to insurers. You will only see the questions that apply to your answers.</p>
           <ul className="q-intro-list">
             <li><Icon name="clipboard" size={20} /> About {sections.length} short sections, usually 10 to 15 minutes</li>

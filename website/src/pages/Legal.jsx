@@ -4,6 +4,7 @@ import SEO from '../components/SEO';
 import { ResourceHero } from '../components/resource/ResourceHero';
 import { SITE, REGULATORY_LINE } from '../config/site';
 import { openConsent } from '../lib/consent';
+import { breadcrumbSchema, webPageSchema } from '../lib/schema';
 
 // DRAFT legal wording — must be reviewed and approved by Allied Insurance Services' compliance
 // team before the site goes live (particularly retention periods, insurer/partner lists and the
@@ -11,7 +12,7 @@ import { openConsent } from '../lib/consent';
 
 const LegalPage = ({ title, description, path, children }) => (
   <div className="page-plain">
-    <SEO title={title} description={description} canonical={path} />
+    <SEO title={title} description={description} canonical={path} schema={[webPageSchema('WebPage', title, description, path), breadcrumbSchema([['Home', '/'], [title, path]])]} />
     <ResourceHero title={title} showTrust={false} description={description} />
     <div className="content">
       {children}
@@ -21,7 +22,7 @@ const LegalPage = ({ title, description, path, children }) => (
 );
 
 export const PrivacyPolicy = () => (
-  <LegalPage title="Privacy Policy" path="/privacy-policy" description="How Polished Insurance collects, uses and protects your personal information.">
+  <LegalPage title="Privacy Policy" path="/privacy-policy" description="How Polished Insurance collects, uses, shares and protects your personal information when you enquire about insurance for your cleaning business.">
     <p>{SITE.name} is a trading name of {SITE.legalName} (&ldquo;we&rdquo;, &ldquo;us&rdquo;). We are the data controller for the personal information described in this policy. Our registered office is {SITE.address}.</p>
 
     <h2>Information we collect</h2>
@@ -55,7 +56,7 @@ export const PrivacyPolicy = () => (
 );
 
 export const TermsOfBusiness = () => (
-  <LegalPage title="Terms of Business" path="/terms-of-business" description="Terms of use for this website and a summary of how we work as an insurance broker.">
+  <LegalPage title="Terms of Business" path="/terms-of-business" description="Terms of use for the Polished Insurance website and a summary of how we work as an FCA regulated insurance broker for cleaning businesses.">
     <h2>About us</h2>
     <p>{REGULATORY_LINE} You can check our details on the Financial Services Register at <a href="https://register.fca.org.uk" target="_blank" rel="noopener noreferrer">register.fca.org.uk</a>.</p>
     <h2>Our service</h2>
@@ -70,7 +71,7 @@ export const TermsOfBusiness = () => (
 );
 
 export const Complaints = () => (
-  <LegalPage title="Complaints" path="/complaints" description="How to make a complaint to Polished Insurance and what happens next.">
+  <LegalPage title="Complaints" path="/complaints" description="How to make a complaint to Polished Insurance, what happens next, and when you can refer it to the Financial Ombudsman Service.">
     <p>We aim to provide a high standard of service. If something has gone wrong, please tell us so we can put it right.</p>
     <h2>How to complain</h2>
     <ul>
@@ -88,7 +89,7 @@ export const Complaints = () => (
 );
 
 export const CookiePolicy = () => (
-  <LegalPage title="Cookie Policy" path="/cookie-policy" description="How this website uses cookies and similar technologies.">
+  <LegalPage title="Cookie Policy" path="/cookie-policy" description="How the Polished Insurance website uses cookies and similar technologies, including the Meta Pixel, and how to change your cookie choice.">
     <h2>Essential storage (always on)</h2>
     <ul>
       <li><strong>Enquiry attribution</strong>: for the length of your visit we record the page you first landed on and any campaign tags in the link you followed, so we can see which page an enquiry came from. It is deleted when you close your browser.</li>

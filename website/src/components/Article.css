@@ -100,6 +100,7 @@
     padding: 1.5rem;
 }
 
+.blog-card h2,
 .blog-card h3 {
     font-size: 1.25rem;
     margin-bottom: 0.75rem;
@@ -107,6 +108,7 @@
     color: var(--color-primary);
 }
 
+.blog-card:hover h2,
 .blog-card:hover h3 {
     color: var(--color-secondary-dark);
 }
@@ -258,7 +260,7 @@
    regardless of source order) rather than narrowing the FAQ selector,
    since :not() with a descendant combinator isn't safe across browsers.
 */
-.blog-post-content .article-cta h3 {
+.blog-post-content .article-cta .article-cta-title {
     background: none;
     padding: 0;
     margin: 0 0 1rem;
@@ -330,7 +332,10 @@
     background: var(--color-panel);
     border: 1px solid var(--color-panel-border);
 }
-.article-cta h3 {
+.article-cta-title {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    line-height: 1.2;
     margin: 0 0 1rem;
     color: var(--color-primary);
     font-size: 1.35rem;
@@ -367,7 +372,8 @@
     background: var(--color-primary);
     border: none;
 }
-.article-cta-mid h3 {
+.article-cta-mid .article-cta-title,
+.blog-post-content .article-cta.article-cta-mid .article-cta-title {
     color: #fff;
 }
 .article-cta-mid p {

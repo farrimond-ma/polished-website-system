@@ -5,8 +5,11 @@ import { SITE } from '../config/site';
 // (same approach as the Boxx site). JSON-LD renders in place, which Google reads anywhere.
 const DEFAULT_OG_IMAGE = `${SITE.url}/og-image.png`;
 
-const SEO = ({ title, description, keywords, type, schema, image, canonical, noIndex = false }) => {
-  const fullTitle = title ? `${title} | ${SITE.name}` : `${SITE.name} | Insurance for Cleaning Businesses`;
+const SEO = ({ title, description, keywords, type, schema, image, canonical, noIndex = false, robots }) => {
+  // Google shows roughly 60 characters: add the brand suffix only when the whole title still fits.
+  const withBrand = title ? `${title} | ${SITE.name}` : `${SITE.name} | Insurance for Cleaning Businesses`;
+  const fullTitle = title && withBrand.length > 60 ? title : withBrand;
+  const robotsContent = robots || (noIndex ? 'noindex, nofollow' : '');
   const path = canonical ?? (typeof window !== 'undefined' ? window.location.pathname.replace(/\/$/, '') || '/' : '/');
   const canonicalUrl = path.startsWith('http') ? path : `${SITE.url}${path}`;
   const ogImage = image ? (image.startsWith('http') ? image : `${SITE.url}${image}`) : DEFAULT_OG_IMAGE;
@@ -16,7 +19,7 @@ const SEO = ({ title, description, keywords, type, schema, image, canonical, noI
     <>
       <title>{fullTitle}</title>
       {description && <meta name="description" content={description} />}
-      {noIndex && <meta name="robots" content="noindex, nofollow" />}
+      {robotsContent && <meta name="robots" content={robotsContent} />}
       {keywordsContent && <meta name="keywords" content={keywordsContent} />}
       {!noIndex && <link rel="canonical" href={canonicalUrl} />}
 

@@ -26,7 +26,6 @@ const posts = JSON.parse(fs.readFileSync(path.join(root, 'src/data/blogPosts.jso
 const urls = [
   ...staticRoutes.map(([loc, priority, changefreq]) => ({ loc, priority, changefreq, lastmod: today })),
   ...covers.map((c) => ({ loc: `/cleaning-insurance/${c.slug}`, priority: '0.9', changefreq: 'monthly', lastmod: today })),
-  ...covers.map((c) => ({ loc: `/get-a-quote/${c.slug}`, priority: '0.6', changefreq: 'monthly', lastmod: today })),
   ...posts.map((p) => ({ loc: `/guides/${p.slug}`, priority: '0.7', changefreq: 'monthly', lastmod: (p.updatedAt || p.publishedAt || p.date || today).slice(0, 10) })),
 ];
 

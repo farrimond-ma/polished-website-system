@@ -1,9 +1,13 @@
 import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
+import { titleCase } from '../lib/titleCase';
 import { ResourceHero, FinalCtaBand } from '../components/resource/ResourceHero';
 import { publishedPosts, formatDate, DEFAULT_GUIDE_IMAGE } from '../data/posts';
+import { breadcrumbSchema, webPageSchema } from '../lib/schema';
 import '../components/Article.css';
+
+const DESCRIPTION = "Practical insurance guides for UK cleaning businesses: public and employers' liability, contracts, keys, equipment, claims and running a cleaning company.";
 
 const Guides = () => {
   const filters = useMemo(() => {
@@ -18,8 +22,9 @@ const Guides = () => {
     <div className="blog-page">
       <SEO
         title="Insurance Guides for Cleaning Businesses"
-        description="Practical guides to insurance for UK cleaning businesses: public and employers' liability, contracts and tenders, keys, equipment, claims and running a cleaning company."
+        description={DESCRIPTION}
         canonical="/guides"
+        schema={[webPageSchema('CollectionPage', 'Insurance Guides for Cleaning Businesses', DESCRIPTION, '/guides'), breadcrumbSchema([['Home', '/'], ['Guides', '/guides']])]}
       />
       <ResourceHero
         title="Insurance guides for cleaning businesses"
@@ -42,11 +47,11 @@ const Guides = () => {
               {shown.map((p) => (
                 <Link key={p.slug} to={`/guides/${p.slug}`} className="blog-card" aria-label={p.title}>
                   <div className="blog-card-img">
-                    <img src={p.heroImage || DEFAULT_GUIDE_IMAGE} alt="" loading="lazy" onError={(e) => { e.currentTarget.src = DEFAULT_GUIDE_IMAGE; }} />
+                    <img src={p.heroImage || DEFAULT_GUIDE_IMAGE} alt="" loading="lazy" width="1440" height="900" onError={(e) => { e.currentTarget.src = DEFAULT_GUIDE_IMAGE; }} />
                     {p.category && <span className="blog-card-tag">{p.category}</span>}
                   </div>
                   <div className="blog-card-content">
-                    <h3>{p.title}</h3>
+                    <h2>{titleCase(p.title)}</h2>
                     <p>{p.excerpt}</p>
                     <p className="blog-card-date">{p.updatedAt ? `Updated ${formatDate(p.updatedAt)}` : `Published ${formatDate(p.publishedAt || p.date)}`}</p>
                     <span className="read-more">Read guide &rarr;</span>
@@ -55,7 +60,7 @@ const Guides = () => {
               ))}
             </div>
           ) : (
-            <div className="text-center"><h3>New guides are on the way.</h3><p>In the meantime, explore our <Link to="/cleaning-insurance">cleaning insurance pages</Link>.</p></div>
+            <div className="text-center"><h2>New guides are on the way</h2><p>In the meantime, explore our <Link to="/cleaning-insurance">cleaning insurance pages</Link>.</p></div>
           )}
         </div>
       </section>

@@ -5,6 +5,9 @@
  * The schema (inc/schema.json) was copied from the SSR Questionnaire app and extended:
  *  - contact_name / contact_phone fields so a lead's contact details can be pre-filled
  *  - item.client = true marks an "Extra" (acturis:false) question the CLIENT should still see
+ *  - item.client = false hides ANY question from the client (staff still see and edit it);
+ *    a table column can also carry client:false (e.g. directors' date of birth)
+ *  - item.default (and a percent_group field's default) is applied when there is no answer yet
  *  - showIf conditions may also be {"all":[...]}, {"any":[...]} or {"field":x,"in":[...]}
  *  - a whole section may carry showIf (e.g. Claims History only when claims_5yr = yes)
  *
@@ -27,9 +30,16 @@ function q_is_input(array $item): bool {
     return $t !== '' && $t !== 'heading' && $t !== 'note';
 }
 
-/** Extra (non-Acturis) questions are hidden from clients unless flagged client:true. */
+/** Hidden from clients: anything flagged client:false, and Extra questions unless flagged client:true. */
 function q_hidden_from_client(array $item): bool {
+    if (($item['client'] ?? null) === false) return true;
     return ($item['acturis'] ?? true) === false && ($item['client'] ?? false) !== true;
+}
+
+/** Table column ids the client must not see or write (column client:false). */
+function q_hidden_columns(array $item): array {
+    if (($item['type'] ?? '') !== 'table') return [];
+    return array_values(array_map(fn($c) => $c['id'], array_filter($item['columns'] ?? [], fn($c) => ($c['client'] ?? null) === false)));
 }
 
 /** Every answer key an item can write (percent groups write one key per sub-field). */
@@ -40,7 +50,7 @@ function q_item_keys(array $item): array {
     return isset($item['id']) ? [$item['id']] : [];
 }
 
-/** The schema as the client sees it: Extra questions and empty headings/sections removed. */
+/** The schema as the client sees it: hidden questions/columns and empty headings/sections removed. */
 function q_client_schema(array $hiddenSections = []): array {
     $schema = q_schema();
     $out = ['title' => $schema['title'] ?? '', 'intro' => $schema['intro'] ?? '', 'sections' => []];
@@ -57,6 +67,9 @@ function q_client_schema(array $hiddenSections = []): array {
                     if (q_is_input($items[$j])) { $hasInput = true; break; }
                 }
                 if (!$hasInput) continue;
+            }
+            if ($hiddenCols = q_hidden_columns($it)) {
+                $it['columns'] = array_values(array_filter($it['columns'], fn($c) => !in_array($c['id'], $hiddenCols, true)));
             }
             $clean[] = $it;
         }
@@ -110,6 +123,37 @@ function q_condition_met($cond, array $data): bool {
     return true;
 }
 
+function q_blank($v): bool {
+    if ($v === null || $v === '' || $v === []) return true;
+    if (is_array($v)) { // a table counts as blank when no row has any value
+        foreach ($v as $row) {
+            if (is_array($row) && array_filter($row, fn($x) => $x !== '' && $x !== null)) return false;
+        }
+        return true;
+    }
+    return false;
+}
+
+/**
+ * Schema defaults for anything not answered yet — so questions hidden from the client (e.g. the
+ * standard PL extensions) are still recorded. A percent group only takes its defaults while every
+ * field in it is empty, so a client who re-splits the percentages doesn't get 100% put back.
+ */
+function q_apply_defaults(array $data): array {
+    foreach (q_schema()['sections'] as $section) {
+        foreach ($section['items'] as $it) {
+            if (($it['type'] ?? '') === 'percent_group') {
+                $fields = $it['fields'] ?? [];
+                if (array_filter($fields, fn($f) => !q_blank($data[$f['id']] ?? null))) continue;
+                foreach ($fields as $f) if (isset($f['default'])) $data[$f['id']] = $f['default'];
+            } elseif (isset($it['id'], $it['default']) && q_blank($data[$it['id']] ?? null)) {
+                $data[$it['id']] = $it['default'];
+            }
+        }
+    }
+    return $data;
+}
+
 /** Contact details from the lead, keyed by questionnaire field, for pre-filling. */
 function q_prefill_from_lead(array $lead): array {
     $person = trim(($lead['first_name'] ?? '') . ' ' . ($lead['last_name'] ?? ''));
@@ -118,9 +162,11 @@ function q_prefill_from_lead(array $lead): array {
         'contact_name'  => $person,
         'contact_phone' => $lead['phone'] ?? '',
         'insured_email' => $lead['email'] ?? '',
+        // The contact is usually the (first) director/principal too; the client can change it.
+        'directors'     => $person !== '' ? [['name' => $person]] : [],
     ];
     if (!empty($lead['renewal_date'])) $pre['renewal_date'] = $lead['renewal_date'];
-    return array_filter($pre, fn($v) => trim((string)$v) !== '');
+    return array_filter($pre, fn($v) => !q_blank(is_string($v) ? trim($v) : $v));
 }
 
 function q_lead_data(array $lead): array {
@@ -128,13 +174,42 @@ function q_lead_data(array $lead): array {
     return is_array($data) ? $data : [];
 }
 
-/** Answers with the lead's contact details filled into any still-empty contact field. */
+/** Answers with the lead's contact details filled into any still-empty field, plus schema defaults. */
 function q_data_with_prefill(array $lead): array {
     $data = q_lead_data($lead);
     foreach (q_prefill_from_lead($lead) as $k => $v) {
-        if (!isset($data[$k]) || $data[$k] === '') $data[$k] = $v;
+        if (q_blank($data[$k] ?? null)) $data[$k] = $v;
     }
-    return $data;
+    return q_apply_defaults($data);
+}
+
+/**
+ * Merges what the client sent into the stored answers: staff-only keys are kept as they are, and
+ * table columns hidden from the client (e.g. directors' date of birth) keep their stored values
+ * row by row, so the client can neither see nor wipe them.
+ */
+function q_merge_client_answers(array $stored, array $clean, array $clientKeys): array {
+    $merged = array_diff_key($stored, $clientKeys);
+    $hiddenCols = [];
+    foreach (q_schema()['sections'] as $section) {
+        foreach ($section['items'] as $it) {
+            if ($cols = q_hidden_columns($it)) $hiddenCols[$it['id']] = $cols;
+        }
+    }
+    foreach ($clean as $k => $v) {
+        if (isset($hiddenCols[$k]) && is_array($v)) {
+            $old = is_array($stored[$k] ?? null) ? $stored[$k] : [];
+            foreach ($v as $i => $row) {
+                foreach ($hiddenCols[$k] as $col) {
+                    unset($row[$col]);
+                    if (isset($old[$i][$col]) && $old[$i][$col] !== '') $row[$col] = $old[$i][$col];
+                }
+                $v[$i] = $row;
+            }
+        }
+        $merged[$k] = $v;
+    }
+    return q_apply_defaults($merged);
 }
 
 /**

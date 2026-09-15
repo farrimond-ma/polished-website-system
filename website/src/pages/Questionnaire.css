@@ -11,15 +11,6 @@
 .q-save-saving { color: var(--color-secondary-light); }
 .q-save-error { color: #fdba74; font-weight: 600; }
 
-.q-steps { display: flex; gap: 0.4rem; overflow-x: auto; padding: 0.2rem 0 0.8rem; margin-bottom: 0.2rem; scrollbar-width: none; }
-.q-steps::-webkit-scrollbar { display: none; }
-.q-steps button {
-  flex: 0 0 auto; border: 1px solid rgba(255, 255, 255, 0.25); background: rgba(255, 255, 255, 0.06); color: rgba(255, 255, 255, 0.8);
-  border-radius: 999px; padding: 0.38rem 0.85rem; font-size: 0.8rem; font-weight: 500;
-}
-.q-steps button.is-done { border-color: var(--color-secondary); color: #fff; }
-.q-steps button.is-current { background: var(--color-secondary); border-color: var(--color-secondary); color: #fff; font-weight: 700; }
-
 .q-card { background: #fff; border-radius: 16px; box-shadow: 0 16px 40px rgba(10, 25, 47, 0.12); padding: 2.25rem 2.25rem 1.75rem; }
 @media (max-width: 600px) { .q-card { padding: 1.5rem 1.15rem 1.25rem; border-radius: 12px; } .q-page { padding-top: 5.5rem; } }
 .q-center { text-align: center; padding: 3rem 2rem; }

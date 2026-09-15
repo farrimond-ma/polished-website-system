@@ -49,11 +49,18 @@ export function sectionProblems(section, data) {
   return problems;
 }
 
-/** Schema defaults (e.g. common PL extensions) for fields with no answer yet. */
+/**
+ * Schema defaults for fields with no answer yet (the CRM also applies these server-side).
+ * A percent group (e.g. UK/EEA 100%) only takes its defaults while every field in it is empty.
+ */
 export function withDefaults(schema, data) {
   const out = { ...data };
   for (const s of schema.sections) for (const it of s.items) {
-    if (it.id && it.default !== undefined && isEmpty(out[it.id])) out[it.id] = it.default;
+    if (it.type === 'percent_group') {
+      if (it.fields.every((f) => isEmpty(out[f.id]))) {
+        for (const f of it.fields) if (f.default !== undefined) out[f.id] = f.default;
+      }
+    } else if (it.id && it.default !== undefined && isEmpty(out[it.id])) out[it.id] = it.default;
   }
   return out;
 }

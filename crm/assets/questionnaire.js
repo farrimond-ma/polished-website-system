@@ -241,12 +241,15 @@
     }
     if (!item.fixedRows && rows.length === 0) rows.push({});
 
+    // Columns flagged client:false (e.g. directors' date of birth) are only shown to staff.
+    const columns = mode === "staff" ? item.columns : item.columns.filter((c) => c.client !== false);
+
     function rebuild() {
       wrap.innerHTML = "";
       const table = el("table", { class: "dyn-table" });
       const thead = el("thead");
       const htr = el("tr");
-      for (const c of item.columns) htr.appendChild(el("th", { text: c.label }));
+      for (const c of columns) htr.appendChild(el("th", { text: c.label + (mode === "staff" && c.client === false ? " (staff only)" : "") }));
       htr.appendChild(el("th", { class: "rowdel" }));
       thead.appendChild(htr);
       table.appendChild(thead);
@@ -254,7 +257,7 @@
 
       rows.forEach((row, idx) => {
         const tr = el("tr");
-        for (const c of item.columns) {
+        for (const c of columns) {
           let cell;
           const setter = (v) => {
             if (v === "") delete row[c.id]; else row[c.id] = v;
@@ -366,6 +369,9 @@
   // Staff-only badge showing whether Acturis captures this question
   function makeBadge(item) {
     if (mode !== "staff") return null;
+    if (item.client === false) {
+      return el("span", { class: "qbadge qbadge-extra", title: "Staff only — the client never sees this" + (item.acturis !== false ? " (captured by Acturis)" : ""), text: item.acturis !== false ? "Acturis · staff only" : "Staff only" });
+    }
     if (item.acturis !== false) {
       return el("span", { class: "qbadge qbadge-acturis", title: "Captured by Acturis — the client is asked this", text: "Acturis" });
     }
@@ -378,9 +384,10 @@
   // "Extra" = a question Acturis doesn't capture (acturis:false). These are hidden
   // from the client entirely, and greyed (but still editable) for staff.
   function isExtra(item) { return item.acturis === false; }
-  // Hidden from the client invite form: an Extra (non-Acturis) question, unless it's
-  // been explicitly marked to show on the client form (item.client === true).
-  function hideFromClient(item) { return isExtra(item) && item.client !== true; }
+  // Hidden from the client invite form: anything flagged client:false, or an Extra (non-Acturis)
+  // question unless it's been explicitly marked to show on the client form (item.client === true).
+  // Mirrors q_hidden_from_client() in inc/questionnaire.php.
+  function hideFromClient(item) { return item.client === false || (isExtra(item) && item.client !== true); }
   function isInput(item) { const t = item.type; return t && t !== "heading" && t !== "note"; }
   function sectionHasClientItems(section) {
     return section.items.some((it) => isInput(it) && !hideFromClient(it));
@@ -523,10 +530,16 @@
 
   // Apply schema `default` values to any field that has no value yet (fresh case),
   // so e.g. the chosen PL extensions start on "Yes". Never overrides existing answers.
+  // A percent group (e.g. UK/EEA 100%) only takes its defaults while every field in it is empty.
   function applyDefaults() {
     let changed = false;
     schema.sections.forEach((s) => s.items.forEach((it) => {
-      if (it && it.default !== undefined) {
+      if (it && it.type === "percent_group") {
+        const empty = (v) => v === undefined || v === null || v === "";
+        if (it.fields.every((f) => empty(data[f.id]))) {
+          it.fields.forEach((f) => { if (f.default !== undefined) { data[f.id] = f.default; changed = true; } });
+        }
+      } else if (it && it.default !== undefined) {
         const v = data[it.id];
         if (v === undefined || v === null || v === "") { data[it.id] = it.default; changed = true; }
       }

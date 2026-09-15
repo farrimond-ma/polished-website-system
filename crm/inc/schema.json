@@ -41,7 +41,7 @@
           "label": "Company registration number",
           "type": "text",
           "acturis": false,
-          "client": true
+          "client": false
         },
         {
           "id": "entity_status",
@@ -85,7 +85,8 @@
             {
               "id": "dob",
               "label": "Date of birth",
-              "type": "date"
+              "type": "date",
+              "client": false
             }
           ],
           "acturis": true
@@ -104,7 +105,7 @@
         },
         {
           "id": "experience_held",
-          "label": "Is at least 1 year's experience held in a relevant field to the business being proposed?",
+          "label": "Do you (or the people running the business) have at least 1 year’s experience in cleaning work?",
           "type": "yesno",
           "acturis": false,
           "client": true
@@ -121,11 +122,17 @@
           }
         },
         {
+          "id": "prev_insurer_details",
+          "label": "Who are you currently insured with?",
+          "type": "text",
+          "acturis": true
+        },
+        {
           "id": "claims_5yr",
           "label": "Has the company, any of its directors, principals, partners or senior managers had any claims, losses or incidents that may give rise to a claim in the last five years, whether insured or not, in respect of the sections of cover requested?",
           "type": "yesno",
           "required": true,
-          "help": "If yes, please provide details in the Claims History section at the end of this form.",
+          "help": "If yes, we will ask for the details on the Claims History page.",
           "acturis": true
         },
         {
@@ -187,20 +194,23 @@
           "id": "trade_associations",
           "label": "Details of any trade association or inspectorate body memberships",
           "type": "textarea",
-          "acturis": true
+          "acturis": true,
+          "client": false
         },
         {
           "id": "ern",
           "label": "Employer Reference Number (ERN)",
           "type": "text",
-          "acturis": true
+          "acturis": true,
+          "client": false
         },
         {
           "id": "ern_exempt",
           "label": "ERN exempt",
           "type": "checkbox",
           "help": "Tick if the business is exempt from having an Employer Reference Number.",
-          "acturis": true
+          "acturis": true,
+          "client": false
         }
       ]
     },
@@ -262,6 +272,12 @@
           "acturis": true
         },
         {
+          "id": "bfsc_percent",
+          "label": "Percentage of work performed by bona fide subcontractors",
+          "type": "percent",
+          "acturis": true
+        },
+        {
           "type": "percent_group",
           "id": "env_split",
           "label": "Business activity split by environment",
@@ -290,7 +306,8 @@
           "fields": [
             {
               "id": "terr_uk_eea",
-              "label": "Within the UK or European Economic Area (EEA)"
+              "label": "Within the UK or European Economic Area (EEA)",
+              "default": "100"
             },
             {
               "id": "terr_row",
@@ -301,12 +318,6 @@
               "label": "In or derived from North America"
             }
           ],
-          "acturis": true
-        },
-        {
-          "id": "bfsc_percent",
-          "label": "Percentage of work performed by bona fide subcontractors",
-          "type": "percent",
           "acturis": true
         }
       ]
@@ -321,7 +332,8 @@
           "label": "Business description",
           "type": "textarea",
           "required": true,
-          "acturis": true
+          "acturis": true,
+          "client": false
         },
         {
           "type": "percent_group",
@@ -1043,84 +1055,96 @@
           "label": "Asbestos buyback (work where a licence is not required or that is subject to Notifiable Non-licensed Work requirements)",
           "type": "yesno",
           "acturis": true,
-          "default": "no"
+          "default": "no",
+          "client": false
         },
         {
           "id": "ext_part_worked_upon",
           "label": "Damage to that part worked upon",
           "type": "yesno",
           "acturis": true,
-          "default": "yes"
+          "default": "no",
+          "client": false
         },
         {
           "id": "ext_fidelity_bonding",
           "label": "Fidelity bonding",
           "type": "yesno",
           "acturis": true,
-          "default": "yes"
+          "default": "yes",
+          "client": false
         },
         {
           "id": "ext_financial_loss",
           "label": "Financial loss (including products)",
           "type": "yesno",
           "acturis": true,
-          "default": "yes"
+          "default": "yes",
+          "client": false
         },
         {
           "id": "ext_loss_of_keys",
           "label": "Loss of keys",
           "type": "yesno",
           "acturis": true,
-          "default": "yes"
+          "default": "yes",
+          "client": false
         },
         {
           "id": "ext_misuse_telephones",
           "label": "Misuse of telephones",
           "type": "yesno",
           "acturis": true,
-          "default": "yes"
+          "default": "yes",
+          "client": false
         },
         {
           "id": "ext_north_america",
           "label": "North America (products)",
           "type": "yesno",
           "acturis": true,
-          "default": "no"
+          "default": "no",
+          "client": false
         },
         {
           "id": "ext_defective_products",
           "label": "Defective products and workmanship (where damage or injury has occurred)",
           "type": "yesno",
           "acturis": true,
-          "default": "no"
+          "default": "no",
+          "client": false
         },
         {
           "id": "ext_metered_water",
           "label": "Loss of metered water",
           "type": "yesno",
           "acturis": true,
-          "default": "no"
+          "default": "no",
+          "client": false
         },
         {
           "id": "ext_temp_removal",
           "label": "Temporary removal of customers' property for cleaning or treatment",
           "type": "yesno",
           "acturis": true,
-          "default": "no"
+          "default": "no",
+          "client": false
         },
         {
           "id": "ext_trace_access",
           "label": "Trace and access",
           "type": "yesno",
           "acturis": true,
-          "default": "no"
+          "default": "no",
+          "client": false
         },
         {
           "id": "ext_firearms",
           "label": "Use of firearms",
           "type": "yesno",
           "acturis": true,
-          "default": "no"
+          "default": "no",
+          "client": false
         }
       ]
     },
@@ -1919,16 +1943,11 @@
       "title": "Previous Insurer Details",
       "items": [
         {
-          "id": "prev_insurer_details",
-          "label": "Details of previous insurer and target premium",
-          "type": "textarea",
-          "acturis": true
-        },
-        {
           "id": "prev_qbe_ssr",
           "label": "Do you currently have a policy with QBE and/or Sutton Specialist Risks?",
           "type": "yesno",
-          "acturis": true
+          "acturis": true,
+          "client": false
         }
       ]
     },

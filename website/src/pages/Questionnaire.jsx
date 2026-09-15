@@ -364,23 +364,12 @@ const Questionnaire = () => {
         </span>
       </div>
 
-      {step > 0 && (
-        <nav className="q-steps" aria-label="Questionnaire sections">
-          {sections.map((s, i) => (
-            <button key={s.id} type="button" className={`${step === i + 1 ? 'is-current' : ''}${i + 1 < step ? ' is-done' : ''}`} onClick={() => goTo(i + 1)}>
-              {s.title}
-            </button>
-          ))}
-          <button type="button" className={step === reviewStep ? 'is-current' : ''} onClick={() => goTo(reviewStep)}>Review &amp; submit</button>
-        </nav>
-      )}
-
       {step === 0 && (
         <div className="q-card">
           <h1>Hi{state.firstName ? ` ${state.firstName}` : ''}, Let&rsquo;s Get Your Cover Sorted</h1>
           <p className="q-lead">These questions help us describe your business accurately to insurers. You will only see the questions that apply to your answers.</p>
           <ul className="q-intro-list">
-            <li><Icon name="clipboard" size={20} /> About {sections.length} short sections, usually 10 to 15 minutes</li>
+            <li><Icon name="clipboard" size={20} /> About {sections.length} short sections, usually 4 to 5 minutes</li>
             <li><Icon name="check" size={20} /> Your answers save automatically. Come back any time using the same link</li>
             <li><Icon name="phone" size={20} /> Stuck on a question? Call us on <a href={SITE.phoneHref}>{SITE.phoneDisplay}</a></li>
           </ul>

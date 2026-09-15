@@ -46,9 +46,9 @@ $body = json_body();
 $incoming = is_array($body['data'] ?? null) ? $body['data'] : [];
 $clean = q_sanitise($incoming, $clientKeys);
 
-// Keep everything staff-only; replace the client-visible part with what the client sent.
-$merged = array_diff_key($stored, $clientKeys);
-foreach ($clean as $k => $v) $merged[$k] = $v;
+// Keep everything staff-only (including hidden table columns); replace the client-visible part
+// with what the client sent, and record schema defaults for questions the client never sees.
+$merged = q_merge_client_answers($stored, $clean, $clientKeys);
 $json = json_encode($merged, JSON_UNESCAPED_UNICODE);
 if (strlen($json) > 1000000) json_out(['ok' => false, 'error' => 'Too much data.'], 413);
 

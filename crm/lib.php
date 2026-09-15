@@ -27,12 +27,40 @@ if (PHP_SAPI !== 'cli' && !defined('POLISHED_API')) {
     session_start();
 }
 
+/**
+ * Stops with a plain explanation of a set-up problem (instead of a blank 500 page).
+ * Never includes credentials; the full technical error goes to the PHP error log.
+ */
+function setup_problem(string $message): void {
+    http_response_code(503);
+    if (PHP_SAPI === 'cli') { fwrite(STDERR, "Polished CRM set-up problem: $message\n"); exit(1); }
+    if (defined('POLISHED_API')) {
+        header('Content-Type: application/json');
+        echo json_encode(['ok' => false, 'error' => 'The service is temporarily unavailable. Please call us.']);
+        exit;
+    }
+    header('Content-Type: text/html; charset=utf-8');
+    echo '<!doctype html><meta charset="utf-8"><meta name="robots" content="noindex"><title>Polished CRM set-up</title>'
+        . '<div style="font-family:Arial,sans-serif;max-width:620px;margin:10vh auto;padding:24px;border:1px solid #e2e8ef;border-top:4px solid #1664f0;border-radius:8px">'
+        . '<h1 style="font-size:20px;margin:0 0 10px;color:#0a192f">The CRM is not set up yet</h1>'
+        . '<p style="line-height:1.6;color:#1f2733">' . htmlspecialchars($message, ENT_QUOTES, 'UTF-8') . '</p></div>';
+    exit;
+}
+
 function config(): array {
     static $cfg = null;
     if ($cfg === null) {
-        $file = getenv('POLISHED_CONFIG') ?: __DIR__ . '/config.php'; // env override is for local testing
-        if (!is_file($file)) $file = __DIR__ . '/config.sample.php';
+        $env = getenv('POLISHED_CONFIG'); // env override is for local testing
+        $file = $env ?: __DIR__ . '/config.php';
+        if (!is_file($file)) {
+            setup_problem('config.php has not been uploaded. Copy your completed config.php into this folder (next to index.php) using SiteGround File Manager.');
+        }
         $cfg = require $file;
+        $unfilled = [];
+        array_walk_recursive($cfg, function ($v, $k) use (&$unfilled) {
+            if (is_string($v) && str_starts_with($v, 'ENTER_')) $unfilled[] = $k;
+        });
+        if ($unfilled) setup_problem('config.php still has placeholder values for: ' . implode(', ', $unfilled) . '. Replace each ENTER_… value and upload it again.');
     }
     return $cfg;
 }
@@ -55,7 +83,19 @@ function db(): PDO {
         $pdo = new PDO('sqlite:' . $path);
     } else {
         $dsn = sprintf('mysql:host=%s;port=%d;dbname=%s;charset=utf8mb4', $c['host'], $c['port'] ?? 3306, $c['dbname']);
-        $pdo = new PDO($dsn, $c['user'], $c['password']);
+        try {
+            $pdo = new PDO($dsn, $c['user'], $c['password']);
+        } catch (PDOException $ex) {
+            error_log('Polished CRM database connection failed: ' . $ex->getMessage());
+            $code = (int)($ex->errorInfo[1] ?? 0) ?: (int)$ex->getCode();
+            setup_problem(match ($code) {
+                1045 => 'The database username or password in config.php is not accepted. Check them in Site Tools → MySQL → Users (and that the user has been added to the database).',
+                1044 => 'The database user exists but has no access to this database. In Site Tools → MySQL → Databases, add the user to the database with All Privileges.',
+                1049 => 'The database name in config.php does not exist. Copy the exact name from Site Tools → MySQL → Databases.',
+                2002, 2003, 2005 => 'The database server could not be reached. The host in config.php should normally be localhost.',
+                default => 'The CRM could not connect to its database (error ' . $code . '). Check the database settings in config.php.',
+            });
+        }
     }
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);

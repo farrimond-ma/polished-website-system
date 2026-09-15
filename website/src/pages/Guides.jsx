@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
 import { titleCase } from '../lib/titleCase';
+import { heroSrcSet } from '../lib/images';
 import { ResourceHero, FinalCtaBand } from '../components/resource/ResourceHero';
 import { publishedPosts, formatDate, DEFAULT_GUIDE_IMAGE } from '../data/posts';
 import { breadcrumbSchema, webPageSchema } from '../lib/schema';
@@ -47,7 +48,7 @@ const Guides = () => {
               {shown.map((p) => (
                 <Link key={p.slug} to={`/guides/${p.slug}`} className="blog-card" aria-label={p.title}>
                   <div className="blog-card-img">
-                    <img src={p.heroImage || DEFAULT_GUIDE_IMAGE} alt="" loading="lazy" width="1440" height="900" onError={(e) => { e.currentTarget.src = DEFAULT_GUIDE_IMAGE; }} />
+                    <img src={p.heroImage || DEFAULT_GUIDE_IMAGE} srcSet={p.heroImage ? heroSrcSet(p.heroImage) : undefined} sizes="(max-width: 640px) 100vw, 380px" alt="" loading="lazy" width="1440" height="900" onError={(e) => { e.currentTarget.src = DEFAULT_GUIDE_IMAGE; }} />
                     {p.category && <span className="blog-card-tag">{p.category}</span>}
                   </div>
                   <div className="blog-card-content">

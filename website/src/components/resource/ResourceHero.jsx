@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Icon from '../Icons';
 import { SITE } from '../../config/site';
 import { titleCase } from '../../lib/titleCase';
+import { imageVariant } from '../../lib/images';
 import './ResourcePage.css';
 
 // Shared navy hero + final CTA band (same visual language as the Boxx site's ResourceHero).
@@ -20,7 +21,7 @@ export const ResourceHero = ({ eyebrow, title: rawTitle, description, heroImage,
   return (
     <div
       className={`resource-hero${heroImage ? ' has-hero-image' : ' has-pattern'}`}
-      style={heroImage ? { '--hero-image': `url("${heroImage}")` } : undefined}
+      style={heroImage ? { '--hero-image': `url("${heroImage}")`, ...(imageVariant(heroImage, 800) && { '--hero-image-sm': `url("${imageVariant(heroImage, 800)}")` }) } : undefined}
     >
       <div className="container resource-hero-grid">
         <div className="resource-hero-text">

@@ -1,5 +1,6 @@
 import React from 'react';
 import QuoteForm from './QuoteForm';
+import { heroSrcSet } from '../lib/images';
 import './QuoteSection.css';
 
 // The quote form in its own section straight after the hero (target of the hero's
@@ -10,7 +11,7 @@ const QuoteSection = ({ image, imageAlt = '', coverInterest = '', heading = 'Get
     <div className="quote-section-grid">
       {image && (
         <div className="quote-section-image">
-          <img src={image} alt={imageAlt} loading="eager" width="1440" height="1024" />
+          <img src={image} srcSet={heroSrcSet(image)} sizes="(max-width: 860px) 100vw, 590px" alt={imageAlt} loading="eager" width="1440" height="1024" />
         </div>
       )}
       <div className="quote-section-form">

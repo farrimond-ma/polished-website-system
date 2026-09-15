@@ -51,6 +51,21 @@ const EXTRA_ROUTES = [
 ];
 const NOT_FOUND_ROUTE = '/404'; // any unknown path renders the Not Found page -> saved as dist/404.html
 
+function optimiseHtml(html) {
+  const assets = path.join(distDir, 'assets');
+  const files = fs.existsSync(assets) ? fs.readdirSync(assets) : [];
+  let out = html.replace(/<link rel="stylesheet"[^>]*href="\/assets\/([^"]+\.css)"[^>]*>/g, (tag, name) => {
+    const file = path.join(assets, name);
+    return fs.existsSync(file) ? `<style>${fs.readFileSync(file, 'utf8')}</style>` : tag;
+  });
+  const preloads = files
+    .filter((f) => /^(inter|outfit)-latin-wght-normal-.*\.woff2$/.test(f))
+    .map((f) => `<link rel="preload" href="/assets/${f}" as="font" type="font/woff2" crossorigin>`)
+    .join('');
+  if (preloads && !out.includes('rel="preload" href="/assets/inter')) out = out.replace(/<meta charset="[^"]*">/i, (m) => `${m}${preloads}`);
+  return out;
+}
+
 const outputPath = (route) => (route === '/' ? path.join(distDir, 'index.html') : route === NOT_FOUND_ROUTE ? path.join(distDir, '404.html') : path.join(distDir, route.slice(1), 'index.html'));
 
 async function render(browser, route) {
@@ -59,7 +74,7 @@ async function render(browser, route) {
   if (route.startsWith('/guides/')) await page.waitForSelector('.blog-post-content', { timeout: 15000 });
   if (route.startsWith('/cleaning-insurance/')) await page.waitForSelector('[data-page-type="cover-page"]', { timeout: 15000 });
   await new Promise((r) => setTimeout(r, 400));
-  const html = await page.content();
+  const html = optimiseHtml(await page.content());
   await page.close();
 
   if (route !== NOT_FOUND_ROUTE && html.includes('data-page-type="not-found"')) throw new Error(`Prerender failed for ${route}: rendered the Not Found page.`);

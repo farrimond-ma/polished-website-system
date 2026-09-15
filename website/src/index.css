@@ -13,8 +13,8 @@
   --color-panel: #eef4ff;
   --color-panel-border: #d3e2fd;
 
-  --font-heading: 'Outfit', system-ui, sans-serif;
-  --font-body: 'Inter', system-ui, sans-serif;
+  --font-heading: 'Outfit Variable', 'Outfit', system-ui, sans-serif;
+  --font-body: 'Inter Variable', 'Inter', system-ui, sans-serif;
 
   --spacing-xs: 0.5rem;
   --spacing-sm: 1rem;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Layout from './Layout';
 import Home from './pages/Home';
@@ -8,11 +8,12 @@ import GetAQuote from './pages/GetAQuote';
 import ThankYou from './pages/ThankYou';
 import Guides from './pages/Guides';
 import GuidePost from './pages/GuidePost';
-import Questionnaire from './pages/Questionnaire';
 import AboutUs from './pages/AboutUs';
 import { PrivacyPolicy, TermsOfBusiness, Complaints, CookiePolicy } from './pages/Legal';
 import NotFound from './pages/NotFound';
 import './App.css';
+
+const Questionnaire = lazy(() => import('./pages/Questionnaire'));
 
 function App() {
   return (
@@ -26,7 +27,7 @@ function App() {
         <Route path="get-a-quote/:slug" element={<GetAQuote />} />
         <Route path="guides" element={<Guides />} />
         <Route path="guides/:slug" element={<GuidePost />} />
-        <Route path="insurance-questionnaire" element={<Questionnaire />} />
+        <Route path="insurance-questionnaire" element={<Suspense fallback={<div className="page-plain" style={{ minHeight: '80vh' }} />}><Questionnaire /></Suspense>} />
         <Route path="about-us" element={<AboutUs />} />
         <Route path="privacy-policy" element={<PrivacyPolicy />} />
         <Route path="terms-of-business" element={<TermsOfBusiness />} />

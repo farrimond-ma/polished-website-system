@@ -1,12 +1,21 @@
 import React from 'react';
 
-// The Polished Insurance logo carried over from the previous site (transparent PNG, trimmed and
-// resized by the image pipeline). Works on the white header and the navy footer.
-const Logo = ({ height = 68, className = '' }) => (
-  <picture className={`logo ${className}`.trim()}>
-    <source srcSet="/images/brand/logo.webp" type="image/webp" />
-    <img src="/images/brand/logo.png" alt="Polished Insurance" width={Math.round((height * 193) / 120)} height={height} style={{ height, width: 'auto' }} />
-  </picture>
-);
+// Header (and default): the Polished Insurance logo with the "Part of the Allied Insurance Group"
+// line, on a transparent background. Footer: the earlier logo, whose lighter lettering suits the
+// navy footer. Width/height match each file so the browser reserves the right space.
+const VARIANTS = {
+  default: { base: '/images/brand/logo', w: 398, h: 240 },
+  footer: { base: '/images/brand/logo-footer', w: 193, h: 120 },
+};
+
+const Logo = ({ height = 68, className = '', variant = 'default' }) => {
+  const v = VARIANTS[variant] || VARIANTS.default;
+  return (
+    <picture className={`logo ${className}`.trim()}>
+      <source srcSet={`${v.base}.webp`} type="image/webp" />
+      <img src={`${v.base}.png`} alt="Polished Insurance" width={Math.round((height * v.w) / v.h)} height={height} style={{ height, width: 'auto' }} />
+    </picture>
+  );
+};
 
 export default Logo;

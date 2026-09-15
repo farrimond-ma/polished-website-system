@@ -16,7 +16,7 @@ function msg_email_wrap(string $innerHtml): string {
     $phone = e(cfg('company_phone', '01942 403370'));
     return '<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.55;color:#1f2733;max-width:600px">'
         . '<div style="background:#0a192f;padding:18px 24px;border-radius:8px 8px 0 0">'
-        . '<span style="color:#22d3ee;font-weight:bold;font-size:20px">Polished</span> '
+        . '<span style="color:#4d8dff;font-weight:bold;font-size:20px">Polished</span> '
         . '<span style="color:#ffffff;font-size:20px">Insurance</span></div>'
         . '<div style="border:1px solid #e2e8ef;border-top:0;padding:22px 24px;border-radius:0 0 8px 8px">'
         . $innerHtml
@@ -29,7 +29,7 @@ function msg_email_wrap(string $innerHtml): string {
 }
 
 function msg_button(string $link, string $label): string {
-    return '<p style="margin:22px 0"><a href="' . e($link) . '" style="background:#06b6d4;color:#0a192f;font-weight:bold;'
+    return '<p style="margin:22px 0"><a href="' . e($link) . '" style="background:#1664f0;color:#ffffff;font-weight:bold;'
         . 'padding:13px 22px;border-radius:6px;text-decoration:none;display:inline-block">' . e($label) . '</a></p>'
         . '<p style="font-size:12.5px;color:#6b7785">If the button does not work, copy this link into your browser:<br>' . e($link) . '</p>';
 }

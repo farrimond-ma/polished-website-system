@@ -1,4 +1,4 @@
-/* Copied from the Boxx Finance site (src/components/resource/ResourcePage.css) and re-coloured: gold/cream panels -> cyan/pale-blue. */
+/* Copied from the Boxx Finance site (src/components/resource/ResourcePage.css) and re-coloured: gold/cream panels -> bright blue/pale blue. */
 /* ── Resource page: shared single-column layout for articles + locations ─────
    Pattern follows the best-performing broker content sites: hero with image,
    one centered readable column, in-content CTAs, one floating CTA. ────────── */
@@ -65,7 +65,7 @@
     font-weight: 600;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--color-secondary);
+    color: var(--color-secondary-light);
     margin: 0 0 1rem;
 }
 .resource-hero h1 {
@@ -117,7 +117,7 @@
     content: "✔";
     position: absolute;
     left: 0;
-    color: var(--color-secondary);
+    color: var(--color-secondary-light);
 }
 /* Optional, rendered via ResourceHero's afterTrust prop — only the homepage
    uses this today, for its "also arranging..." line. */
@@ -482,7 +482,7 @@
     width: 56px;
     height: 56px;
     background: var(--color-secondary);
-    color: var(--color-primary);
+    color: #fff;
     font-family: inherit;
     padding: 0;
     border-radius: 50%;
@@ -560,12 +560,12 @@
 }
 
 /* ── Polished additions ─────────────────────────────────────────────────── */
-/* No photo: navy with a soft cyan glow + fine grid so the hero never looks flat. */
+/* No photo: navy with a soft blue glow + fine grid so the hero never looks flat. */
 .resource-hero.has-pattern {
   background-color: var(--color-primary);
   background-image:
-    radial-gradient(circle at 85% 20%, rgba(6, 182, 212, 0.28), transparent 45%),
-    radial-gradient(circle at 70% 90%, rgba(103, 232, 249, 0.12), transparent 40%),
+    radial-gradient(circle at 85% 20%, rgba(22, 100, 240, 0.28), transparent 45%),
+    radial-gradient(circle at 70% 90%, rgba(138, 184, 255, 0.12), transparent 40%),
     linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
   background-size: auto, auto, 44px 44px, 44px 44px;

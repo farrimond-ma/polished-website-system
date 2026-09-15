@@ -13,10 +13,10 @@ $all = param('all') === '1';
 <style>
   body{font-family:Arial,Helvetica,sans-serif;color:#1f2733;font-size:12.5px;margin:24px auto;max-width:820px;padding:0 16px}
   h1{font-size:20px;margin:0}h2{font-size:14px;background:#0a192f;color:#fff;padding:6px 10px;margin:22px 0 6px;border-radius:4px;break-after:avoid}
-  h3{font-size:12.5px;margin:12px 0 4px;color:#0e7490}
+  h3{font-size:12.5px;margin:12px 0 4px;color:#0b4fd0}
   table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid #e2e8ef;padding:5px 6px;vertical-align:top;text-align:left}
   td.q{width:58%;color:#54626f}.empty{color:#b0b8c2}.sub{color:#6b7785}
-  .bar{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #06b6d4;padding-bottom:10px}
+  .bar{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #1664f0;padding-bottom:10px}
   .noprint{margin:10px 0}@media print{.noprint{display:none}body{margin:0}}
   table.inner th{background:#f4f6f9;font-size:11px}
 </style></head><body>

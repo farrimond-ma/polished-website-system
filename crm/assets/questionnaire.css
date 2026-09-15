@@ -3,8 +3,8 @@
    the CRM's own style.css. Colours re-pointed at the Polished palette. */
 .qwrap {
   --green: #0a192f;
-  --green-light: #0891b2;
-  --green-pale: #e6f7fb;
+  --green-light: #1664f0;
+  --green-pale: #e8f0ff;
   --ink: #1f2733;
   --muted: #5b6472;
   --border: #d4dae2;
@@ -151,7 +151,7 @@
   padding: .6rem .9rem; margin-bottom: 1rem; font-size: .82rem; color: var(--muted);
 }
 
-.qwrap .qbadge-client { background: #e6f7fb; color: #0e7490; border: 1px solid #a5e3f0; }
+.qwrap .qbadge-client { background: #e8f0ff; color: #0b4fd0; border: 1px solid #b7cff8; }
 .qwrap .na-banner { border-left-color: var(--muted); background: #eef0f3; }
 .qwrap .progress-nav a.na { opacity: .5; font-style: italic; }
 .qwrap .progress-nav { top: 0; }

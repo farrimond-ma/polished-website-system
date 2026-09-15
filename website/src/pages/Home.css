@@ -8,7 +8,7 @@
   padding: 1rem 1.25rem; background: none; border: 0; font-family: var(--font-heading);
   font-size: 1.06rem; font-weight: 600; color: var(--color-primary); text-align: left;
 }
-.home-faq .faq-question:hover { background: rgba(6, 182, 212, 0.06); }
+.home-faq .faq-question:hover { background: rgba(22, 100, 240, 0.06); }
 .home-faq .faq-icon { font-size: 1.5rem; color: var(--color-secondary-dark); }
 .home-faq .faq-answer { padding: 0 1.25rem 1.25rem; }
 .home-faq .faq-answer p { margin: 0; line-height: 1.7; }

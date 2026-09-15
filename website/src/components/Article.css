@@ -86,7 +86,7 @@
     font-size: 0.72rem;
     font-weight: 600;
     letter-spacing: 0.02em;
-    color: var(--color-primary);
+    color: #fff;
     background: var(--color-secondary);
     padding: 0.3rem 0.7rem;
     border-radius: 999px;
@@ -358,7 +358,7 @@
 
 /* Soft CTA — lighter, left gold accent bar */
 .article-cta-soft {
-    background: #f5fbfc;
+    background: #f5f8ff;
     border-left: 4px solid var(--color-secondary);
 }
 

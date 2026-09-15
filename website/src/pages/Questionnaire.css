@@ -18,7 +18,7 @@
   border-radius: 999px; padding: 0.38rem 0.85rem; font-size: 0.8rem; font-weight: 500;
 }
 .q-steps button.is-done { border-color: var(--color-secondary); color: #fff; }
-.q-steps button.is-current { background: var(--color-secondary); border-color: var(--color-secondary); color: var(--color-primary); font-weight: 700; }
+.q-steps button.is-current { background: var(--color-secondary); border-color: var(--color-secondary); color: #fff; font-weight: 700; }
 
 .q-card { background: #fff; border-radius: 16px; box-shadow: 0 16px 40px rgba(10, 25, 47, 0.12); padding: 2.25rem 2.25rem 1.75rem; }
 @media (max-width: 600px) { .q-card { padding: 1.5rem 1.15rem 1.25rem; border-radius: 12px; } .q-page { padding-top: 5.5rem; } }
@@ -43,9 +43,9 @@
   width: 100%; padding: 0.72rem 0.85rem; border: 1px solid #cfd8e0; border-radius: 8px; font: inherit; font-size: 1rem; background: #fbfcfd; color: var(--color-text-dark);
 }
 .q-field input:focus, .q-field textarea:focus, .q-field select:focus, .q-table-cell input:focus, .q-pgroup input:focus {
-  outline: none; border-color: var(--color-secondary); box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.2); background: #fff;
+  outline: none; border-color: var(--color-secondary); box-shadow: 0 0 0 3px rgba(22, 100, 240, 0.2); background: #fff;
 }
-.q-field input.is-prefilled { background: #f0fbfd; border-color: #a5e3f0; }
+.q-field input.is-prefilled { background: #f0f5ff; border-color: #b7cff8; }
 .q-prefilled-note { font-size: 0.8rem; color: var(--color-secondary-dark); margin: 0.35rem 0 0; }
 .q-field .q-adorned, .q-pgroup .q-adorned { position: relative; display: block; max-width: 280px; }
 .q-adorned input { padding-left: 1.8rem !important; }

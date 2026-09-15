@@ -1034,7 +1034,8 @@
             "field": "el_required",
             "equals": "yes"
           },
-          "acturis": true
+          "acturis": true,
+          "client": false
         },
         {
           "type": "heading",
@@ -1045,6 +1046,43 @@
           "label": "Limit required (£)",
           "type": "currency",
           "acturis": true
+        },
+        {
+          "type": "heading",
+          "text": "Tools, equipment and hired-in plant"
+        },
+        {
+          "id": "cw_tools_req",
+          "label": "Do you require cover for your Tools and Equipment?",
+          "type": "yesno",
+          "acturis": true
+        },
+        {
+          "id": "cw_tools",
+          "label": "Tools and equipment — sum insured (£)",
+          "type": "currency",
+          "showIf": {
+            "field": "cw_tools_req",
+            "equals": "yes"
+          },
+          "acturis": true
+        },
+        {
+          "id": "cw_hired_plant_req",
+          "label": "Do you need cover for Hired in Plant?",
+          "type": "yesno",
+          "acturis": true
+        },
+        {
+          "id": "cw_hired_plant",
+          "label": "Hired-in plant — sum insured (£)",
+          "type": "currency",
+          "showIf": {
+            "field": "cw_hired_plant_req",
+            "equals": "yes"
+          },
+          "acturis": true,
+          "help": "The most you would have on hire at any one time."
         },
         {
           "type": "heading",
@@ -1151,13 +1189,14 @@
     {
       "id": "contractors_all_risks",
       "title": "Contractors All Risks",
-      "description": "Contract Works, Plant & Tools. Tick each cover the client requires and complete the sums insured.",
+      "description": "Contract Works and Own Plant (staff only). Tools and Hired-in Plant are asked in Covers Required; the annual hiring fees for hired-in plant are recorded here.",
       "items": [
         {
           "id": "cw_contract_works",
           "label": "Contract Works",
           "type": "checkbox",
-          "acturis": true
+          "acturis": true,
+          "client": false
         },
         {
           "id": "cw_contracting_turnover",
@@ -1167,7 +1206,8 @@
             "field": "cw_contract_works",
             "equals": true
           },
-          "acturis": true
+          "acturis": true,
+          "client": false
         },
         {
           "id": "cw_max_contract",
@@ -1177,13 +1217,15 @@
             "field": "cw_contract_works",
             "equals": true
           },
-          "acturis": true
+          "acturis": true,
+          "client": false
         },
         {
           "id": "cw_own_plant_req",
           "label": "Own Plant and other temporary property",
           "type": "checkbox",
-          "acturis": true
+          "acturis": true,
+          "client": false
         },
         {
           "id": "cw_own_plant",
@@ -1193,23 +1235,8 @@
             "field": "cw_own_plant_req",
             "equals": true
           },
-          "acturis": true
-        },
-        {
-          "id": "cw_hired_plant_req",
-          "label": "Hired-in Plant",
-          "type": "checkbox",
-          "acturis": true
-        },
-        {
-          "id": "cw_hired_plant",
-          "label": "Hired-in plant — maximum any one occurrence (£)",
-          "type": "currency",
-          "showIf": {
-            "field": "cw_hired_plant_req",
-            "equals": true
-          },
-          "acturis": true
+          "acturis": true,
+          "client": false
         },
         {
           "id": "cw_hire_fees",
@@ -1217,25 +1244,10 @@
           "type": "currency",
           "showIf": {
             "field": "cw_hired_plant_req",
-            "equals": true
+            "equals": "yes"
           },
-          "acturis": true
-        },
-        {
-          "id": "cw_tools_req",
-          "label": "Tools",
-          "type": "checkbox",
-          "acturis": true
-        },
-        {
-          "id": "cw_tools",
-          "label": "Tools — sum insured (£)",
-          "type": "currency",
-          "showIf": {
-            "field": "cw_tools_req",
-            "equals": true
-          },
-          "acturis": true
+          "acturis": true,
+          "client": false
         }
       ]
     },

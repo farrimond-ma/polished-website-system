@@ -171,7 +171,21 @@ function q_prefill_from_lead(array $lead): array {
 
 function q_lead_data(array $lead): array {
     $data = json_decode((string)($lead['q_data'] ?? ''), true);
-    return is_array($data) ? $data : [];
+    return is_array($data) ? q_normalise_answers($data) : [];
+}
+
+/**
+ * Brings answers saved under an older version of the schema into line with the current one:
+ * a question that changed from a tick box to Yes/No (e.g. tools / hired-in plant cover) shows a
+ * previously ticked box as "yes".
+ */
+function q_normalise_answers(array $data): array {
+    foreach (q_schema()['sections'] as $section) {
+        foreach ($section['items'] as $it) {
+            if (($it['type'] ?? '') === 'yesno' && isset($it['id']) && ($data[$it['id']] ?? null) === true) $data[$it['id']] = 'yes';
+        }
+    }
+    return $data;
 }
 
 /** Answers with the lead's contact details filled into any still-empty field, plus schema defaults. */

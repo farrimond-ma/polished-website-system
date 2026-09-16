@@ -226,6 +226,19 @@ function build_chase_sms(array $lead, string $link, int $n = 1): string {
     return msg_fill_text(msg_template($key)['body'], msg_vars($lead, $link));
 }
 
+/**
+ * A one-off email typed by staff on the lead page. Same layout, sign-off and footer as the
+ * automatic messages, and the same placeholders ({first_name}, {link}, {phone}, {reference}).
+ */
+function build_custom_email(array $lead, string $subject, string $body, string $link = ''): array {
+    $vars = msg_vars($lead, $link);
+    return [
+        'subject' => msg_fill_text($subject, $vars),
+        'html' => msg_email_wrap(msg_fill_html($body, $vars)),
+        'text' => msg_fill_text($body, $vars) . "\n\nKind regards,\nThe Polished Insurance team\n" . $vars['phone'],
+    ];
+}
+
 /** Straight-away acknowledgement for someone who asked for a call rather than the link. */
 function build_ack_email(array $lead): array {
     return msg_build_email('email_ack', $lead, '');

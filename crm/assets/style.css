@@ -197,3 +197,5 @@ body.is-login .topbar nav{display:none}
 .table-scroll{overflow-x:auto;margin-bottom:6px}.table-scroll .grid{min-width:640px}
 .guides-h2{margin:26px 0 8px;font-size:18px}
 .pill.call{background:#e8f0ff;color:#0b4fd0}
+.custom-email-form{display:flex;flex-direction:column;gap:8px}
+.custom-email-form input,.custom-email-form textarea{padding:8px 10px;border:1px solid #cdd6df;border-radius:6px;font-size:14px;font-family:inherit;resize:vertical}

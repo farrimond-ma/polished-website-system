@@ -52,6 +52,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             add_note($id, "Questionnaire link re-sent by $channel: " . ($r['ok'] ? 'sent.' : 'FAILED — ' . $r['error']), $me);
             flash($r['ok'] ? "Link sent by $channel." : "Could not send: {$r['error']}");
             break;
+        case 'custom_email':
+            $subject = trim((string)post('subject', ''));
+            $body = trim((string)post('body', ''));
+            if (trim($lead['email']) === '') { flash('No email address on file for this client.'); break; }
+            if ($subject === '' || $body === '') { flash('Please fill in both the subject and the message.'); break; }
+            $subject = mb_substr($subject, 0, 200);
+            $body = mb_substr($body, 0, 5000);
+            $link = questionnaire_link(ensure_link_token($lead));
+            $m = build_custom_email($lead, $subject, $body, $link);
+            $r = send_email($lead['email'], lead_name($lead), $m['subject'], $m['html'], $m['text']);
+            // The history keeps what the client actually received, with the placeholders filled in.
+            $sentBody = msg_fill_text($body, msg_vars($lead, $link));
+            add_note($id, ($r['ok'] ? 'Email sent to ' : 'Email FAILED to ') . $lead['email']
+                . ($r['ok'] ? '' : ' (' . $r['error'] . ')') . "\nSubject: " . $m['subject'] . "\n\n" . $sentBody, $me);
+            flash($r['ok'] ? 'Email sent and saved to the history.' : 'Could not send: ' . $r['error']);
+            break;
         case 'stop_chase':
             stop_chasing($id);
             add_note($id, 'Automatic reminders stopped.', $me);
@@ -179,6 +195,22 @@ layout_header(lead_ref($id) . ' ' . lead_name($lead));
         <?php endif; ?>
         <form method="post" onsubmit="return confirm('Create a new link? The current link will stop working.')"><?= csrf_field() ?><input type="hidden" name="action" value="regenerate_link"><button class="btn ghost small">New link</button></form>
       </div>
+    </div>
+
+    <div class="card">
+      <h2>Email this client</h2>
+      <?php if (trim($lead['email']) === ''): ?>
+        <p class="sub">No email address on file for this client.</p>
+      <?php else: ?>
+        <p class="sub">Sent from <?= e((string)((config()['mail'] ?? [])['from_email'] ?? 'the CRM')) ?> with our usual sign-off and footer, and saved to the history below.
+          You can use <strong>{first_name}</strong>, <strong>{link}</strong> (their questionnaire link), <strong>{phone}</strong> and <strong>{reference}</strong>.</p>
+        <form method="post" class="custom-email-form" onsubmit="return confirm('Send this email to <?= e($lead['email']) ?>?')">
+          <?= csrf_field() ?><input type="hidden" name="action" value="custom_email">
+          <input name="subject" placeholder="Subject" maxlength="200" required>
+          <textarea name="body" rows="7" placeholder="Hi {first_name},&#10;&#10;Type your message here. Leave a blank line between paragraphs." maxlength="5000" required></textarea>
+          <div><button type="submit" class="btn small">Send email</button></div>
+        </form>
+      <?php endif; ?>
     </div>
 
     <div class="card">

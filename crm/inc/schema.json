@@ -1187,6 +1187,66 @@
       ]
     },
     {
+      "id": "other_covers_needed",
+      "title": "Other Covers You May Need",
+      "description": "Tell us which of these you would like us to quote for. We only ask more about the ones you say yes to.",
+      "items": [
+        {
+          "id": "car_required",
+          "label": "Is Commercial All Risks (premises) cover required?",
+          "type": "yesno",
+          "acturis": true,
+          "help": "Where cover is required for more than one premises, describe each (a second premises can be noted in the additional details box)."
+        },
+        {
+          "id": "bi_required",
+          "label": "Is Business Interruption cover required?",
+          "type": "yesno",
+          "acturis": true
+        },
+        {
+          "id": "pi_required",
+          "label": "Is Professional Indemnity cover required?",
+          "type": "yesno",
+          "acturis": true
+        },
+        {
+          "id": "do_required",
+          "label": "Is Directors' & Officers' Liability cover required?",
+          "type": "yesno",
+          "acturis": true
+        },
+        {
+          "type": "heading",
+          "text": "Other optional covers"
+        },
+        {
+          "id": "oc_fidelity",
+          "label": "Fidelity guarantee",
+          "type": "yesno",
+          "acturis": true
+        },
+        {
+          "id": "oc_legal",
+          "label": "Legal expenses",
+          "type": "yesno",
+          "acturis": true
+        },
+        {
+          "id": "oc_personal_accident",
+          "label": "Personal accident",
+          "type": "yesno",
+          "acturis": true
+        },
+        {
+          "id": "oc_terrorism",
+          "label": "Property terrorism",
+          "type": "yesno",
+          "acturis": true
+        }
+      ]
+    },
+    {
       "id": "contractors_all_risks",
       "title": "Contractors All Risks",
       "description": "Contract Works and Own Plant (staff only). Tools and Hired-in Plant are asked in Covers Required; the annual hiring fees for hired-in plant are recorded here.",
@@ -1257,108 +1317,61 @@
       "description": "Property cover for the client's own premises. Tick the covers required and complete the sums insured.",
       "items": [
         {
-          "id": "car_required",
-          "label": "Is Commercial All Risks (premises) cover required?",
-          "type": "yesno",
-          "acturis": true,
-          "help": "Where cover is required for more than one premises, describe each (a second premises can be noted in the additional details box)."
-        },
-        {
           "id": "car_risk_address",
           "label": "Risk address",
           "type": "textarea",
-          "showIf": {
-            "field": "car_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "car_premises_use",
           "label": "Primary use of premises (e.g. office, warehouse, storage facility)",
           "type": "text",
-          "showIf": {
-            "field": "car_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "car_security",
           "label": "Are external doors (including roller shutters), skylights and windows secured with appropriate locks, conforming to BS:3621 where applicable?",
           "type": "yesno",
-          "showIf": {
-            "field": "car_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "car_heating",
           "label": "Is the heating system fixed, and where it is not, it does not include naked flame-based heating?",
           "type": "yesno",
-          "showIf": {
-            "field": "car_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "car_construction",
           "label": "Is the property of a standard construction (brick, stone, metal or concrete with a roof of slate, tiles, concrete or metal)?",
           "type": "yesno",
-          "showIf": {
-            "field": "car_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "car_flooded",
           "label": "Has the property ever flooded?",
           "type": "yesno",
-          "showIf": {
-            "field": "car_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "car_subsidence",
           "label": "Does the property have a history of subsidence, landslip, heave or structural movement?",
           "type": "yesno",
-          "showIf": {
-            "field": "car_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "car_details",
           "label": "Additional details regarding premises security, heating, construction, flood history or subsidence (and any second premises)",
           "type": "textarea",
-          "showIf": {
-            "field": "car_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "type": "heading",
-          "text": "Which covers does the client want? (tick all that apply)",
-          "showIf": {
-            "field": "car_required",
-            "equals": "yes"
-          }
+          "text": "Which covers does the client want? (tick all that apply)"
         },
         {
           "id": "contents_required",
           "label": "Contents (machinery, plant, stock, equipment, tools, goods in transit)",
           "type": "checkbox",
-          "showIf": {
-            "field": "car_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
@@ -1445,20 +1458,12 @@
           "id": "customer_money",
           "label": "Customer money",
           "type": "checkbox",
-          "showIf": {
-            "field": "car_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "buildings_required",
           "label": "Buildings",
           "type": "checkbox",
-          "showIf": {
-            "field": "car_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
@@ -1485,10 +1490,6 @@
           "id": "rent_payable_required",
           "label": "Rent payable",
           "type": "checkbox",
-          "showIf": {
-            "field": "car_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
@@ -1505,41 +1506,28 @@
           "id": "floating_contents",
           "label": "Floating contents (only if cover is needed across multiple premises)",
           "type": "checkbox",
-          "showIf": {
-            "field": "car_required",
-            "equals": "yes"
-          },
-          "acturis": true
+          "acturis": true,
+          "client": false
         }
-      ]
+      ],
+      "showIf": {
+        "field": "car_required",
+        "equals": "yes"
+      }
     },
     {
       "id": "business_interruption",
       "title": "Business Interruption",
       "items": [
         {
-          "id": "bi_required",
-          "label": "Is Business Interruption cover required?",
-          "type": "yesno",
-          "acturis": true
-        },
-        {
           "id": "bi_note",
           "type": "note",
-          "text": "A 12 month indemnity period may not be enough to cover your business after a serious incident. We will talk you through the right indemnity period before arranging cover.",
-          "showIf": {
-            "field": "bi_required",
-            "equals": "yes"
-          }
+          "text": "A 12 month indemnity period may not be enough to cover your business after a serious incident. We will talk you through the right indemnity period before arranging cover."
         },
         {
           "id": "bi_items",
           "label": "Business Interruption items",
           "type": "table",
-          "showIf": {
-            "field": "bi_required",
-            "equals": "yes"
-          },
           "addLabel": "Add item",
           "fixedRows": [
             "Gross Profit",
@@ -1569,164 +1557,102 @@
           ],
           "acturis": false
         }
-      ]
+      ],
+      "showIf": {
+        "field": "bi_required",
+        "equals": "yes"
+      }
     },
     {
       "id": "professional_indemnity",
       "title": "Professional Indemnity",
       "items": [
         {
-          "id": "pi_required",
-          "label": "Is Professional Indemnity cover required?",
-          "type": "yesno",
-          "acturis": true
-        },
-        {
           "id": "pi_limit",
           "label": "Limit of indemnity required (aggregate basis of indemnity) (£)",
           "type": "currency",
-          "showIf": {
-            "field": "pi_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "pi_retro_date",
           "label": "Retroactive continuous cover date (evidence of this cover date must be provided)",
           "type": "date",
-          "showIf": {
-            "field": "pi_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "pi_excess",
           "label": "Preferred level of excess (£)",
           "type": "currency",
-          "showIf": {
-            "field": "pi_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "type": "heading",
-          "text": "Are any activities undertaken or services offered in the following areas:",
-          "showIf": {
-            "field": "pi_required",
-            "equals": "yes"
-          }
+          "text": "Are any activities undertaken or services offered in the following areas:"
         },
         {
           "id": "pi_biomass",
           "label": "Industrial or commercial biomass systems or anaerobic digestors or waste disposal plants or recycling centres",
           "type": "yesno",
-          "showIf": {
-            "field": "pi_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "pi_wind",
           "label": "Wind turbines or hydro-electric premises",
           "type": "yesno",
-          "showIf": {
-            "field": "pi_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "pi_heat_pumps",
           "label": "Ground source / air source heat pumps",
           "type": "yesno",
-          "showIf": {
-            "field": "pi_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "pi_sewerage",
           "label": "Sewerage or water treatment or testing",
           "type": "yesno",
-          "showIf": {
-            "field": "pi_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "pi_architectural",
           "label": "Architectural services",
           "type": "yesno",
-          "showIf": {
-            "field": "pi_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "pi_civil_structural",
           "label": "Civil or structural engineering",
           "type": "yesno",
-          "showIf": {
-            "field": "pi_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "pi_mainframe",
           "label": "Mainframe computer suites",
           "type": "yesno",
-          "showIf": {
-            "field": "pi_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "pi_chemical_soil",
           "label": "Chemical or soil engineering",
           "type": "yesno",
-          "showIf": {
-            "field": "pi_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "pi_high_rise",
           "label": "High-rise premises",
           "type": "yesno",
-          "showIf": {
-            "field": "pi_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "pi_nuclear",
           "label": "Nuclear engineering",
           "type": "yesno",
-          "showIf": {
-            "field": "pi_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "pi_surveying",
           "label": "Surveying (either land/quantity or building)",
           "type": "yesno",
-          "showIf": {
-            "field": "pi_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
@@ -1754,201 +1680,112 @@
           "id": "pi_turnover",
           "label": "Turnover for all insured entities in most recent financial year (if new venture without previous financial year, please use an estimated figure) (£)",
           "type": "currency",
-          "showIf": {
-            "field": "pi_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "pi_pct_design",
           "label": "Percentage of turnover for fees where you provide pure design, consultancy, technical, software design or other professional services only",
           "type": "percent",
-          "showIf": {
-            "field": "pi_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "pi_pct_turnkey",
           "label": "Percentage of turnover for works where you provide bespoke and/or turn-key solutions, or you are responsible for the full design of an entire system",
           "type": "percent",
-          "showIf": {
-            "field": "pi_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "pi_pct_tried_tested",
           "label": "Percentage of turnover for works where you use tried and tested installation methods but are not responsible for the creation of the product installed, or you work to the designs of others",
           "type": "percent",
-          "showIf": {
-            "field": "pi_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "pi_pct_other",
           "label": "Percentage of all other remaining turnover (that does not fit into any of the above specified categories)",
           "type": "percent",
-          "showIf": {
-            "field": "pi_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "pi_experience",
           "label": "Is at least 5 years' relevant experience held by the persons carrying out, controlling or signing off the works in respect of the professional activities undertaken, or does this person have suitable professional qualifications?",
           "type": "yesno",
-          "showIf": {
-            "field": "pi_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "pi_claims",
           "label": "Any claims, losses or incidents, whether insured or not, in respect of Professional Indemnity? (If yes, please provide details in the Claims History section)",
           "type": "yesno",
-          "showIf": {
-            "field": "pi_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "pi_manufacturing",
           "label": "Is manufacturing work undertaken?",
           "type": "yesno",
-          "showIf": {
-            "field": "pi_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "pi_asbestos_ext",
           "label": "Is the Professional Indemnity asbestos extension required?",
           "type": "yesno",
-          "showIf": {
-            "field": "pi_required",
-            "equals": "yes"
-          },
           "acturis": false
         }
-      ]
+      ],
+      "showIf": {
+        "field": "pi_required",
+        "equals": "yes"
+      }
     },
     {
       "id": "other_covers",
-      "title": "Directors' & Officers' Liability and Other Optional Covers",
+      "title": "Directors’ & Officers’ Liability",
       "items": [
         {
-          "id": "do_required",
-          "label": "Is Directors' & Officers' Liability cover required?",
-          "type": "yesno",
-          "acturis": true
-        },
-        {
           "type": "heading",
-          "text": "Tick to confirm that the following statements are true:",
-          "showIf": {
-            "field": "do_required",
-            "equals": "yes"
-          }
+          "text": "Tick to confirm that the following statements are true:"
         },
         {
           "id": "do_not_sole_trader",
           "label": "The firm or company is not a sole trader, partnership or listed on a stock exchange",
           "type": "checkbox",
-          "showIf": {
-            "field": "do_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "do_positive_net_worth",
           "label": "The last consolidated annual accounts had a positive net worth (total assets exceed total liabilities)",
           "type": "checkbox",
-          "showIf": {
-            "field": "do_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "do_pays_debts",
           "label": "The firm or company is able to pay its debts as they fall due",
           "type": "checkbox",
-          "showIf": {
-            "field": "do_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "do_trading_24m",
           "label": "The firm or company has been trading for not less than 24 months",
           "type": "checkbox",
-          "showIf": {
-            "field": "do_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "do_no_circumstances",
           "label": "There are no circumstances that might reasonably be expected to give rise to any claim against any of the Directors or Officers of the firm or company",
           "type": "checkbox",
-          "showIf": {
-            "field": "do_required",
-            "equals": "yes"
-          },
           "acturis": false
         },
         {
           "id": "do_no_claims",
           "label": "There have been no claims against any of the Directors (including past Directors) or Officers of the firm or company or any of its subsidiaries in the last 5 years",
           "type": "checkbox",
-          "showIf": {
-            "field": "do_required",
-            "equals": "yes"
-          },
           "acturis": false
-        },
-        {
-          "type": "heading",
-          "text": "Other optional covers"
-        },
-        {
-          "id": "oc_fidelity",
-          "label": "Fidelity guarantee",
-          "type": "yesno",
-          "acturis": true
-        },
-        {
-          "id": "oc_legal",
-          "label": "Legal expenses",
-          "type": "yesno",
-          "acturis": true
-        },
-        {
-          "id": "oc_personal_accident",
-          "label": "Personal accident",
-          "type": "yesno",
-          "acturis": true
-        },
-        {
-          "id": "oc_terrorism",
-          "label": "Property terrorism",
-          "type": "yesno",
-          "acturis": true
         }
-      ]
+      ],
+      "showIf": {
+        "field": "do_required",
+        "equals": "yes"
+      },
+      "description": "You said you would like Directors’ & Officers’ Liability cover. Please confirm the statements below."
     },
     {
       "id": "previous_insurer",

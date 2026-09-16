@@ -243,7 +243,11 @@
           "id": "clerical_wages",
           "label": "Total estimated clerical wages",
           "type": "currency",
-          "acturis": true
+          "acturis": true,
+          "requiredIf": {
+            "fieldGt0": "num_clerical"
+          },
+          "help": "Needed because you have entered clerical staff."
         },
         {
           "id": "bfsc_payments",

@@ -3,6 +3,7 @@
 require __DIR__ . '/lib.php';
 require_once __DIR__ . '/inc/guides.php';
 require_login();
+if (!is_admin()) { flash('The Guides page is for administrators.'); redirect('index.php'); }
 
 $g = guides_dashboard(param('refresh') === '1');
 $lastRun = $g['runs'][0] ?? null;

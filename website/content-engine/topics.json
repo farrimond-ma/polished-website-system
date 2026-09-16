@@ -24,13 +24,15 @@
   },
   {
     "id": "t003",
-    "status": "queued",
+    "status": "published",
     "title": "How much public liability cover does a cleaning contract need?",
     "keyword": "public liability limit cleaning contract",
     "coverSlug": "contract-cleaners-insurance",
     "angle": "Explain £1m/£2m/£5m/£10m limits, how buyers set them, what to do when a tender asks for more.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "slug": "public-liability-limit-cleaning-contract",
+    "publishedAt": "2026-09-16T12:39:48.830Z"
   },
   {
     "id": "t004",

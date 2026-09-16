@@ -170,7 +170,9 @@ function msg_fill_html(string $template, array $vars): string {
     }
     $filled = strtr($escaped, $map);
     $paragraphs = preg_split('/\R{2,}/', trim($filled)) ?: [];
-    return implode('', array_map(fn($p) => '<p>' . nl2br(trim($p)) . '</p>', $paragraphs));
+    // The gap between paragraphs is set here rather than left to the email software: Outlook and
+    // some webmail ignore the default paragraph spacing, which ran the greeting into the next line.
+    return implode('', array_map(fn($p) => '<p style="margin:0 0 16px">' . nl2br(trim($p)) . '</p>', $paragraphs));
 }
 
 function msg_email_wrap(string $innerHtml): string {

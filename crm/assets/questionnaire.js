@@ -132,6 +132,7 @@
     refreshVisibility();
     refreshTotals();
     refreshNav();
+    updatePager();
     scheduleSave();
   }
 
@@ -473,6 +474,19 @@
   // flagged as "not applicable" so it is obvious the client will skip them.
   const conditionalSections = []; // {banner, link, section}
 
+  // Staff see every page (with a "not applicable" banner); in client view a page that does not
+  // apply is hidden completely, exactly as the client would experience it.
+  function sectionApplies(i) {
+    const section = sectionMeta[i];
+    if (!section) return false;
+    if (hiddenSections.has(section.id) && mode !== "staff") return false;
+    return mode === "staff" || conditionMet(section.showIf);
+  }
+
+  function applicablePages() {
+    return sectionCards.map((_, i) => i).filter(sectionApplies);
+  }
+
   function refreshVisibility() {
     for (const { node, item } of conditionalItems) {
       node.classList.toggle("hidden", !isVisible(item));
@@ -497,6 +511,10 @@
 
   function showPage(i, scroll = true) {
     currentPage = Math.max(0, Math.min(i, sectionCards.length - 1));
+    if (!sectionApplies(currentPage)) {
+      const pages = applicablePages();
+      currentPage = pages.find((p) => p >= currentPage) ?? pages[pages.length - 1] ?? 0;
+    }
     sectionCards.forEach((card, idx) => {
       card.style.display = idx === currentPage ? "" : "none";
     });
@@ -511,19 +529,29 @@
   }
 
   // Back / Next controls inside the sticky bar
-  const pagerBack = el("button", { type: "button", class: "btn pager-btn", text: "‹ Back", onclick: () => gotoPage(currentPage - 1) });
-  const pagerNext = el("button", { type: "button", class: "btn primary pager-btn", onclick: () => gotoPage(currentPage + 1) });
+  const stepPage = (dir) => {
+    const pages = applicablePages();
+    const at = pages.indexOf(currentPage);
+    return pages[Math.max(0, Math.min(pages.length - 1, (at === -1 ? 0 : at) + dir))] ?? currentPage;
+  };
+  const pagerBack = el("button", { type: "button", class: "btn pager-btn", text: "‹ Back", onclick: () => gotoPage(stepPage(-1)) });
+  const pagerNext = el("button", { type: "button", class: "btn primary pager-btn", onclick: () => gotoPage(stepPage(1)) });
   const pagerLabel = el("span", { class: "pager-label" });
 
+  const progressFill = document.getElementById("qprogress-fill");
+
   function updatePager() {
-    const last = sectionCards.length - 1;
-    pagerBack.disabled = currentPage === 0;
-    pagerBack.style.visibility = currentPage === 0 ? "hidden" : "visible";
+    const pages = applicablePages();
+    const at = Math.max(0, pages.indexOf(currentPage));
+    const last = pages[pages.length - 1];
+    if (progressFill && pages.length) progressFill.style.width = Math.round(((at + 1) / pages.length) * 100) + "%";
+    pagerBack.disabled = currentPage === pages[0];
+    pagerBack.style.visibility = currentPage === pages[0] ? "hidden" : "visible";
     pagerNext.style.display = currentPage === last ? "none" : "";
     pagerNext.textContent = "Save & continue ›";
-    pagerLabel.textContent = "Page " + (currentPage + 1) + " of " + sectionCards.length + " — " + sectionMeta[currentPage].title;
+    pagerLabel.textContent = "Page " + (at + 1) + " of " + pages.length + " — " + sectionMeta[currentPage].title;
     // Submit button only on the last page for clients; staff see it on every page
-    if (mode === "client") {
+    if (mode === "client" && !window.STAFF_SUBMIT) {
       submitBtn.style.display = currentPage === last ? "" : "none";
     }
   }
@@ -653,7 +681,11 @@
 
   function refreshNav() {
     const links = nav.querySelectorAll("a");
+    let shown = 0;
     sectionMeta.forEach((section, i) => {
+      const applies = sectionApplies(i);
+      links[i].style.display = applies ? "" : "none";
+      if (applies) links[i].textContent = ++shown + ". " + section.title;
       links[i].classList.toggle("done", sectionHasData(section));
       links[i].classList.toggle("current", i === currentPage);
     });
@@ -665,6 +697,7 @@
     const problems = [];
     sectionMeta.forEach((section, pageIdx) => {
       if (hiddenSections.has(section.id)) return; // staff marked as not needed
+      if (!conditionMet(section.showIf)) return;    // page does not apply to this client
       for (const item of section.items) {
         if (mode === "client" && hideFromClient(item)) continue;  // Extra questions are hidden from clients
         if (mode === "public" && isPublicHidden(item)) continue; // admin hid this from the public form
@@ -749,7 +782,7 @@
       return;
     }
 
-    const confirmMsg = mode === "client"
+    const confirmMsg = (mode === "client" && !window.STAFF_SUBMIT)
       ? "Submit the questionnaire to Polished Insurance? You will not be able to make further changes without contacting us."
       : "Mark this questionnaire as completed? This stops the automatic reminders and locks the client link.";
     if (!window.confirm(confirmMsg)) return;

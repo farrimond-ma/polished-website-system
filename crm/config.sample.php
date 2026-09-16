@@ -41,6 +41,10 @@ return [
     'follow_up_days'         => 2,   // default "needs attention" follow-up for open leads
     'cron_key'               => 'CHANGE_ME', // for URL-triggered cron runs (?key=)
 
+    // ---- Cases (policy admin) ----
+    'ipt_pct'         => 12.0,  // Insurance Premium Tax added to the premium
+    'policy_fee_pct'  => 0,     // optional percentage fee on top
+
     // ---- Guides page (content engine dashboard) ----
     // The repository the content engine publishes from. Only add a (read-only) github_token if the
     // repository is made private; while it is public the page needs no token.

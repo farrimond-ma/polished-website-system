@@ -155,7 +155,7 @@ function csrf_check(): void {
 /* ---------- auth ---------- */
 function current_user(): ?array { return $_SESSION['user'] ?? null; }
 function require_login(): void {
-    if (!current_user()) redirect('login.php');
+    if (!current_user()) redirect('/login.php');
 }
 function is_admin(): bool { return (current_user()['role'] ?? '') === 'admin'; }
 function require_admin(): void {
@@ -485,8 +485,9 @@ function json_out_then(array $payload, callable $after): void {
 
 /* ---------- layout ---------- */
 function asset(string $path): string {
+    // Root-relative: these pages are also served from subfolders (e.g. /cases/).
     $file = __DIR__ . '/' . $path;
-    return e($path) . (is_file($file) ? '?v=' . filemtime($file) : '');
+    return '/' . e($path) . (is_file($file) ? '?v=' . filemtime($file) : '');
 }
 
 function layout_header(string $title = '', string $bodyClass = ''): void {
@@ -497,22 +498,23 @@ function layout_header(string $title = '', string $bodyClass = ''): void {
     echo "<link rel='icon' type='image/png' href='" . asset('assets/img/favicon.png') . "'>";
     echo "<link rel='stylesheet' href='" . asset('assets/style.css') . "'></head><body class='" . e($bodyClass) . "'>";
     echo "<header class='topbar'><div class='wrap'>";
-    echo "<a class='logo' href='index.php'><img class='logo-mark' src='" . asset('assets/img/icon.png') . "' alt='' width='30' height='30'><span class='logo-text'>Polished <em>CRM</em></span></a>";
+    echo "<a class='logo' href='/index.php'><img class='logo-mark' src='" . asset('assets/img/icon.png') . "' alt='' width='30' height='30'><span class='logo-text'>Polished <em>CRM</em></span></a>";
     if ($u) {
         $page = basename((string)($_SERVER['SCRIPT_NAME'] ?? ''));
         $nav = function (string $href, string $label, array $on) use ($page) {
             $active = in_array($page, $on, true) ? ' active' : '';
-            return "<a class='nav-btn$active' href='" . e($href) . "'>" . e($label) . '</a>';
+            return "<a class='nav-btn$active' href='/" . e(ltrim($href, '/')) . "'>" . e($label) . '</a>';
         };
         echo '<nav>'
             . $nav('index.php', 'Dashboard', ['index.php'])
             . $nav('leads.php', 'Leads', ['leads.php', 'lead.php', 'lead_edit.php', 'questionnaire.php'])
             . $nav('tasks.php', 'Tasks', ['tasks.php'])
+            . $nav('cases/index.php', 'Cases', ['index.php', 'case.php', 'case_edit.php', 'adjust.php', 'document.php', 'clients.php', 'client.php', 'client_edit.php', 'quote.php', 'report.php', 'rates.php', 'import.php'])
             . (is_admin() ? $nav('guides.php', 'Guides', ['guides.php']) : '')
             . (is_admin() ? $nav('messages.php', 'Messages', ['messages.php']) : '')
             . (is_admin() ? $nav('users.php', 'Users', ['users.php']) : '')
             . '</nav>';
-        echo "<div class='who'>" . e($u['display_name'] ?: $u['username']) . " · <a href='set_password.php'>Password</a> · <a href='logout.php'>Log out</a></div>";
+        echo "<div class='who'>" . e($u['display_name'] ?: $u['username']) . " · <a href='/set_password.php'>Password</a> · <a href='/logout.php'>Log out</a></div>";
     }
     echo "</div></header><main class='wrap'>";
     if ($f = flash()) echo "<div class='flash'>" . e($f) . '</div>';

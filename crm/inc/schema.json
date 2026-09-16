@@ -1196,25 +1196,29 @@
           "label": "Is Commercial All Risks (premises) cover required?",
           "type": "yesno",
           "acturis": true,
-          "help": "Where cover is required for more than one premises, describe each (a second premises can be noted in the additional details box)."
+          "help": "Where cover is required for more than one premises, describe each (a second premises can be noted in the additional details box).",
+          "default": "no"
         },
         {
           "id": "bi_required",
           "label": "Is Business Interruption cover required?",
           "type": "yesno",
-          "acturis": true
+          "acturis": true,
+          "default": "no"
         },
         {
           "id": "pi_required",
           "label": "Is Professional Indemnity cover required?",
           "type": "yesno",
-          "acturis": true
+          "acturis": true,
+          "default": "no"
         },
         {
           "id": "do_required",
           "label": "Is Directors' & Officers' Liability cover required?",
           "type": "yesno",
-          "acturis": true
+          "acturis": true,
+          "default": "no"
         },
         {
           "type": "heading",
@@ -1224,25 +1228,29 @@
           "id": "oc_fidelity",
           "label": "Fidelity guarantee",
           "type": "yesno",
-          "acturis": true
+          "acturis": true,
+          "default": "no"
         },
         {
           "id": "oc_legal",
           "label": "Legal expenses",
           "type": "yesno",
-          "acturis": true
+          "acturis": true,
+          "default": "no"
         },
         {
           "id": "oc_personal_accident",
           "label": "Personal accident",
           "type": "yesno",
-          "acturis": true
+          "acturis": true,
+          "default": "no"
         },
         {
           "id": "oc_terrorism",
           "label": "Property terrorism",
           "type": "yesno",
-          "acturis": true
+          "acturis": true,
+          "default": "no"
         }
       ]
     },

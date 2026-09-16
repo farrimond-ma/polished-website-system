@@ -13,7 +13,9 @@ const TableOfContents = ({ containerId, ready }) => {
         if (!ready) return;
         const container = document.getElementById(containerId);
         if (!container) return;
-        const headings = [...container.querySelectorAll('h2')];
+        // Only the article's own sections: the quote form and CTA boxes injected into the body
+        // carry headings of their own, which are not part of the guide.
+        const headings = [...container.querySelectorAll('h2')].filter((h) => !h.closest('.quote-section, .article-cta'));
         setItems(headings.map((h) => {
             const id = h.id || slugId(h.textContent || '');
             h.id = id;

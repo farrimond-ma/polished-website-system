@@ -82,6 +82,17 @@ function msg_defaults(): array {
             'note' => 'Final reminder by text.',
             'body' => "Hi {first_name}, last reminder from Polished Insurance about your quote. Complete your details here: {link} or call {phone}. Reply STOP to opt out.",
         ],
+        'email_ack' => [
+            'label' => 'Email — enquiry received (client asked for a call)',
+            'type' => 'email',
+            'note' => 'Sent straight away when someone enquires and asks to be called rather than sent the link. No questionnaire link is included.',
+            'subject' => 'Thank you for your enquiry — we will call you',
+            'body' => "Hi {first_name},\n\n"
+                . "Thank you for your enquiry with Polished Insurance. We specialise in insurance for cleaning businesses.\n\n"
+                . "You asked us to give you a call, so one of our team will be in touch shortly to talk through what you need.\n\n"
+                . "If it is easier to speak sooner, call us on {phone} and we will pick it up straight away.\n\n"
+                . "Your reference is {reference}.",
+        ],
         'email_submitted' => [
             'label' => 'Email — questionnaire received',
             'type' => 'email',
@@ -213,6 +224,11 @@ function build_chase_sms(array $lead, string $link, int $n = 1): string {
     $started = ($lead['q_status'] ?? '') === 'in_progress';
     $key = $n === 2 ? ($started ? 'sms_2_started' : 'sms_2') : ($n === 3 ? 'sms_3' : 'sms_1');
     return msg_fill_text(msg_template($key)['body'], msg_vars($lead, $link));
+}
+
+/** Straight-away acknowledgement for someone who asked for a call rather than the link. */
+function build_ack_email(array $lead): array {
+    return msg_build_email('email_ack', $lead, '');
 }
 
 /** Confirmation to the client after they submit the questionnaire. */

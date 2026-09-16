@@ -18,11 +18,19 @@ const ThankYou = () => {
         <p>We have received your details{state?.reference ? <> (reference <strong>{state.reference}</strong>)</> : null}.</p>
         <div className="notice">
           <strong>What happens next</strong>
-          <ul>
-            <li>A member of our team will review your enquiry and send you a secure link to your insurance questionnaire by email and text, usually within one working day.</li>
-            <li>It usually takes 10 to 15 minutes. Your answers save as you go, so you can finish it later using the same link.</li>
-            <li>When it arrives, please check your junk or spam folder if you cannot see the email.</li>
-          </ul>
+          {state?.prefersCall ? (
+            <ul>
+              <li>One of our team will call you shortly to talk through what your cleaning business needs.</li>
+              <li>We have emailed you to confirm we have your enquiry.</li>
+              <li>If it is easier to speak sooner, call us on <a href={SITE.phoneHref}>{SITE.phoneDisplay}</a>.</li>
+            </ul>
+          ) : (
+            <ul>
+              <li>We have just sent you a secure link to your insurance questionnaire, by email and text.</li>
+              <li>It takes about 4 to 5 minutes. Your answers save as you go, so you can finish it later using the same link.</li>
+              <li>Please check your junk or spam folder if you cannot see the email.</li>
+            </ul>
+          )}
         </div>
         <p>Questions? Call us on <a href={SITE.phoneHref}>{SITE.phoneDisplay}</a>.</p>
         <p><Link to="/guides" className="btn btn-navy">Read our insurance guides</Link></p>

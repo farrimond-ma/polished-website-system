@@ -14,7 +14,7 @@ const QuoteForm = ({ coverInterest = '', heading = 'Get a quote', intro, compact
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const startedAt = useRef(Date.now());
-  const [values, setValues] = useState({ first_name: '', last_name: '', company_name: '', email: '', phone: '', consent: false, website: '' });
+  const [values, setValues] = useState({ first_name: '', last_name: '', company_name: '', email: '', phone: '', consent: false, website: '', prefers_call: false });
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState('idle'); // idle | sending | error
   const [serverError, setServerError] = useState('');
@@ -62,7 +62,7 @@ const QuoteForm = ({ coverInterest = '', heading = 'Get a quote', intro, compact
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data.ok) throw new Error(data.error || 'Something went wrong.');
       trackLead({ content_name: coverInterest || 'Cleaning business insurance' }); // no-op unless cookies accepted
-      navigate('/get-a-quote/thank-you', { state: { firstName: values.first_name.trim(), reference: data.reference, phone: values.phone } });
+      navigate('/get-a-quote/thank-you', { state: { firstName: values.first_name.trim(), reference: data.reference, phone: values.phone, prefersCall: values.prefers_call } });
     } catch (err) {
       setStatus('error');
       setServerError(err.message && err.message !== 'Failed to fetch'
@@ -92,6 +92,20 @@ const QuoteForm = ({ coverInterest = '', heading = 'Get a quote', intro, compact
       {field('email', 'Email address', { type: 'email', autoComplete: 'email', inputMode: 'email', required: true })}
       {field('phone', 'Mobile number', { type: 'tel', autoComplete: 'tel', inputMode: 'tel', required: true })}
       </div>
+
+      {/* The client decides what happens next: the questionnaire link straight away, or a call first. */}
+      <fieldset className="qf-choice">
+        <legend>How would you like to start?</legend>
+        {[
+          [false, 'Send me the questionnaire link', 'Arrives by email and text straight away. It takes about 4 to 5 minutes.'],
+          [true, 'I would prefer a call first', 'We will ring you to talk it through. No questionnaire link for now.'],
+        ].map(([value, label, hint]) => (
+          <label key={String(value)} className={values.prefers_call === value ? 'is-selected' : undefined}>
+            <input type="radio" name="prefers_call" checked={values.prefers_call === value} onChange={() => setValues((v) => ({ ...v, prefers_call: value }))} />
+            <span><strong>{label}</strong><em>{hint}</em></span>
+          </label>
+        ))}
+      </fieldset>
 
       {/* Honeypot: hidden from people, filled in by bots. */}
       <div className="qf-hp" aria-hidden="true">

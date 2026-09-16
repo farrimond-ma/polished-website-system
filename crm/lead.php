@@ -122,6 +122,7 @@ layout_header(lead_ref($id) . ' ' . lead_name($lead));
   <div>
     <span class="pill pill-lg <?= status_class($lead['status']) ?>"><?= e($lead['status']) ?></span>
     <?php if ($lead['chasing']): ?><span class="pill pill-lg chasing">Chasing <?= (int)$lead['auto_chase_count'] ?>/3</span><?php endif; ?>
+    <?php if (!empty($lead['prefers_call'])): ?><span class="pill pill-lg call" title="Asked to be called rather than sent the questionnaire link">Wants a call</span><?php endif; ?>
   </div>
 </div>
 

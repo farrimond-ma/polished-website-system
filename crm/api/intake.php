@@ -66,29 +66,43 @@ if ($existing = $st->fetch()) {
     });
 }
 
+$prefersCall = !empty($in['prefers_call']);
 $consentText = $str('consent_text', 500) ?: 'Agreed to be contacted by Polished Insurance about an insurance quote.';
 $pdo->prepare('INSERT INTO leads (status, first_name, last_name, company_name, email, phone, source, landing_page, cover_interest,
-        utm_source, utm_medium, utm_campaign, consent_text, consent_at, ip_hash, link_token, next_follow_up, created_at, updated_at)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)')
+        utm_source, utm_medium, utm_campaign, consent_text, consent_at, ip_hash, link_token, next_follow_up, created_at, updated_at, prefers_call)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)')
     ->execute(['New Enquiry', $first, $last, $str('company_name'), $email, $phone, 'Website form',
         $str('landing_page', 255), $str('cover_interest', 120), $str('utm_source', 120), $str('utm_medium', 120),
-        $str('utm_campaign'), $consentText, now(), $ipHash, new_link_token(), date('Y-m-d', strtotime('+' . (int)cfg('follow_up_days', 2) . ' days')), now(), now()]);
+        $str('utm_campaign'), $consentText, now(), $ipHash, new_link_token(), date('Y-m-d', strtotime('+' . (int)cfg('follow_up_days', 2) . ' days')), now(), now(), $prefersCall ? 1 : 0]);
 $leadId = (int)$pdo->lastInsertId();
-add_note($leadId, 'Enquiry received from the website' . ($str('landing_page', 255) ? ' (' . $str('landing_page', 255) . ')' : '') . '.');
+add_note($leadId, 'Enquiry received from the website' . ($str('landing_page', 255) ? ' (' . $str('landing_page', 255) . ')' : '') . '.'
+    . ($prefersCall ? ' The client asked to be CALLED rather than sent the questionnaire link.' : ''));
 
 json_out_then(['ok' => true, 'reference' => lead_ref($leadId)], function () use ($leadId) {
     $lead = find_lead($leadId);
-    // Default: nothing is sent to the client until a team member clicks "Send questionnaire link +
-    // start reminders" on the lead. (The old 'auto_chase_new_leads' setting is deliberately ignored.)
-    if (cfg('send_questionnaire_automatically', false) === true) {
-        $r = start_questionnaire_chase($lead, 'Automatic questionnaire link sent (message 1 of 3)');
-        $chaseNote = "\n" . $r['message'];
+    // What happens next is the client's own choice on the enquiry form:
+    //   "send me the link"  -> questionnaire link and text now, reminders start automatically
+    //   "I'd prefer a call" -> a short acknowledgement only; the team rings them
+    if ((int)$lead['prefers_call'] === 1) {
+        $m = build_ack_email($lead);
+        $r = trim((string)$lead['email']) !== ''
+            ? send_email($lead['email'], lead_name($lead), $m['subject'], $m['html'], $m['text'])
+            : ['ok' => false, 'error' => 'no email address on file'];
+        // Someone waiting for a call needs attention today, not in a couple of days.
+        touch_lead($leadId, ['next_follow_up' => date('Y-m-d')]);
+        add_note($leadId, !empty($r['ok'])
+            ? 'Client asked for a call. Acknowledgement email sent - no questionnaire link, no reminders.'
+            : 'Client asked for a call. The acknowledgement email could NOT be sent (' . ($r['error'] ?? 'unknown error') . ') - please contact them.');
+        $chaseNote = "\nThe client asked us to CALL THEM. They have had an acknowledgement email only - no questionnaire link and no reminders."
+            . "\nWhen you are ready, open the lead and click \"Send questionnaire link + start reminders\".";
     } else {
-        $chaseNote = "\nNo message has been sent to the client yet. Open the lead and click \"Send questionnaire link + start reminders\" to begin.";
+        $r = start_questionnaire_chase($lead, 'Questionnaire link sent automatically (message 1 of 3)');
+        $chaseNote = "\n" . $r['message'];
     }
     notify_team('New enquiry: ' . lead_ref($leadId) . ' ' . lead_name($lead),
         lead_name($lead) . ($lead['company_name'] ? ' (' . $lead['company_name'] . ')' : '') . "\n"
         . $lead['email'] . ' · ' . $lead['phone'] . "\n"
+        . ((int)$lead['prefers_call'] === 1 ? "Asked for: a call back\n" : "Asked for: the questionnaire link\n")
         . ($lead['cover_interest'] ? 'Interested in: ' . $lead['cover_interest'] . "\n" : '')
         . ($lead['landing_page'] ? 'Page: ' . $lead['landing_page'] . "\n" : '')
         . rtrim((string)cfg('crm_base_url', ''), '/') . '/lead.php?id=' . $leadId . $chaseNote);

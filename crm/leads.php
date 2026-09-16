@@ -68,7 +68,7 @@ layout_header('Leads');
       <td class="mono"><?= e(lead_ref((int)$l['lead_id'])) ?></td>
       <td><strong><?= e(trim($l['first_name'] . ' ' . $l['last_name'])) ?></strong><div class="sub"><?= e($l['email']) ?></div></td>
       <td><?= e($l['company_name']) ?></td>
-      <td><span class="pill <?= status_class($l['status']) ?>"><?= e($l['status']) ?></span><?= $l['chasing'] ? " <span class='pill chasing'>Chasing " . (int)$l['auto_chase_count'] . "/3</span>" : '' ?></td>
+      <td><span class="pill <?= status_class($l['status']) ?>"><?= e($l['status']) ?></span><?= $l['chasing'] ? " <span class='pill chasing'>Chasing " . (int)$l['auto_chase_count'] . "/3</span>" : '' ?><?= !empty($l['prefers_call']) ? " <span class='pill call'>Wants a call</span>" : '' ?></td>
       <td><span class="pill q-<?= e($l['q_status']) ?>"><?= e(q_status_label($l['q_status'])) ?></span></td>
       <td><?= e(user_name($l['assigned_to'] ? (int)$l['assigned_to'] : null)) ?></td>
       <td><?= dt($l['created_at']) ?></td>

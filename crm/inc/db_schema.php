@@ -87,6 +87,10 @@ function schema_migrations(bool $sqlite): array {
             "CREATE INDEX idx_note_lead ON lead_note (lead_id)",
             "CREATE INDEX idx_task_due ON lead_task (due_date)",
         ],
+        2 => [
+            // The website form asks whether they would rather have a call than the questionnaire link.
+            'ALTER TABLE leads ADD COLUMN prefers_call ' . ($sqlite ? 'INTEGER NOT NULL DEFAULT 0' : 'TINYINT(1) NOT NULL DEFAULT 0'),
+        ],
     ];
 }
 

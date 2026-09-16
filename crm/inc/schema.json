@@ -229,7 +229,15 @@
           "id": "manual_wages",
           "label": "Total estimated manual wages (including manual labour-only subcontractor payments)",
           "type": "currency",
-          "acturis": true
+          "acturis": true,
+          "requiredIf": {
+            "anyGt0": [
+              "num_manual_directors",
+              "num_manual_employees",
+              "num_losc"
+            ]
+          },
+          "help": "Needed because you have entered manual staff. Include manual labour-only subcontractor payments."
         },
         {
           "id": "clerical_wages",

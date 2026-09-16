@@ -710,7 +710,7 @@
               msg: section.title + ": “" + item.label.replace(/ \(must.*$/, "") + "” totals " + total + "% — it must total " + item.mustTotal + "%.",
             });
           }
-        } else if (item.required && isVisible(item)) {
+        } else if ((item.required || (item.requiredIf && conditionMet(item.requiredIf))) && isVisible(item)) {
           const v = val(item.id);
           if (v === undefined || v === "" || v === null) {
             problems.push({

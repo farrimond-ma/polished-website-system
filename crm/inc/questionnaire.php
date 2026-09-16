@@ -10,6 +10,8 @@
  *  - item.default (and a percent_group field's default) is applied when there is no answer yet
  *  - showIf conditions may also be {"all":[...]}, {"any":[...]} or {"field":x,"in":[...]}
  *  - a whole section may carry showIf (e.g. Claims History only when claims_5yr = yes)
+ *  - item.requiredIf makes an answer compulsory only in certain cases (e.g. the manual wageroll
+ *    once any manual staff are entered)
  *
  * The same visibility rules are implemented in assets/questionnaire.js (staff) and in the
  * website's React questionnaire — keep all three in step if you add a new condition type.
@@ -276,7 +278,11 @@ function q_missing_required(array $data, bool $clientScope, array $hiddenSection
         if (in_array($section['id'], $hiddenSections, true)) continue;
         if (!q_condition_met($section['showIf'] ?? null, $data)) continue;
         foreach ($section['items'] as $it) {
-            if (!q_is_input($it) || empty($it['required'])) continue;
+            if (!q_is_input($it)) continue;
+            // "required" always; "requiredIf" only when its condition is met (e.g. the manual
+            // wageroll once any manual staff are entered).
+            $needed = !empty($it['required']) || (isset($it['requiredIf']) && q_condition_met($it['requiredIf'], $data));
+            if (!$needed) continue;
             if (!q_condition_met($it['showIf'] ?? null, $data)) continue;
             $v = $data[$it['id']] ?? null;
             if ($it['type'] === 'table' && is_array($v)) {

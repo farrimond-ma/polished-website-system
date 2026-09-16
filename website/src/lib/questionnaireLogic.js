@@ -36,7 +36,8 @@ export function sectionProblems(section, data) {
       }
       continue;
     }
-    if (item.required) {
+    // "required" always; "requiredIf" only when its condition is met.
+    if (item.required || (item.requiredIf && conditionMet(item.requiredIf, data))) {
       const v = data[item.id];
       const emptyTable = item.type === 'table' && (!Array.isArray(v) || !v.some((r) => Object.values(r || {}).some((x) => !isEmpty(x))));
       if (isEmpty(v) || emptyTable) problems.push({ id: item.id, message: 'Please answer this question.' });

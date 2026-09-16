@@ -12,13 +12,15 @@
   },
   {
     "id": "t002",
-    "status": "queued",
+    "status": "published",
     "title": "Employers' liability insurance for cleaning companies: what the law requires",
     "keyword": "employers liability insurance cleaning company",
     "coverSlug": "employers-liability-insurance-for-cleaners",
     "angle": "Legal requirement, who counts as an employee, fines, ERN, certificates, subcontractors.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "slug": "employers-liability-insurance-cleaning-company",
+    "publishedAt": "2026-09-16T07:41:06.612Z"
   },
   {
     "id": "t003",

@@ -6,7 +6,7 @@ import { trackLead } from '../lib/consent';
 import './QuoteForm.css';
 
 const CONSENT_TEXT =
-  'I agree to Polished Insurance contacting me by phone, email and text message about my insurance quote, and I have read the privacy policy.';
+  'I agree to Polished Insurance contacting me about my insurance quote, and I have read the privacy policy.';
 
 // Lead capture: contact details only. Everything else is collected afterwards by the
 // questionnaire link the CRM emails and texts to the client.
@@ -120,7 +120,7 @@ const QuoteForm = ({ coverInterest = '', heading = 'Get a quote', intro, compact
         <label>
           <input type="checkbox" name="consent" checked={values.consent} onChange={set} />
           <span>
-            I agree to Polished Insurance contacting me by phone, email and text about my quote, and I have read
+            I agree to Polished Insurance contacting me about my quote, and I have read
             the <Link to="/privacy-policy" target="_blank">privacy policy</Link>.
           </span>
         </label>

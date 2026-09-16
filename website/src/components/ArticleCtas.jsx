@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { coversBySlug } from '../data/covers';
 import { SITE } from '../config/site';
+import QuoteSection from './QuoteSection';
 import './Article.css';
 
 // Conversion blocks injected into guides at RENDER time (same approach as the Boxx site), so
@@ -22,17 +23,10 @@ export const SoftCta = ({ coverSlug }) => (
   </aside>
 );
 
-export const MidCta = ({ coverSlug }) => (
-  <aside className="article-cta article-cta-mid">
-    <p className="article-cta-title">Looking for {coverName(coverSlug).toLowerCase().startsWith('cleaning') ? 'cleaning business insurance' : coverName(coverSlug)}?</p>
-    <p>Cover arranged by people who understand how cleaning businesses work.</p>
-    <ul className="article-cta-ticks">
-      <li>Public and employers&rsquo; liability limits to match your contracts</li>
-      <li>Loss of keys, equipment and damage to property worked upon</li>
-      <li>Quotes from a panel of UK insurers</li>
-    </ul>
-    <Link to={quoteLinkFor(coverSlug)} className="btn btn-quote">Get a quote</Link>
-  </aside>
+// Midway through a guide the reader gets the enquiry form itself rather than a link. The heading is
+// deliberately general: a guide on one cover attracts every kind of cleaning business.
+const MidForm = ({ coverSlug }) => (
+  <QuoteSection compact coverInterest={coverName(coverSlug)} heading="Get a quote for your cleaning business" />
 );
 
 export const EndCta = ({ coverSlug }) => (
@@ -59,7 +53,7 @@ const ArticleBody = ({ html, coverSlug }) => {
     return (
       <>
         <div dangerouslySetInnerHTML={{ __html: sections.join('') }} />
-        <MidCta coverSlug={coverSlug} />
+        <MidForm coverSlug={coverSlug} />
       </>
     );
   }
@@ -69,7 +63,7 @@ const ArticleBody = ({ html, coverSlug }) => {
       <div dangerouslySetInnerHTML={{ __html: sections[0] }} />
       <SoftCta coverSlug={coverSlug} />
       <div dangerouslySetInnerHTML={{ __html: sections.slice(1, mid).join('') }} />
-      <MidCta coverSlug={coverSlug} />
+      <MidForm coverSlug={coverSlug} />
       <div dangerouslySetInnerHTML={{ __html: sections.slice(mid).join('') }} />
     </>
   );

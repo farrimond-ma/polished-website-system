@@ -36,13 +36,15 @@
   },
   {
     "id": "t004",
-    "status": "queued",
+    "status": "published",
     "title": "What does contract cleaners insurance cover?",
     "keyword": "contract cleaners insurance cover",
     "coverSlug": "contract-cleaners-insurance",
     "angle": "Section-by-section explanation for contract cleaning companies.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "slug": "what-does-contract-cleaners-insurance-cover",
+    "publishedAt": "2026-09-18T12:14:45.411Z"
   },
   {
     "id": "t005",

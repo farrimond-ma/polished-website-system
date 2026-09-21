@@ -1,5 +1,5 @@
 <?php
-/** Renewal Questionnaires: import existing clients from an Acturis export and send their questionnaire. */
+/** Renewal Questionnaires: import existing clients from Acturis and send their questionnaire. */
 require __DIR__ . '/lib.php';
 require_once __DIR__ . '/inc/renewals.php';
 require_login();
@@ -7,28 +7,43 @@ $me = (int)current_user()['user_id'];
 
 $dir = __DIR__ . '/data';
 $token = preg_replace('/[^a-f0-9]/', '', (string)param('file', ''));
-$path = $token !== '' ? $dir . '/renewal_import_' . $token . '.csv' : '';
+$ext = in_array(param('ext'), ['docx', 'pdf', 'csv'], true) ? (string)param('ext') : '';
+$path = ($token !== '' && $ext !== '') ? $dir . '/renewal_import_' . $token . '.' . $ext : '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_check();
     $action = (string)post('action', '');
 
     if ($action === 'upload') {
-        $f = $_FILES['csv'] ?? null;
-        if (!$f || ($f['error'] ?? 1) !== UPLOAD_ERR_OK) {
-            flash('Please choose a CSV file to upload.');
-            redirect('renewals.php');
-        }
-        if (($f['size'] ?? 0) > 8 * 1024 * 1024) { flash('That file is larger than 8MB — please export in smaller batches.'); redirect('renewals.php'); }
+        $f = $_FILES['doc'] ?? null;
+        if (!$f || ($f['error'] ?? 1) !== UPLOAD_ERR_OK) { flash('Please choose a file to upload.'); redirect('renewals.php'); }
+        $ext = strtolower(pathinfo((string)($f['name'] ?? ''), PATHINFO_EXTENSION));
+        if (!in_array($ext, ['docx', 'pdf', 'csv'], true)) { flash('Please upload a Word (.docx), PDF or CSV file.'); redirect('renewals.php'); }
+        if (($f['size'] ?? 0) > 12 * 1024 * 1024) { flash('That file is larger than 12MB.'); redirect('renewals.php'); }
         if (!is_dir($dir)) @mkdir($dir, 0775, true);
         $token = bin2hex(random_bytes(8));
-        if (!@move_uploaded_file($f['tmp_name'], $dir . '/renewal_import_' . $token . '.csv')) {
+        if (!@move_uploaded_file($f['tmp_name'], $dir . '/renewal_import_' . $token . '.' . $ext)) {
             flash('The file could not be saved — check the data folder is writable.');
             redirect('renewals.php');
         }
-        redirect('renewals.php?file=' . $token);
+        redirect('renewals.php?file=' . $token . '&ext=' . $ext);
     }
 
+    // One client, checked on screen after reading their document
+    if ($action === 'import_one') {
+        $values = [];
+        foreach (array_keys(renewal_fields()) as $field) {
+            $v = trim((string)post('f_' . $field, ''));
+            if ($v !== '') $values[$field] = $v;
+        }
+        [$leadId, $result] = renewal_import_one($values, $me);
+        if (!$leadId) { flash('Nothing was imported: ' . $result); redirect('renewals.php'); }
+        if ($path !== '' && is_file($path)) @unlink($path);
+        flash(($result === 'added' ? 'Client added' : 'Client updated') . ' — ' . lead_ref($leadId) . '. Open them to send the questionnaire.');
+        redirect('lead.php?id=' . $leadId);
+    }
+
+    // A spreadsheet of many clients
     if ($action === 'import' && $path !== '' && is_file($path)) {
         renewal_map_save((array)post('map', []));
         $csv = renewal_read_csv($path);
@@ -46,7 +61,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $fields = renewal_fields();
-$csv = $path !== '' && is_file($path) ? renewal_read_csv($path) : null;
+$doc = null; $csv = null; $parsed = [];
+if ($path !== '' && is_file($path)) {
+    if ($ext === 'csv') {
+        $csv = renewal_read_csv($path);
+    } else {
+        $doc = renewal_document_text($path, 'x.' . $ext);
+        $parsed = $doc['error'] ? [] : renewal_parse_document($doc['text']);
+    }
+}
 $map = $csv ? (renewal_map() ?: renewal_guess_map($csv['headers'])) : renewal_map();
 $search = trim((string)param('q', ''));
 $leads = renewal_leads($search);
@@ -58,21 +81,57 @@ layout_header('Renewal Questionnaires');
   <h1>Renewal Questionnaires</h1>
 </div>
 
-<?php if ($csv && !$csv['error']): ?>
-  <!-- Step 2: match the export's columns to our fields -->
+<?php if ($doc): ?>
+  <!-- Word / PDF: one client, checked before importing -->
+  <div class="card">
+    <h2>Check the details</h2>
+    <?php if ($doc['error']): ?>
+      <div class="flash"><?= e($doc['error']) ?></div>
+    <?php else: ?>
+      <p class="sub">Read from the document — <strong><?= count($parsed) ?></strong> detail(s) recognised. Correct anything that is
+        wrong or missing, then import. Only the email address is essential; the rest pre-fills the client's questionnaire
+        for them to check.</p>
+    <?php endif; ?>
+    <form method="post">
+      <?= csrf_field() ?><input type="hidden" name="action" value="import_one">
+      <input type="hidden" name="file" value="<?= e($token) ?>"><input type="hidden" name="ext" value="<?= e($ext) ?>">
+      <div class="grid2">
+        <?php foreach ($fields as $id => [$label, $where, $note]): $v = $parsed[$id] ?? ''; ?>
+          <div>
+            <label for="f_<?= e($id) ?>" class="sub"><?= e($label) ?><?= $id === 'email' ? ' *' : '' ?>
+              <?= isset($parsed[$id]) ? '<span class="pill ok">read from document</span>' : '' ?></label>
+            <input id="f_<?= e($id) ?>" name="f_<?= e($id) ?>" value="<?= e($v) ?>" style="width:100%;padding:8px 10px;border:1px solid #cdd6df;border-radius:6px">
+          </div>
+        <?php endforeach; ?>
+      </div>
+      <div class="btn-row">
+        <button class="btn">Import this client</button>
+        <a class="btn ghost" href="renewals.php">Cancel</a>
+      </div>
+    </form>
+    <?php if (!$doc['error']): ?>
+      <details class="mt">
+        <summary class="sub">Show the text read from the document</summary>
+        <pre style="white-space:pre-wrap;background:#f8fafb;border:1px solid #e8edf2;border-radius:6px;padding:10px;max-height:340px;overflow:auto;font-size:12.5px"><?= e(mb_substr($doc['text'], 0, 6000)) ?></pre>
+      </details>
+    <?php endif; ?>
+  </div>
+
+<?php elseif ($csv && !$csv['error']): ?>
+  <!-- Spreadsheet: match the columns once, then import every row -->
   <div class="card">
     <h2>Match the columns</h2>
     <p class="sub">Your file has <strong><?= count($csv['rows']) ?></strong> row(s) and <strong><?= count($csv['headers']) ?></strong> column(s).
-      Tell us which column holds which detail — we remember this for next time, so you only do it once.
-      Leave anything you do not have as “—”.</p>
+      Tell us which column holds which detail — we remember this for next time. Leave anything you do not have as “—”.</p>
     <form method="post">
-      <?= csrf_field() ?><input type="hidden" name="action" value="import"><input type="hidden" name="file" value="<?= e($token) ?>">
+      <?= csrf_field() ?><input type="hidden" name="action" value="import">
+      <input type="hidden" name="file" value="<?= e($token) ?>"><input type="hidden" name="ext" value="csv">
       <div class="table-scroll"><table class="grid small">
         <thead><tr><th>Field</th><th>Column in your file</th><th>Example from row 1</th></tr></thead>
         <tbody>
         <?php foreach ($fields as $id => [$label, $where, $note]): $sel = $map[$id] ?? ''; ?>
           <tr>
-            <td><?= e($label) ?><?= $id === 'email' ? ' <span class="req" title="required">*</span>' : '' ?>
+            <td><?= e($label) ?><?= $id === 'email' ? ' <span class="req">*</span>' : '' ?>
               <?= $note ? '<div class="sub">' . e($note) . '</div>' : '' ?></td>
             <td>
               <select name="map[<?= e($id) ?>]">
@@ -91,24 +150,23 @@ layout_header('Renewal Questionnaires');
         <button class="btn">Import <?= count($csv['rows']) ?> row(s)</button>
         <a class="btn ghost" href="renewals.php">Cancel</a>
       </div>
-      <p class="sub">Clients already in the CRM (matched on email address) are updated, not duplicated, and anything
-        a client has already answered themselves is kept.</p>
     </form>
   </div>
+
 <?php else: ?>
   <?php if ($csv && $csv['error']): ?><div class="flash"><?= e($csv['error']) ?></div><?php endif; ?>
-  <!-- Step 1: upload -->
   <div class="card">
     <h2>Import from Acturis</h2>
-    <p class="sub">Export your existing clients from Acturis as a CSV file and upload it here. You will then match up the
-      columns. Each client gets a questionnaire pre-filled with what we already know, so they only have to check it and
-      fill in the gaps.</p>
+    <p class="sub">Upload the client's Acturis document — a Word file (.docx) is read most reliably, and text-based PDFs
+      usually work too. We read what we can from it, you check it, and the client's questionnaire is pre-filled so they
+      only have to confirm the details and fill the gaps. A CSV of many clients at once also works.</p>
     <form method="post" enctype="multipart/form-data" class="btn-row">
       <?= csrf_field() ?><input type="hidden" name="action" value="upload">
-      <input type="file" name="csv" accept=".csv,text/csv" required>
+      <input type="file" name="doc" accept=".docx,.pdf,.csv" required>
       <button class="btn">Upload</button>
     </form>
-    <?php if (renewal_map()): ?><p class="sub">A column mapping is saved from last time and will be filled in for you.</p><?php endif; ?>
+    <p class="sub">Clients already in the CRM are matched on email address and updated, never duplicated, and anything a
+      client has answered themselves is kept.</p>
   </div>
 <?php endif; ?>
 
@@ -120,7 +178,7 @@ layout_header('Renewal Questionnaires');
   <div class="table-scroll"><table class="grid small">
     <thead><tr><th>Renewal</th><th>Client</th><th>Email</th><th>Questionnaire</th><th>Reminders</th><th></th></tr></thead>
     <tbody>
-    <?php if (!$leads): ?><tr><td colspan="6" class="empty">No renewal clients yet — import an Acturis export above.</td></tr><?php endif; ?>
+    <?php if (!$leads): ?><tr><td colspan="6" class="empty">No renewal clients yet — import an Acturis document above.</td></tr><?php endif; ?>
     <?php foreach ($leads as $l): ?>
       <tr>
         <td class="<?= $l['renewal_date'] && $l['renewal_date'] < $today ? 'overdue' : '' ?>" style="white-space:nowrap"><?= d($l['renewal_date']) ?></td>

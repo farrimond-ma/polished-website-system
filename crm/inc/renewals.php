@@ -41,6 +41,207 @@ function renewal_fields(): array {
     ];
 }
 
+/* ===================== Acturis documents (.docx / .pdf), one client each ===================== */
+
+/** Plain text from a Word .docx (paragraphs and table cells become lines). */
+function renewal_docx_text(string $path): array {
+    if (!class_exists('ZipArchive')) return ['text' => '', 'error' => 'This server cannot open .docx files (the PHP zip extension is missing).'];
+    $zip = new ZipArchive();
+    if ($zip->open($path) !== true) return ['text' => '', 'error' => 'That file could not be opened — is it really a Word .docx?'];
+    $xml = '';
+    foreach (['word/document.xml', 'word/document2.xml'] as $entry) {
+        $x = $zip->getFromName($entry);
+        if ($x !== false) { $xml = $x; break; }
+    }
+    $zip->close();
+    if ($xml === '') return ['text' => '', 'error' => 'No text was found in that Word file.'];
+    // Keep the shape of the document: cell and paragraph ends become line breaks.
+    $xml = preg_replace('#<w:tab[^>]*/>#', "\t", $xml);
+    $xml = preg_replace('#</w:(p|tr)>#', "\n", $xml);
+    $xml = preg_replace('#</w:tc>#', "\t", $xml);
+    $text = html_entity_decode(strip_tags($xml), ENT_QUOTES | ENT_XML1, 'UTF-8');
+    $text = preg_replace("/[ \t]+/", ' ', $text);
+    $text = preg_replace("/\n{3,}/", "\n\n", $text);
+    return ['text' => trim($text), 'error' => null];
+}
+
+/** Plain text from a straightforward (text-based) PDF. Scanned PDFs cannot be read this way. */
+function renewal_pdf_text(string $path): array {
+    $raw = (string)file_get_contents($path);
+    if (!str_starts_with($raw, '%PDF')) return ['text' => '', 'error' => 'That does not look like a PDF.'];
+    $out = '';
+    if (preg_match_all('/stream\r?\n(.*?)\r?\nendstream/s', $raw, $m)) {
+        foreach ($m[1] as $stream) {
+            $data = @gzuncompress($stream);
+            if ($data === false) $data = @gzinflate(substr($stream, 2));
+            if ($data === false) $data = $stream;                      // uncompressed stream
+            if (!preg_match('/(Tj|TJ)/', (string)$data)) continue;
+            // Walk the stream in order: (text) pieces, and the operators that start a new line
+            // (T*, Td, TD, ' and ") so the layout survives as line breaks.
+            if (preg_match_all('/\((?:\\\\.|[^()\\\\])*\)|T\*|Td|TD|\'|"/s', (string)$data, $tokens)) {
+                foreach ($tokens[0] as $tok) {
+                    if ($tok[0] === '(') {
+                        $s = substr($tok, 1, -1);
+                        $out .= str_replace(['\\(', '\\)', '\\\\'], ['(', ')', '\\'], $s);
+                    } else {
+                        $out .= "\n";
+                    }
+                }
+                $out .= "\n";
+            }
+        }
+    }
+    $out = preg_replace("/[ \t]+/", ' ', trim($out));
+    if (mb_strlen($out) < 40) {
+        return ['text' => $out, 'error' => 'Hardly any text could be read — this PDF is probably a scan. Please use the Word version.'];
+    }
+    return ['text' => $out, 'error' => null];
+}
+
+/** Text from whichever document type was uploaded. */
+function renewal_document_text(string $path, string $filename): array {
+    $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+    if ($ext === 'docx') return renewal_docx_text($path);
+    if ($ext === 'pdf') return renewal_pdf_text($path);
+    return ['text' => '', 'error' => 'Please upload a Word (.docx) or PDF document.'];
+}
+
+/**
+ * What to look for in the document, per field: the wording before the value. Matching is
+ * case-insensitive and allows a colon, spaces, tabs or a line break between label and value.
+ */
+function renewal_labels(): array {
+    return [
+        'email'                => ['email address', 'e-mail address', 'email'],
+        'full_name'            => ['contact name', 'contact', 'proposer', 'attention of'],
+        'company_name'         => ['name of insured', 'insured name', 'the insured', 'client name', 'business name', 'insured'],
+        'phone'                => ['mobile number', 'mobile', 'telephone number', 'telephone', 'contact number'],
+        'renewal_date'         => ['renewal date', 'expiry date', 'renewal'],
+        'policy_number'        => ['policy number', 'policy no', 'policy ref'],
+        'trading_names'        => ['trading name', 'trading as', 't/as'],
+        'address'              => ['correspondence address', 'registered address', 'risk address', 'address'],
+        'entity_status'        => ['legal status', 'status of entity', 'business type', 'constitution'],
+        'business_established' => ['business established', 'established', 'trading since'],
+        'turnover'             => ['estimated turnover', 'total turnover', 'turnover'],
+        'manual_wages'         => ['manual wageroll', 'manual wages', 'wageroll manual'],
+        'clerical_wages'       => ['clerical wageroll', 'clerical wages'],
+        'bfsc_payments'        => ['bona fide sub-contractor', 'bona fide subcontractor', 'bfsc payments', 'bfsc'],
+        'num_clerical'         => ['number of clerical', 'clerical employees', 'clerical staff'],
+        'num_manual_directors' => ['manual directors', 'working directors', 'manual partners'],
+        'num_manual_employees' => ['manual employees', 'number of manual', 'manual staff'],
+        'num_losc'             => ['labour only sub-contractors', 'labour-only subcontractors', 'labour only', 'losc'],
+        'pl_limit'             => ['public liability limit', 'limit of indemnity - public', 'public & products liability', 'public liability'],
+        'el_limit'             => ['employers liability limit', "employers' liability limit", 'employers liability', "employers' liability"],
+    ];
+}
+
+/**
+ * Pulls "label: value" pairs out of the document text. Returns [field => value] for whatever it
+ * recognised — staff check and correct everything on screen before anything is saved.
+ */
+function renewal_parse_document(string $text): array {
+    $numeric = ['turnover', 'manual_wages', 'clerical_wages', 'bfsc_payments', 'pl_limit', 'el_limit',
+                'num_clerical', 'num_manual_directors', 'num_manual_employees', 'num_losc',
+                'renewal_date', 'business_established'];
+    // Wording that means the line belongs to a different field, however well the label matches
+    // ("Email Address" is not the postal address).
+    $excludes = [
+        'address'      => ['email', 'e-mail'],
+        'company_name' => ['contact name'],
+        'full_name'    => ['company name', 'business name'],
+        'phone'        => ['email'],
+        'num_clerical' => ['wageroll', 'wages'],
+        'num_manual_employees' => ['wageroll', 'wages'],
+        'num_losc'     => ['payment'],
+    ];
+    $found = [];
+    $lines = array_values(array_filter(array_map(fn($l) => trim($l), preg_split('/\R/', $text)), fn($l) => $l !== ''));
+
+    foreach (renewal_labels() as $field => $labels) {
+        foreach ($labels as $label) {
+            foreach ($lines as $i => $line) {
+                foreach ($excludes[$field] ?? [] as $bad) {
+                    if (mb_stripos($line, $bad) !== false) continue 2;
+                }
+                $pos = mb_stripos($line, $label);
+                if ($pos === false) continue;
+                // Value after the label on the same line...
+                $value = trim(mb_substr($line, $pos + mb_strlen($label)), " \t:-–|");
+                // ...or the next line, which is how tables and forms usually lay it out. A value
+                // that should contain digits but does not is really the rest of the label.
+                $needsDigits = in_array($field, $numeric, true);
+                if ($value === '' || ($needsDigits && !preg_match('/\d/', $value))) {
+                    $value = trim((string)($lines[$i + 1] ?? ''), " \t:-–|");
+                }
+                if ($value === '' || mb_strlen($value) > 200) continue;
+                if ($needsDigits && !preg_match('/\d/', $value)) continue;
+                $found[$field] = $value;
+                break 2;
+            }
+        }
+    }
+    // Tidy the values we know the shape of
+    foreach (['renewal_date', 'business_established'] as $f) {
+        if (isset($found[$f])) {
+            $d = renewal_date_value($found[$f]);
+            if ($d) $found[$f] = $d; else unset($found[$f]);
+        }
+    }
+    foreach (['turnover', 'manual_wages', 'clerical_wages', 'bfsc_payments', 'pl_limit', 'el_limit',
+              'num_clerical', 'num_manual_directors', 'num_manual_employees', 'num_losc'] as $f) {
+        if (isset($found[$f])) {
+            $n = renewal_number_value($found[$f]);
+            if ($n !== null) $found[$f] = $n; else unset($found[$f]);
+        }
+    }
+    if (isset($found['email']) && !filter_var($found['email'], FILTER_VALIDATE_EMAIL)) {
+        // an email is often followed by other text on the same line
+        if (preg_match('/[^\s,;]+@[^\s,;]+\.[a-z]{2,}/i', $found['email'], $m)) $found['email'] = $m[0];
+        else unset($found['email']);
+    }
+    if (!isset($found['email']) && preg_match('/[^\s,;<>()]+@[^\s,;<>()]+\.[a-z]{2,}/i', $text, $m)) {
+        $found['email'] = $m[0];   // fall back to the first email anywhere in the document
+    }
+    return $found;
+}
+
+/** Imports one client from checked values ([field => value]). Returns [leadId, 'added'|'updated']. */
+function renewal_import_one(array $values, ?int $userId = null): array {
+    // renewal_prepare_row() works on a row keyed by column name, so map field => field.
+    $map = [];
+    foreach (array_keys(renewal_fields()) as $f) $map[$f] = $f;
+    $p = renewal_prepare_row($values, $map);
+    if ($p['problems']) return [0, implode('; ', $p['problems'])];
+
+    $st = db()->prepare('SELECT * FROM leads WHERE email = ? ORDER BY lead_id DESC LIMIT 1');
+    $st->execute([$p['lead']['email']]);
+    $existing = $st->fetch();
+    if ($existing) {
+        $leadId = (int)$existing['lead_id'];
+        $data = q_lead_data($existing);
+        foreach ($p['q'] as $k => $v) if (q_blank($data[$k] ?? null)) $data[$k] = $v;
+        $fields = array_filter($p['lead'], fn($v) => $v !== '' && $v !== null);
+        unset($fields['email']);
+        $fields['q_data'] = json_encode($data, JSON_UNESCAPED_UNICODE);
+        $fields['source'] = 'Renewal';
+        touch_lead($leadId, $fields);
+        add_note($leadId, 'Updated from an Acturis document.' . ($p['policy_number'] !== '' ? ' Policy ' . $p['policy_number'] . '.' : ''), $userId);
+        return [$leadId, 'updated'];
+    }
+    db()->prepare('INSERT INTO leads (status, first_name, last_name, company_name, email, phone, source,
+            renewal_date, q_data, link_token, next_follow_up, created_at, updated_at)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)')
+        ->execute(['New Enquiry', $p['lead']['first_name'], $p['lead']['last_name'], $p['lead']['company_name'],
+            $p['lead']['email'], $p['lead']['phone'], 'Renewal', $p['lead']['renewal_date'] ?? null,
+            json_encode($p['q'], JSON_UNESCAPED_UNICODE), new_link_token(),
+            $p['lead']['renewal_date'] ?? date('Y-m-d'), now(), now()]);
+    $leadId = (int)db()->lastInsertId();
+    add_note($leadId, 'Imported from an Acturis document for renewal.' . ($p['policy_number'] !== '' ? ' Policy ' . $p['policy_number'] . '.' : ''), $userId);
+    return [$leadId, 'added'];
+}
+
+/* ===================== Spreadsheet exports (CSV), many clients per file ===================== */
+
 function renewal_map(): array {
     try {
         $v = db()->query("SELECT svalue FROM setting WHERE skey='acturis_map'")->fetchColumn();

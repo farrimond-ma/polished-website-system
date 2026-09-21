@@ -509,6 +509,7 @@ function layout_header(string $title = '', string $bodyClass = ''): void {
             . $nav('index.php', 'Dashboard', ['index.php'])
             . $nav('leads.php', 'Leads', ['leads.php', 'lead.php', 'lead_edit.php', 'questionnaire.php'])
             . $nav('tasks.php', 'Tasks', ['tasks.php'])
+            . $nav('renewals.php', 'Renewal Questionnaires', ['renewals.php'])
             . $nav('cases/index.php', 'Cases', ['index.php', 'case.php', 'case_edit.php', 'adjust.php', 'document.php', 'clients.php', 'client.php', 'client_edit.php', 'quote.php', 'report.php', 'rates.php', 'import.php'])
             . (is_admin() ? $nav('guides.php', 'Guides', ['guides.php']) : '')
             . (is_admin() ? $nav('messages.php', 'Messages', ['messages.php']) : '')

@@ -6,7 +6,8 @@ $me = (int)current_user()['user_id'];
 $today = date('Y-m-d');
 
 $stat = fn(string $sql, array $a = []) => (function () use ($pdo, $sql, $a) { $s = $pdo->prepare($sql); $s->execute($a); return (int)$s->fetchColumn(); })();
-$newThisWeek = $stat('SELECT COUNT(*) FROM leads WHERE created_at >= ?', [date('Y-m-d 00:00:00', strtotime('monday this week'))]);
+$newThisWeek = $stat('SELECT COUNT(*) FROM leads WHERE is_case = 0 AND created_at >= ?', [date('Y-m-d 00:00:00', strtotime('monday this week'))]);
+$renewalsDue = $stat('SELECT COUNT(*) FROM leads WHERE is_case = 1 AND renewal_date IS NOT NULL AND renewal_date <= ?', [date('Y-m-d', strtotime('+60 days'))]);
 $chasing = $stat('SELECT COUNT(*) FROM leads WHERE chasing = 1');
 $inProgress = $stat("SELECT COUNT(*) FROM leads WHERE q_status = 'in_progress'");
 $completed30 = $stat("SELECT COUNT(*) FROM leads WHERE q_status = 'submitted' AND q_submitted_at >= ?", [date('Y-m-d H:i:s', strtotime('-30 days'))]);
@@ -26,9 +27,10 @@ layout_header('Dashboard');
 <div class="page-head"><h1>Dashboard</h1><a class="btn" href="lead_edit.php">+ Add lead</a></div>
 <div class="kpis">
   <a class="kpi" href="leads.php?status=all"><strong><?= $newThisWeek ?></strong><span>New leads this week</span></a>
-  <a class="kpi" href="leads.php?status=Questionnaire+Sent"><strong><?= $chasing ?></strong><span>Being chased automatically</span></a>
-  <a class="kpi" href="leads.php?status=all&amp;qs=in_progress"><strong><?= $inProgress ?></strong><span>Questionnaires in progress</span></a>
-  <a class="kpi" href="leads.php?status=all&amp;qs=submitted"><strong><?= $completed30 ?></strong><span>Completed (30 days)</span></a>
+  <a class="kpi" href="cases.php?due=soon"><strong><?= $renewalsDue ?></strong><span>Renewals due (60 days)</span></a>
+  <a class="kpi" href="leads.php?scope=all&amp;status=Questionnaire+Sent"><strong><?= $chasing ?></strong><span>Being chased automatically</span></a>
+  <a class="kpi" href="leads.php?scope=all&amp;status=all&amp;qs=in_progress"><strong><?= $inProgress ?></strong><span>Questionnaires in progress</span></a>
+  <a class="kpi" href="leads.php?scope=all&amp;status=all&amp;qs=submitted"><strong><?= $completed30 ?></strong><span>Completed (30 days)</span></a>
 </div>
 <div class="cols">
   <div class="col">
@@ -36,7 +38,7 @@ layout_header('Dashboard');
       <h2>Needs attention</h2>
       <p class="hint">New enquiries not yet being chased, completed questionnaires ready to quote, and follow-ups that are due.</p>
       <table class="grid small">
-        <thead><tr><th>Lead</th><th>Status</th><th>Follow-up</th></tr></thead>
+        <thead><tr><th>Lead or case</th><th>Status</th><th>Follow-up</th></tr></thead>
         <tbody>
         <?php if (!$attention): ?><tr><td colspan="3" class="empty">Nothing needs attention right now.</td></tr><?php endif; ?>
         <?php foreach ($attention as $l): ?>

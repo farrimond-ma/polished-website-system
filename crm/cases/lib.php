@@ -1,6 +1,6 @@
 <?php
 /**
- * Cases — bridge to the CRM.
+ * Policies — bridge to the CRM.
  *
  * The Cases screens came from the SchemeServe V2 reference app (see README.md), which had its own
  * database connection, login and page layout. Inside the CRM none of that is needed: this file
@@ -23,14 +23,16 @@ function cases_header(string $title = ''): void {
     echo "<link rel='stylesheet' href='" . asset('cases/assets/cases.css') . "'>";
     $page = basename((string)($_SERVER['SCRIPT_NAME'] ?? ''));
     $tabs = [
-        'index.php' => 'Cases',
+        'index.php' => 'Policies',
         'clients.php' => 'Clients',
         'quote.php' => 'Quote',
         'report.php' => 'Reports',
         'rates.php' => 'Rates',
         'import.php' => 'Import',
     ];
-    echo "<nav class='cases-nav'>";
+    // These are the policy records behind the cases; the case itself (client, questionnaire,
+    // reminders) lives in the Cases list.
+    echo "<nav class='cases-nav'><a href='/cases.php'>‹ Cases</a>";
     foreach ($tabs as $href => $label) {
         $on = $page === $href
             || ($href === 'index.php' && in_array($page, ['case.php', 'case_edit.php', 'adjust.php', 'document.php'], true))

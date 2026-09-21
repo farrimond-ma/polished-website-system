@@ -311,15 +311,16 @@ function renewal_import_one(array $values, ?int $userId = null): array {
         unset($fields['email']);
         $fields['q_data'] = json_encode($data, JSON_UNESCAPED_UNICODE);
         $fields['source'] = 'Renewal';
+        $fields['is_case'] = 1;                    // they already have a policy with us
         if (!$existing['assigned_to'] && $userId) $fields['assigned_to'] = $userId;
         touch_lead($leadId, $fields);
         add_note($leadId, 'Updated from an Acturis document.' . ($p['policy_number'] !== '' ? ' Policy ' . $p['policy_number'] . '.' : ''), $userId);
         return [$leadId, 'updated'];
     }
-    db()->prepare('INSERT INTO leads (status, first_name, last_name, company_name, email, phone, source,
+    db()->prepare('INSERT INTO leads (status, is_case, first_name, last_name, company_name, email, phone, source,
             renewal_date, q_data, link_token, assigned_to, next_follow_up, created_at, updated_at)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)')
-        ->execute(['New Enquiry', $p['lead']['first_name'], $p['lead']['last_name'], $p['lead']['company_name'],
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)')
+        ->execute(['New Enquiry', 1, $p['lead']['first_name'], $p['lead']['last_name'], $p['lead']['company_name'],
             $p['lead']['email'], $p['lead']['phone'], 'Renewal', $p['lead']['renewal_date'] ?? null,
             json_encode($p['q'], JSON_UNESCAPED_UNICODE), new_link_token(), $userId,
             $p['lead']['renewal_date'] ?? date('Y-m-d'), now(), now()]);
@@ -525,15 +526,16 @@ function renewal_import(array $rows, array $map, ?int $userId = null): array {
             unset($fields['email']);
             $fields['q_data'] = json_encode($data, JSON_UNESCAPED_UNICODE);
             $fields['source'] = 'Renewal';
+            $fields['is_case'] = 1;
             touch_lead($leadId, $fields);
             add_note($leadId, 'Updated from the Acturis renewal import.'
                 . ($p['policy_number'] !== '' ? ' Policy ' . $p['policy_number'] . '.' : ''), $userId);
             $updated++;
         } else {
-            $pdo->prepare('INSERT INTO leads (status, first_name, last_name, company_name, email, phone, source,
+            $pdo->prepare('INSERT INTO leads (status, is_case, first_name, last_name, company_name, email, phone, source,
                     renewal_date, q_data, link_token, next_follow_up, created_at, updated_at)
-                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)')
-                ->execute(['New Enquiry', $p['lead']['first_name'], $p['lead']['last_name'], $p['lead']['company_name'],
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)')
+                ->execute(['New Enquiry', 1, $p['lead']['first_name'], $p['lead']['last_name'], $p['lead']['company_name'],
                     $p['lead']['email'], $p['lead']['phone'], 'Renewal', $p['lead']['renewal_date'] ?? null,
                     json_encode($p['q'], JSON_UNESCAPED_UNICODE), new_link_token(),
                     $p['lead']['renewal_date'] ?? date('Y-m-d'), now(), now()]);

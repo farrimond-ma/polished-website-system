@@ -4,7 +4,7 @@ require __DIR__ . '/lib.php';
 require_login();
 $id = (int)param('id', 0);
 $lead = find_lead($id);
-if (!$lead) { flash('Lead not found.'); redirect('leads.php'); }
+if (!$lead) { flash('Record not found.'); redirect('leads.php'); }
 $data = q_data_with_prefill($lead);
 $all = param('all') === '1';
 ?><!doctype html>

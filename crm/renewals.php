@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         [$leadId, $result] = renewal_import_one($values, $me);
         if (!$leadId) { flash('Nothing was imported: ' . $result); redirect('renewals.php'); }
         if ($path !== '' && is_file($path)) @unlink($path);
-        flash(($result === 'added' ? 'Client added' : 'Client updated') . ' — ' . lead_ref($leadId) . '. Open them to send the questionnaire.');
+        flash(($result === 'added' ? 'Case added' : 'Case updated') . ' — ' . lead_ref($leadId) . '. Open it to send the questionnaire.');
         redirect('lead.php?id=' . $leadId);
     }
 
@@ -71,14 +71,15 @@ if ($path !== '' && is_file($path)) {
     }
 }
 $map = $csv ? (renewal_map() ?: renewal_guess_map($csv['headers'])) : renewal_map();
-$search = trim((string)param('q', ''));
-$leads = renewal_leads($search);
-$today = date('Y-m-d');
 
-layout_header('Renewal Questionnaires');
+layout_header('Import from Acturis');
 ?>
 <div class="page-head">
-  <h1>Renewal Questionnaires</h1>
+  <div>
+    <h1>Import from Acturis</h1>
+    <div class="sub"><a href="cases.php">‹ Cases</a> · an imported client becomes a case, ready for their
+      renewal questionnaire.</div>
+  </div>
 </div>
 
 <?php if ($doc): ?>
@@ -176,26 +177,8 @@ layout_header('Renewal Questionnaires');
 <?php endif; ?>
 
 <div class="card">
-  <div class="page-head" style="margin-bottom:8px">
-    <h2 style="margin:0">Renewal clients (<?= count($leads) ?>)</h2>
-    <form method="get" class="btn-row"><input name="q" value="<?= e($search) ?>" placeholder="Name, business or email"><button class="btn ghost small">Search</button></form>
-  </div>
-  <div class="table-scroll"><table class="grid small">
-    <thead><tr><th>Renewal</th><th>Client</th><th>Email</th><th>Questionnaire</th><th>Reminders</th><th></th></tr></thead>
-    <tbody>
-    <?php if (!$leads): ?><tr><td colspan="6" class="empty">No renewal clients yet — import an Acturis document above.</td></tr><?php endif; ?>
-    <?php foreach ($leads as $l): ?>
-      <tr>
-        <td class="<?= $l['renewal_date'] && $l['renewal_date'] < $today ? 'overdue' : '' ?>" style="white-space:nowrap"><?= d($l['renewal_date']) ?></td>
-        <td><?= e(trim($l['first_name'] . ' ' . $l['last_name'])) ?><?= $l['company_name'] ? '<div class="sub">' . e($l['company_name']) . '</div>' : '' ?></td>
-        <td class="sub"><?= e($l['email']) ?></td>
-        <td><span class="pill q-<?= e($l['q_status']) ?>"><?= e(q_status_label($l['q_status'])) ?></span></td>
-        <td><?= $l['chasing'] ? "<span class='pill chasing'>Chasing " . (int)$l['auto_chase_count'] . "/3</span>" : '<span class="sub">—</span>' ?></td>
-        <td class="r"><a class="btn ghost small" href="lead.php?id=<?= (int)$l['lead_id'] ?>">Open</a></td>
-      </tr>
-    <?php endforeach; ?>
-    </tbody>
-  </table></div>
-  <p class="sub">Open a client to send their questionnaire link and start the reminders.</p>
+  <h2>Where imported clients go</h2>
+  <p class="sub">Every client imported here becomes a case. <a href="cases.php">Open Cases</a> to see them all, sorted by
+    renewal date, and to send a client their questionnaire.</p>
 </div>
 <?php layout_footer();

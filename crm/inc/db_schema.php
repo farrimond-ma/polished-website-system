@@ -96,6 +96,18 @@ function schema_migrations(bool $sqlite): array {
             'ALTER TABLE app_user ADD COLUMN reset_token VARCHAR(64) NULL',
             'ALTER TABLE app_user ADD COLUMN reset_expires ' . $dt,
         ],
+        4 => [
+            // Leads are people asking for a quote; cases are clients who already have a policy with
+            // us — the same record, listed under whichever tab fits. Existing clients imported from
+            // Acturis are cases from the start, and a lead becomes one when it is marked Won.
+            'ALTER TABLE leads ADD COLUMN is_case ' . ($sqlite ? 'INTEGER NOT NULL DEFAULT 0' : 'TINYINT(1) NOT NULL DEFAULT 0'),
+            "UPDATE leads SET is_case = 1 WHERE source = 'Renewal' OR status = 'Won'",
+            'CREATE INDEX idx_lead_is_case ON leads (is_case, status)',
+        ],
+        5 => [
+            // Which policy in the Cases tables this case is: cover, premiums, MTAs and documents.
+            'ALTER TABLE leads ADD COLUMN policy_case_id ' . ($sqlite ? 'INTEGER NULL' : 'BIGINT NULL'),
+        ],
         // The Cases tables are NOT installed here: they are set up the first time someone opens the
         // Cases tab (see crm/cases/lib.php), so a problem there can never stop the rest of the CRM.
     ];

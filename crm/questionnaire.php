@@ -9,7 +9,7 @@ require __DIR__ . '/lib.php';
 require_login();
 $id = (int)param('id', 0);
 $lead = find_lead($id);
-if (!$lead) { flash('Lead not found.'); redirect('leads.php'); }
+if (!$lead) { flash('Record not found.'); redirect('leads.php'); }
 
 $view = param('view') === 'client' ? 'client' : 'staff';
 $data = q_data_with_prefill($lead);
@@ -31,7 +31,7 @@ echo "<link rel='stylesheet' href='" . asset('assets/questionnaire.css') . "'>";
       <a class="<?= $view === 'staff' ? 'on' : '' ?>" href="questionnaire.php?id=<?= $id ?>">Staff view</a>
       <a class="<?= $view === 'client' ? 'on' : '' ?>" href="questionnaire.php?id=<?= $id ?>&amp;view=client">Client view</a>
     </span>
-    <a class="btn ghost" href="lead.php?id=<?= $id ?>">‹ Back to lead</a>
+    <a class="btn ghost" href="lead.php?id=<?= $id ?>">‹ Back to <?= e(strtolower(record_word($lead))) ?></a>
     <a class="btn ghost" href="questionnaire_print.php?id=<?= $id ?>" target="_blank">Print / PDF</a>
   </div>
 </div>

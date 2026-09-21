@@ -17,6 +17,7 @@ require_once __DIR__ . '/vendor/PHPMailer/SMTP.php';
 require_once __DIR__ . '/inc/db_schema.php';
 require_once __DIR__ . '/inc/questionnaire.php';
 require_once __DIR__ . '/inc/messages.php';
+require_once __DIR__ . '/inc/policies.php';
 
 // Any other unexpected error: log the detail, show a plain page instead of a blank 500.
 set_exception_handler(function (\Throwable $ex) {
@@ -234,9 +235,31 @@ function add_note(int $leadId, string $body, ?int $userId = null): void {
 }
 
 function touch_lead(int $leadId, array $fields): void {
+    // Won means they now have a policy with us, so the record belongs under Cases from here on.
+    if (($fields['status'] ?? '') === 'Won') $fields['is_case'] = 1;
     $fields['updated_at'] = now();
     $sets = implode(', ', array_map(fn($k) => "$k = ?", array_keys($fields)));
     db()->prepare("UPDATE leads SET $sets WHERE lead_id = ?")->execute([...array_values($fields), $leadId]);
+}
+
+/** "Case" or "Lead" — what a record is called on screen. */
+function record_word(array $lead): string { return !empty($lead['is_case']) ? 'Case' : 'Lead'; }
+/** The list a record belongs to. */
+function record_list(array $lead): string { return !empty($lead['is_case']) ? 'cases.php' : 'leads.php'; }
+
+/** Is the record being looked at right now a case rather than a lead? (Used to light the nav.) */
+function current_record_is_case(): bool {
+    $id = (int)($_GET['id'] ?? 0);
+    if (!$id) return false;
+    static $seen = [];
+    if (!isset($seen[$id])) {
+        try {
+            $st = db()->prepare('SELECT is_case FROM leads WHERE lead_id = ?');
+            $st->execute([$id]);
+            $seen[$id] = (bool)$st->fetchColumn();
+        } catch (\Throwable $e) { $seen[$id] = false; }
+    }
+    return $seen[$id];
 }
 
 /* ---------- client links ---------- */
@@ -520,16 +543,20 @@ function layout_header(string $title = '', string $bodyClass = ''): void {
     echo "<a class='logo' href='/index.php'><img class='logo-mark' src='" . asset('assets/img/icon.png') . "' alt='' width='30' height='30'><span class='logo-text'>Polished <em>CRM</em></span></a>";
     if ($u) {
         $page = basename((string)($_SERVER['SCRIPT_NAME'] ?? ''));
+        // A record opened from either list keeps that list's tab lit.
+        if (in_array($page, ['lead.php', 'lead_edit.php', 'questionnaire.php'], true)) {
+            $page = current_record_is_case() ? 'cases.php' : 'leads.php';
+        }
+        if (str_contains((string)($_SERVER['SCRIPT_NAME'] ?? ''), '/cases/')) $page = 'cases.php';
         $nav = function (string $href, string $label, array $on) use ($page) {
             $active = in_array($page, $on, true) ? ' active' : '';
             return "<a class='nav-btn$active' href='/" . e(ltrim($href, '/')) . "'>" . e($label) . '</a>';
         };
         echo '<nav>'
             . $nav('index.php', 'Dashboard', ['index.php'])
-            . $nav('leads.php', 'Leads', ['leads.php', 'lead.php', 'lead_edit.php', 'questionnaire.php'])
+            . $nav('leads.php', 'Leads', ['leads.php'])
+            . $nav('cases.php', 'Cases', ['cases.php', 'renewals.php'])
             . $nav('tasks.php', 'Tasks', ['tasks.php'])
-            . $nav('renewals.php', 'Renewal Questionnaires', ['renewals.php'])
-            . $nav('cases/index.php', 'Cases', ['index.php', 'case.php', 'case_edit.php', 'adjust.php', 'document.php', 'clients.php', 'client.php', 'client_edit.php', 'quote.php', 'report.php', 'rates.php', 'import.php'])
             . (is_admin() ? $nav('guides.php', 'Guides', ['guides.php']) : '')
             . (is_admin() ? $nav('messages.php', 'Messages', ['messages.php']) : '')
             . (is_admin() ? $nav('users.php', 'Users', ['users.php']) : '')

@@ -3,16 +3,18 @@ require __DIR__ . '/lib.php';
 require_login();
 $pdo = db();
 
+$scope = param('scope') === 'all' ? 'all' : 'leads';   // 'all' also shows cases (used by the dashboard)
 $status = (string)param('status', 'open');
 $q = trim((string)param('q', ''));
 $qs = (string)param('qs', '');
 
 $counts = [];
-foreach ($pdo->query('SELECT status, COUNT(*) c FROM leads GROUP BY status') as $r) $counts[$r['status']] = (int)$r['c'];
+$scopeSql = $scope === 'all' ? '1=1' : 'is_case = 0';
+foreach ($pdo->query('SELECT status, COUNT(*) c FROM leads WHERE ' . $scopeSql . ' GROUP BY status') as $r) $counts[$r['status']] = (int)$r['c'];
 $openCount = 0;
 foreach ($counts as $s => $c) if (!in_array($s, terminal_statuses(), true)) $openCount += $c;
 
-$where = []; $args = [];
+$where = [$scopeSql]; $args = [];          // clients with a policy live under Cases
 if ($status === 'open') {
     $where[] = 'status NOT IN (' . implode(',', array_fill(0, count(terminal_statuses()), '?')) . ')';
     array_push($args, ...terminal_statuses());
@@ -31,16 +33,22 @@ $st = $pdo->prepare($sql);
 $st->execute($args);
 $leads = $st->fetchAll();
 
-$chip = function (string $key, string $label, int $n) use ($status, $q, $qs) {
+$chip = function (string $key, string $label, int $n) use ($status, $q, $qs, $scope) {
     $active = $status === $key ? ' active' : '';
-    $href = 'leads.php?' . http_build_query(array_filter(['status' => $key, 'q' => $q, 'qs' => $qs]));
+    $href = 'leads.php?' . http_build_query(array_filter(['status' => $key, 'q' => $q, 'qs' => $qs, 'scope' => $scope === 'all' ? 'all' : null]));
     return "<a class='stage-chip$active' href='" . e($href) . "'>" . e($label) . "<span>$n</span></a>";
 };
 
 layout_header('Leads');
 ?>
 <div class="page-head">
-  <h1>Leads</h1>
+  <div>
+    <h1><?= $scope === 'all' ? 'Leads &amp; cases' : 'Leads' ?></h1>
+    <?php if ($scope === 'all'): ?>
+      <div class="sub">Enquiries and existing clients together. <a href="leads.php">Leads only</a> ·
+        <a href="cases.php">Cases only</a></div>
+    <?php endif; ?>
+  </div>
   <a class="btn" href="lead_edit.php">+ Add lead</a>
 </div>
 <div class="stage-strip">
@@ -50,6 +58,7 @@ layout_header('Leads');
 </div>
 <form class="filters" method="get">
   <input type="hidden" name="status" value="<?= e($status) ?>">
+  <?php if ($scope === 'all'): ?><input type="hidden" name="scope" value="all"><?php endif; ?>
   <input name="q" value="<?= e($q) ?>" placeholder="Search name, business, email, phone or POL-0001">
   <select name="qs" onchange="this.form.submit()">
     <option value="">Questionnaire: any</option>
@@ -67,7 +76,7 @@ layout_header('Leads');
     <tr onclick="location.href='lead.php?id=<?= (int)$l['lead_id'] ?>'">
       <td class="mono"><?= e(lead_ref((int)$l['lead_id'])) ?></td>
       <td><strong><?= e(trim($l['first_name'] . ' ' . $l['last_name'])) ?></strong><div class="sub"><?= e($l['email']) ?></div></td>
-      <td><?= e($l['company_name']) ?></td>
+      <td><?= e($l['company_name']) ?><?= $scope === 'all' && !empty($l['is_case']) ? ' <span class="pill">Case</span>' : '' ?></td>
       <td><span class="pill <?= status_class($l['status']) ?>"><?= e($l['status']) ?></span><?= $l['chasing'] ? " <span class='pill chasing'>Chasing " . (int)$l['auto_chase_count'] . "/3</span>" : '' ?><?= !empty($l['prefers_call']) ? " <span class='pill call'>Wants a call</span>" : '' ?></td>
       <td><span class="pill q-<?= e($l['q_status']) ?>"><?= e(q_status_label($l['q_status'])) ?></span></td>
       <td><?= e(user_name($l['assigned_to'] ? (int)$l['assigned_to'] : null)) ?></td>

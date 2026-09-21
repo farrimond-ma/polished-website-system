@@ -4,7 +4,7 @@ require_login();
 $pdo = db();
 $id = (int)param('id', 0);
 $lead = $id ? find_lead($id) : null;
-if ($id && !$lead) { flash('Lead not found.'); redirect('leads.php'); }
+if ($id && !$lead) { flash('Record not found.'); redirect('leads.php'); }
 
 $f = $lead ?? ['first_name' => '', 'last_name' => '', 'company_name' => '', 'email' => '', 'phone' => '', 'source' => 'Phone',
     'cover_interest' => '', 'renewal_date' => null, 'assigned_to' => current_user()['user_id'], 'next_follow_up' => null];

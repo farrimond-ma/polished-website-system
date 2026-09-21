@@ -4,7 +4,9 @@ require_login();
 $pdo = db();
 $id = (int)param('id', 0);
 $lead = find_lead($id);
-if (!$lead) { flash('Lead not found.'); redirect('leads.php'); }
+if (!$lead) { flash('Record not found.'); redirect('leads.php'); }
+$list = record_list($lead);
+$word = record_word($lead);
 $me = (int)current_user()['user_id'];
 $back = 'lead.php?id=' . $id;
 
@@ -92,6 +94,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             add_note($id, 'Questionnaire marked as completed by staff.', $me);
             flash('Questionnaire marked as completed.');
             break;
+        case 'link_policy':
+            $policyId = (int)post('policy_case_id', 0);
+            if (!$policyId) { flash('Please choose a policy first.'); break; }
+            if ($other = policy_linked_elsewhere($policyId, $id)) {
+                flash('That policy is already linked to ' . lead_ref($other) . '.');
+                break;
+            }
+            touch_lead($id, ['policy_case_id' => $policyId, 'is_case' => 1]);
+            add_note($id, 'Linked to policy ' . $policyId . '.', $me);
+            flash('Policy linked.');
+            break;
+        case 'unlink_policy':
+            touch_lead($id, ['policy_case_id' => null]);
+            add_note($id, 'Policy unlinked.', $me);
+            flash('Policy unlinked — the policy itself is untouched.');
+            break;
         case 'note':
             $body = trim((string)post('body', ''));
             if ($body !== '') { add_note($id, $body, $me); flash('Note added.'); }
@@ -114,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $pdo->prepare('DELETE FROM lead_task WHERE lead_id = ?')->execute([$id]);
             $pdo->prepare('DELETE FROM leads WHERE lead_id = ?')->execute([$id]);
             flash(lead_ref($id) . ' and all its data have been deleted.');
-            redirect('leads.php');
+            redirect($list);
     }
     redirect($back);
 }
@@ -126,6 +144,15 @@ $tasks = $pdo->prepare('SELECT * FROM lead_task WHERE lead_id = ? ORDER BY done_
 $tasks->execute([$id]);
 $tasks = $tasks->fetchAll();
 
+$qData = q_lead_data($lead);
+$hiddenSections = array_values(array_filter((array)($qData['_hidden_sections'] ?? []), 'is_string'));
+$sectionsAll = count(q_client_schema([])['sections'] ?? []);
+$sectionsShown = count(q_client_schema($hiddenSections)['sections'] ?? []);
+
+$isCase = !empty($lead['is_case']);
+$policy = $isCase ? policy_for_case($lead['policy_case_id'] ? (int)$lead['policy_case_id'] : null) : null;
+$policyFind = $isCase && !$policy ? policy_search(trim((string)param('findpolicy', ''))) : [];
+
 $link = $lead['link_token'] ? questionnaire_link($lead['link_token']) : '';
 $progress = q_progress($lead);
 $today = date('Y-m-d');
@@ -135,7 +162,10 @@ layout_header(lead_ref($id) . ' ' . lead_name($lead));
 <div class="page-head">
   <div>
     <h1><span class="mono"><?= e(lead_ref($id)) ?></span> · <?= e(lead_name($lead)) ?></h1>
-    <div class="sub"><?= e($lead['company_name']) ?> · <?= e($lead['source']) ?> · received <?= dt($lead['created_at']) ?></div>
+    <div class="sub"><a href="<?= e($list) ?>">&lsaquo; <?= e($word === 'Case' ? 'Cases' : 'Leads') ?></a>
+      · <?= e($lead['company_name']) ?> · <?= e($lead['source']) ?>
+      · <?= $word === 'Case' ? 'client since ' : 'received ' ?><?= dt($lead['created_at']) ?>
+      <?php if ($word === 'Case' && $lead['renewal_date']): ?> · renews <?= d($lead['renewal_date']) ?><?php endif; ?></div>
   </div>
   <div>
     <span class="pill pill-lg <?= status_class($lead['status']) ?>"><?= e($lead['status']) ?></span>
@@ -143,6 +173,73 @@ layout_header(lead_ref($id) . ' ' . lead_name($lead));
     <?php if (!empty($lead['prefers_call'])): ?><span class="pill pill-lg call" title="Asked to be called rather than sent the questionnaire link">Wants a call</span><?php endif; ?>
   </div>
 </div>
+
+<?php if ($isCase): ?>
+  <!-- The policy behind this case: cover, premiums, adjustments and documents. -->
+  <div class="card">
+    <div class="page-head" style="margin-bottom:8px">
+      <h2 style="margin:0">Policy</h2>
+      <?php if ($policy): ?>
+        <div class="btn-row">
+          <a class="btn ghost small" href="cases/case.php?id=<?= (int)$policy['case_id'] ?>">Open policy</a>
+          <a class="btn ghost small" href="cases/adjust.php?case=<?= (int)$policy['case_id'] ?>">Adjust (MTA)</a>
+          <a class="btn ghost small" href="cases/document.php?case=<?= (int)$policy['case_id'] ?>">Documents</a>
+        </div>
+      <?php endif; ?>
+    </div>
+
+    <?php if ($policy): ?>
+      <dl>
+        <dt>Policy number</dt><dd class="mono"><?= e(policy_number($policy)) ?></dd>
+        <dt>Policyholder</dt><dd><?= e(policy_client_name($policy)) ?><?= $policy['postcode'] ? ' · ' . e((string)$policy['postcode']) : '' ?></dd>
+        <dt>Scheme</dt><dd><?= e((string)($policy['scheme_name'] ?? '—')) ?></dd>
+        <dt>Status</dt><dd><?= e((string)$policy['status']) ?><?= $policy['sequence_label'] ? ' · ' . e((string)$policy['sequence_label']) : '' ?></dd>
+        <dt>Period</dt><dd><?= d($policy['inception_date']) ?> to <?= d($policy['expiry_date']) ?></dd>
+        <dt>Premium</dt><dd><?= $policy['total_premium'] === null ? '—' : '£' . number_format((float)$policy['total_premium'], 2) ?></dd>
+      </dl>
+      <form method="post" class="btn-row" onsubmit="return confirm('Unlink this policy from the case? The policy itself is not changed.')">
+        <?= csrf_field() ?><input type="hidden" name="action" value="unlink_policy">
+        <button class="btn ghost small">Unlink</button>
+      </form>
+
+    <?php elseif (!policy_tables_ready()): ?>
+      <p class="sub">The policy records are not set up on this server yet. Open
+        <a href="cases/index.php">Policies &amp; documents</a> once to create them, then link this case to its policy.</p>
+
+    <?php else: ?>
+      <p class="sub">This case is not linked to a policy yet. Find it by business name, policy number or postcode —
+        then cover, adjustments and documents are one click from here.</p>
+      <form method="get" class="filters">
+        <input type="hidden" name="id" value="<?= $id ?>">
+        <input name="findpolicy" value="<?= e((string)param('findpolicy', '')) ?>" placeholder="Business name, policy number or postcode">
+        <button type="submit">Find policy</button>
+      </form>
+      <?php if ($policyFind): ?>
+        <table class="grid small">
+          <thead><tr><th>Policy</th><th>Policyholder</th><th>Expires</th><th></th></tr></thead>
+          <tbody>
+          <?php foreach ($policyFind as $row): ?>
+            <tr>
+              <td class="mono"><?= e(policy_number($row)) ?></td>
+              <td><?= e(policy_client_name($row)) ?><?= $row['postcode'] ? '<div class="sub">' . e((string)$row['postcode']) . '</div>' : '' ?></td>
+              <td><?= d($row['expiry_date']) ?></td>
+              <td class="r">
+                <form method="post"><?= csrf_field() ?>
+                  <input type="hidden" name="action" value="link_policy">
+                  <input type="hidden" name="policy_case_id" value="<?= (int)$row['case_id'] ?>">
+                  <button class="btn small">Link</button>
+                </form>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+          </tbody>
+        </table>
+      <?php elseif (param('findpolicy', '') !== ''): ?>
+        <p class="sub">No policy matched that. Check the Cases data extract has been imported.</p>
+      <?php endif; ?>
+    <?php endif; ?>
+  </div>
+<?php endif; ?>
 
 <div class="cols">
   <div class="col">
@@ -158,8 +255,13 @@ layout_header(lead_ref($id) . ' ' . lead_name($lead));
         <dt>Last saved</dt><dd><?= dt($lead['q_saved_at']) ?></dd>
         <dt>Submitted</dt><dd><?= dt($lead['q_submitted_at']) ?></dd>
       </dl>
+      <p class="sub">The client is asked <strong><?= $sectionsShown ?></strong> of <?= $sectionsAll ?> pages<?php
+        if ($hiddenSections): ?> — <?= count($hiddenSections) ?> hidden: <?= e(implode(', ', array_map('q_section_title', $hiddenSections))) ?><?php
+        endif; ?>. Open the questionnaire to hide a page you do not need for this client
+        <?= $lead['q_status'] === 'not_started' ? ' — worth doing before you send the link.' : '.' ?></p>
       <div class="btn-row">
         <a class="btn" href="questionnaire.php?id=<?= $id ?>">Open full questionnaire</a>
+        <a class="btn ghost" href="questionnaire.php?id=<?= $id ?>&amp;view=client">See what the client sees</a>
         <a class="btn ghost" href="questionnaire_print.php?id=<?= $id ?>" target="_blank">Print / PDF</a>
         <a class="btn ghost" href="questionnaire_export.php?id=<?= $id ?>">Download CSV</a>
       </div>

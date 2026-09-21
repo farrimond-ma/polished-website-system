@@ -53,6 +53,14 @@ function q_item_keys(array $item): array {
 }
 
 /** The schema as the client sees it: hidden questions/columns and empty headings/sections removed. */
+/** A section's title from its id ("high_risk" -> "High risk activities"). */
+function q_section_title(string $sectionId): string {
+    foreach (q_schema()['sections'] as $section) {
+        if (($section['id'] ?? '') === $sectionId) return (string)($section['title'] ?? $sectionId);
+    }
+    return $sectionId;
+}
+
 function q_client_schema(array $hiddenSections = []): array {
     $schema = q_schema();
     $out = ['title' => $schema['title'] ?? '', 'intro' => $schema['intro'] ?? '', 'sections' => []];

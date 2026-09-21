@@ -38,6 +38,11 @@ function renewal_fields(): array {
         'num_losc'             => ['Number of labour-only subcontractors', 'q', ''],
         'pl_limit'             => ['Public liability limit', 'q', ''],
         'el_limit'             => ['Employers liability limit', 'q', ''],
+        'business_description' => ['Business description', 'q', ''],
+        'prev_insurer_details' => ['Current insurer', 'q', ''],
+        'claims_5yr'           => ['Claims in the last 5 years', 'q', 'Yes or No.'],
+        'hr_max_height'        => ['Maximum working height (metres)', 'q', ''],
+        'cw_tools'             => ['Tools and equipment sum insured', 'q', ''],
     ];
 }
 
@@ -67,35 +72,8 @@ function renewal_docx_text(string $path): array {
 
 /** Plain text from a straightforward (text-based) PDF. Scanned PDFs cannot be read this way. */
 function renewal_pdf_text(string $path): array {
-    $raw = (string)file_get_contents($path);
-    if (!str_starts_with($raw, '%PDF')) return ['text' => '', 'error' => 'That does not look like a PDF.'];
-    $out = '';
-    if (preg_match_all('/stream\r?\n(.*?)\r?\nendstream/s', $raw, $m)) {
-        foreach ($m[1] as $stream) {
-            $data = @gzuncompress($stream);
-            if ($data === false) $data = @gzinflate(substr($stream, 2));
-            if ($data === false) $data = $stream;                      // uncompressed stream
-            if (!preg_match('/(Tj|TJ)/', (string)$data)) continue;
-            // Walk the stream in order: (text) pieces, and the operators that start a new line
-            // (T*, Td, TD, ' and ") so the layout survives as line breaks.
-            if (preg_match_all('/\((?:\\\\.|[^()\\\\])*\)|T\*|Td|TD|\'|"/s', (string)$data, $tokens)) {
-                foreach ($tokens[0] as $tok) {
-                    if ($tok[0] === '(') {
-                        $s = substr($tok, 1, -1);
-                        $out .= str_replace(['\\(', '\\)', '\\\\'], ['(', ')', '\\'], $s);
-                    } else {
-                        $out .= "\n";
-                    }
-                }
-                $out .= "\n";
-            }
-        }
-    }
-    $out = preg_replace("/[ \t]+/", ' ', trim($out));
-    if (mb_strlen($out) < 40) {
-        return ['text' => $out, 'error' => 'Hardly any text could be read — this PDF is probably a scan. Please use the Word version.'];
-    }
-    return ['text' => $out, 'error' => null];
+    require_once __DIR__ . '/pdf_text.php';
+    return pdf_text((string)file_get_contents($path));
 }
 
 /** Text from whichever document type was uploaded. */
@@ -113,25 +91,37 @@ function renewal_document_text(string $path, string $filename): array {
 function renewal_labels(): array {
     return [
         'email'                => ['email address', 'e-mail address', 'email'],
-        'full_name'            => ['contact name', 'contact', 'proposer', 'attention of'],
-        'company_name'         => ['name of insured', 'insured name', 'the insured', 'client name', 'business name', 'insured'],
+        'full_name'            => ['what is your name', 'contact name', 'contact', 'proposer', 'attention of'],
+        'company_name'         => ['name of the business to be', 'name of insured', 'insured name', 'the insured',
+                                   'client name', 'business name', 'insured'],
         'phone'                => ['mobile number', 'mobile', 'telephone number', 'telephone', 'contact number'],
-        'renewal_date'         => ['renewal date', 'expiry date', 'renewal'],
-        'policy_number'        => ['policy number', 'policy no', 'policy ref'],
+        'renewal_date'         => ['period of insurance', 'renewal date', 'expiry date', 'renewal'],
+        'policy_number'        => ['policy number', 'policy no', 'policy ref', 'policy document reference',
+                                   'quotation reference'],
         'trading_names'        => ['trading name', 'trading as', 't/as'],
-        'address'              => ['correspondence address', 'registered address', 'risk address', 'address'],
-        'entity_status'        => ['legal status', 'status of entity', 'business type', 'constitution'],
+        'address'              => ['address of the business', 'postal address', 'correspondence address',
+                                   'registered address', 'risk address', 'address'],
+        'entity_status'        => ['what type of business do you operate', 'legal status', 'status of entity',
+                                   'business type', 'constitution'],
         'business_established' => ['business established', 'established', 'trading since'],
-        'turnover'             => ['estimated turnover', 'total turnover', 'turnover'],
-        'manual_wages'         => ['manual wageroll', 'manual wages', 'wageroll manual'],
+        'business_description' => ['the business:', 'business description', 'what activities does your business undertake'],
+        'prev_insurer_details' => ['insurer:', 'current insurer', 'present insurer'],
+        'turnover'             => ['estimated annual turnover', 'estimated turnover', 'total turnover', 'turnover'],
+        'manual_wages'         => ['annual wageroll', 'manual wageroll', 'manual wages', 'wageroll'],
         'clerical_wages'       => ['clerical wageroll', 'clerical wages'],
-        'bfsc_payments'        => ['bona fide sub-contractor', 'bona fide subcontractor', 'bfsc payments', 'bfsc'],
+        'bfsc_payments'        => ['payments to bona', 'bona fide sub-contractor', 'bona fide subcontractor',
+                                   'bfsc payments', 'bfsc'],
         'num_clerical'         => ['number of clerical', 'clerical employees', 'clerical staff'],
         'num_manual_directors' => ['manual directors', 'working directors', 'manual partners'],
         'num_manual_employees' => ['manual employees', 'number of manual', 'manual staff'],
         'num_losc'             => ['labour only sub-contractors', 'labour-only subcontractors', 'labour only', 'losc'],
-        'pl_limit'             => ['public liability limit', 'limit of indemnity - public', 'public & products liability', 'public liability'],
-        'el_limit'             => ['employers liability limit', "employers' liability limit", 'employers liability', "employers' liability"],
+        'pl_limit'             => ['public liability limit', 'limit do you require for public liability',
+                                   'limit of indemnity - public', 'public & products liability', 'public liability'],
+        'el_limit'             => ['employers liability limit', "employers' liability limit", 'employers liability',
+                                   "employers' liability"],
+        'claims_5yr'           => ['sustained any loss or damage', 'claims in the last 5 years', 'any claims'],
+        'hr_max_height'        => ['maximum height you work at', 'maximum height worked', 'working at height'],
+        'cw_tools'             => ['level of cover you need for all the', 'tools and equipment', 'plant, tools'],
     ];
 }
 
@@ -139,47 +129,135 @@ function renewal_labels(): array {
  * Pulls "label: value" pairs out of the document text. Returns [field => value] for whatever it
  * recognised — staff check and correct everything on screen before anything is saved.
  */
+/** Tidies one value read out of a document: no label punctuation, no bullet, no stray spaces. */
+function renewal_clean_value(string $value): string {
+    $value = trim($value, " \t\r\n:?-|\xE2\x80\xA2");
+    return trim((string)preg_replace('/\s+/u', ' ', $value));
+}
+
+/** Yes/No answers as the questionnaire stores them. */
+function renewal_yesno_value(string $value): ?string {
+    $v = strtolower(trim($value));
+    if (preg_match('/^(yes|y|true|insured)\b/', $v)) return 'yes';
+    if (preg_match('/^(no|n|false|not insured|none)\b/', $v)) return 'no';
+    return null;
+}
+
+/** "Limited company" and the like matched to the choices the questionnaire offers. */
+function renewal_entity_value(string $value): string {
+    $v = strtolower($value);
+    if (str_contains($v, 'limited liability partnership') || str_contains($v, 'llp')) return 'Limited liability partnership (LLP)';
+    if (str_contains($v, 'partnership')) return 'Partnership';
+    if (str_contains($v, 'sole trader') || str_contains($v, 'individual')) return 'Individual trading as (sole trader)';
+    if (str_contains($v, 'limited') || str_contains($v, 'ltd')) return 'Limited company (LTD)';
+    return $value;
+}
+
+/**
+ * Reads a client's details out of an Acturis document.
+ *
+ * Acturis lays a quotation out as a question with its answer on the same line or just below it,
+ * and a long question wraps onto two or three lines before the answer appears — so each label is
+ * looked for on its own line first and then a few lines further down. Nothing is trusted blindly:
+ * whatever is found is shown to staff to check before it is imported.
+ */
 function renewal_parse_document(string $text): array {
     $numeric = ['turnover', 'manual_wages', 'clerical_wages', 'bfsc_payments', 'pl_limit', 'el_limit',
                 'num_clerical', 'num_manual_directors', 'num_manual_employees', 'num_losc',
-                'renewal_date', 'business_established'];
+                'hr_max_height', 'cw_tools', 'renewal_date', 'business_established'];
+    $yesno = ['claims_5yr'];
     // Wording that means the line belongs to a different field, however well the label matches
     // ("Email Address" is not the postal address).
     $excludes = [
         'address'      => ['email', 'e-mail'],
         'company_name' => ['contact name'],
-        'full_name'    => ['company name', 'business name'],
-        'phone'        => ['email'],
+        'full_name'    => ['company name', 'business name', 'name of the business'],
+        'phone'        => ['email', 'misuse', 'contact us on'],
         'num_clerical' => ['wageroll', 'wages'],
         'num_manual_employees' => ['wageroll', 'wages'],
         'num_losc'     => ['payment'],
+        'manual_wages' => ['clerical'],
+        'claims_5yr'   => ['we will not', 'we may', 'refuse all claims'],
     ];
-    $found = [];
-    $lines = array_values(array_filter(array_map(fn($l) => trim($l), preg_split('/\R/', $text)), fn($l) => $l !== ''));
 
+    // Straighten out typographic quotes and dashes, and drop the page footers, which would
+    // otherwise be read as an answer.
+    $text = strtr($text, ["\xE2\x80\x99" => "'", "\xE2\x80\x98" => "'", "\xE2\x80\x9C" => '"',
+                          "\xE2\x80\x9D" => '"', "\xE2\x80\x93" => '-', "\xE2\x80\x94" => '-',
+                          "\xC2\xA0" => ' ']);
+    $lines = array_map(fn($l) => trim((string)$l), preg_split('/\R/', $text) ?: []);
+    foreach ($lines as $i => $line) {
+        if (preg_match('/^page \d+ of \d+$/i', $line)) $lines[$i] = '';
+    }
+    $count = count($lines);
+
+    // The next few lines of the same block (a blank line ends a block).
+    $blockAfter = function (int $from, int $howMany) use ($lines, $count): array {
+        $out = [];
+        for ($j = $from + 1; $j < $count && count($out) < $howMany; $j++) {
+            if ($lines[$j] === '') { if ($out) break; continue; }
+            $out[] = [$j, $lines[$j]];
+        }
+        return $out;
+    };
+
+    $found = [];
     foreach (renewal_labels() as $field => $labels) {
+        $needsDigits = in_array($field, $numeric, true);
+        $needsYesNo = in_array($field, $yesno, true);
+        // Does this look like the answer we are after, rather than more of the question?
+        $usable = function (string $v) use ($field, $needsDigits, $needsYesNo): bool {
+            if ($v === '' || mb_strlen($v) > 200) return false;
+            if ($needsYesNo) return renewal_yesno_value($v) !== null;
+            if ($needsDigits) return (bool)preg_match('/\d/', $v);
+            if ($field === 'phone') return (bool)preg_match('/\d{6}/', preg_replace('/[^0-9]/', '', $v) ?? '');
+            return true;
+        };
         foreach ($labels as $label) {
             foreach ($lines as $i => $line) {
+                if ($line === '') continue;
                 foreach ($excludes[$field] ?? [] as $bad) {
                     if (mb_stripos($line, $bad) !== false) continue 2;
                 }
                 $pos = mb_stripos($line, $label);
                 if ($pos === false) continue;
-                // Value after the label on the same line...
-                $value = trim(mb_substr($line, $pos + mb_strlen($label)), " \t:-–|");
-                // ...or the next line, which is how tables and forms usually lay it out. A value
-                // that should contain digits but does not is really the rest of the label.
-                $needsDigits = in_array($field, $numeric, true);
-                if ($value === '' || ($needsDigits && !preg_match('/\d/', $value))) {
-                    $value = trim((string)($lines[$i + 1] ?? ''), " \t:-–|");
+
+                // The answer sits after the label on the same line...
+                $at = $i;
+                $value = renewal_clean_value(mb_substr($line, $pos + mb_strlen($label)));
+                if (!$usable($value)) {
+                    // ...or below it, where a long question carries on for a line or two first.
+                    $value = '';
+                    foreach ($blockAfter($i, $needsYesNo ? 10 : 4) as [$j, $candidate]) {
+                        if (str_ends_with($candidate, '?')) continue;          // still the question
+                        $candidate = renewal_clean_value($candidate);
+                        if ($usable($candidate)) { $value = $candidate; $at = $j; break; }
+                        if (!$needsDigits && !$needsYesNo) break;
+                    }
                 }
-                if ($value === '' || mb_strlen($value) > 200) continue;
-                if ($needsDigits && !preg_match('/\d/', $value)) continue;
+                if (!$usable($value)) continue;
+
+                // An address, or a description of the business, carries on over the lines beneath it.
+                if (in_array($field, ['address', 'business_description'], true)) {
+                    $join = $field === 'address' ? ', ' : ' ';
+                    foreach ($blockAfter($at, 5) as [, $more]) {
+                        $more = renewal_clean_value($more);
+                        if ($more === '' || str_contains($more, '?')) break;
+                        if ($field === 'address' && mb_strlen($more) > 60) break;
+                        $value .= $join . $more;
+                    }
+                }
                 $found[$field] = $value;
                 break 2;
             }
         }
     }
+
+    // "Period of Insurance: 12 October 2025 to 11 October 2026" — the renewal is the later date.
+    if (isset($found['renewal_date']) && preg_match('/^(.*)\bto\b(.*)$/i', $found['renewal_date'], $m)) {
+        if (renewal_date_value(trim($m[2]))) $found['renewal_date'] = trim($m[2]);
+    }
+
     // Tidy the values we know the shape of
     foreach (['renewal_date', 'business_established'] as $f) {
         if (isset($found[$f])) {
@@ -188,12 +266,21 @@ function renewal_parse_document(string $text): array {
         }
     }
     foreach (['turnover', 'manual_wages', 'clerical_wages', 'bfsc_payments', 'pl_limit', 'el_limit',
-              'num_clerical', 'num_manual_directors', 'num_manual_employees', 'num_losc'] as $f) {
+              'num_clerical', 'num_manual_directors', 'num_manual_employees', 'num_losc',
+              'hr_max_height', 'cw_tools'] as $f) {
         if (isset($found[$f])) {
             $n = renewal_number_value($found[$f]);
             if ($n !== null) $found[$f] = $n; else unset($found[$f]);
         }
     }
+    foreach ($yesno as $f) {
+        if (isset($found[$f])) {
+            $v = renewal_yesno_value($found[$f]);
+            if ($v !== null) $found[$f] = $v; else unset($found[$f]);
+        }
+    }
+    if (isset($found['entity_status'])) $found['entity_status'] = renewal_entity_value($found['entity_status']);
+
     if (isset($found['email']) && !filter_var($found['email'], FILTER_VALIDATE_EMAIL)) {
         // an email is often followed by other text on the same line
         if (preg_match('/[^\s,;]+@[^\s,;]+\.[a-z]{2,}/i', $found['email'], $m)) $found['email'] = $m[0];
@@ -382,11 +469,18 @@ function renewal_prepare_row(array $row, array $map): array {
         $raw = renewal_value($row, $map, $field);
         if ($raw === '') continue;
         if (in_array($field, ['turnover', 'manual_wages', 'clerical_wages', 'bfsc_payments', 'pl_limit', 'el_limit',
-                              'num_clerical', 'num_manual_directors', 'num_manual_employees', 'num_losc'], true)) {
+                              'num_clerical', 'num_manual_directors', 'num_manual_employees', 'num_losc',
+                              'hr_max_height', 'cw_tools'], true)) {
             $n = renewal_number_value($raw);
             if ($n !== null) $q[$field] = $n;
             continue;
         }
+        if ($field === 'claims_5yr') {
+            $yn = renewal_yesno_value($raw);
+            if ($yn !== null) $q[$field] = $yn;
+            continue;
+        }
+        if ($field === 'entity_status') { $q[$field] = renewal_entity_value($raw); continue; }
         if ($field === 'business_established') {
             $d = renewal_date_value($raw);
             if ($d) $q[$field] = $d;
@@ -401,6 +495,7 @@ function renewal_prepare_row(array $row, array $map): array {
     if ($lead['phone'] !== '') $q['contact_phone'] = $lead['phone'];
     if ($email !== '') $q['insured_email'] = $email;
     if (!empty($q['el_limit'])) $q['el_required'] = 'yes';
+    if (!empty($q['cw_tools'])) $q['cw_tools_req'] = 'yes';
 
     return ['lead' => $lead, 'q' => $q, 'problems' => $problems, 'policy_number' => renewal_value($row, $map, 'policy_number')];
 }

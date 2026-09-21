@@ -88,9 +88,13 @@ layout_header('Renewal Questionnaires');
     <?php if ($doc['error']): ?>
       <div class="flash"><?= e($doc['error']) ?></div>
     <?php else: ?>
-      <p class="sub">Read from the document — <strong><?= count($parsed) ?></strong> detail(s) recognised. Correct anything that is
-        wrong or missing, then import. Only the email address is essential; the rest pre-fills the client's questionnaire
-        for them to check.</p>
+      <p class="sub">Read from the document — <strong><?= count($parsed) ?></strong> detail(s) recognised. Correct anything
+        that is wrong and fill in anything missing, then import. Everything here pre-fills the client's questionnaire for
+        them to check and confirm.</p>
+      <?php if (!isset($parsed['email'])): ?>
+        <p class="sub">An Acturis quotation does not carry the client's email address or phone number, so please add
+          them — the email address is how we match them to the CRM and send their questionnaire.</p>
+      <?php endif; ?>
     <?php endif; ?>
     <form method="post">
       <?= csrf_field() ?><input type="hidden" name="action" value="import_one">
@@ -157,9 +161,10 @@ layout_header('Renewal Questionnaires');
   <?php if ($csv && $csv['error']): ?><div class="flash"><?= e($csv['error']) ?></div><?php endif; ?>
   <div class="card">
     <h2>Import from Acturis</h2>
-    <p class="sub">Upload the client's Acturis document — a Word file (.docx) is read most reliably, and text-based PDFs
-      usually work too. We read what we can from it, you check it, and the client's questionnaire is pre-filled so they
-      only have to confirm the details and fill the gaps. A CSV of many clients at once also works.</p>
+    <p class="sub">Upload the client's Acturis document — a Word file (.docx) or a PDF, one client per document. We read
+      what we can from it, you check it on the next screen, and the client's questionnaire is pre-filled so they only have
+      to confirm the details and fill the gaps. A CSV of many clients at once also works. Scanned documents (a photo or
+      picture of the page) cannot be read.</p>
     <form method="post" enctype="multipart/form-data" class="btn-row">
       <?= csrf_field() ?><input type="hidden" name="action" value="upload">
       <input type="file" name="doc" accept=".docx,.pdf,.csv" required>

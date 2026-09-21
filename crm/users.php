@@ -10,17 +10,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'add') {
         $username = trim((string)post('username', ''));
         $pw = (string)post('password', '');
+        $email = trim((string)post('email', ''));
         if (!preg_match('/^[a-z0-9._-]{3,40}$/i', $username)) flash('Username: 3-40 letters, numbers, dots, dashes or underscores.');
+        elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) flash('Please give this person an email address — it is how they reset their own password and hear when their clients finish a questionnaire.');
         elseif (strlen($pw) < 10) flash('Password must be at least 10 characters.');
         else {
             try {
                 $pdo->prepare('INSERT INTO app_user (username, display_name, email, password_hash, role, created_at) VALUES (?,?,?,?,?,?)')
-                    ->execute([$username, trim((string)post('display_name', '')), trim((string)post('email', '')),
+                    ->execute([$username, trim((string)post('display_name', '')), $email,
                         password_hash($pw, PASSWORD_DEFAULT), post('role') === 'admin' ? 'admin' : 'staff', now()]);
                 flash("User $username added.");
             } catch (PDOException $ex) {
                 flash('That username is already taken.');
             }
+        }
+    } elseif ($action === 'email') {
+        $email = trim((string)post('email', ''));
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) flash('That does not look like an email address.');
+        else {
+            $pdo->prepare('UPDATE app_user SET email = ? WHERE user_id = ?')->execute([$email, $targetId]);
+            flash('Email address updated.');
         }
     } elseif ($action === 'reset') {
         $pw = (string)post('password', '');
@@ -56,7 +65,17 @@ layout_header('Users');
     <tr>
       <td><?= e($u['display_name']) ?></td>
       <td class="mono"><?= e($u['username']) ?></td>
-      <td><?= e($u['email']) ?></td>
+      <td>
+        <form method="post" class="inline-form"><?= csrf_field() ?>
+          <input type="hidden" name="action" value="email"><input type="hidden" name="user_id" value="<?= $uid ?>">
+          <input name="email" type="email" value="<?= e($u['email']) ?>" placeholder="No email address" size="24">
+          <button class="btn small ghost">Save</button>
+        </form>
+        <?php if (trim((string)$u['email']) === ''): ?>
+          <div class="sub">Without an email address they cannot reset their own password, and alerts about their
+            clients go to the team address instead.</div>
+        <?php endif; ?>
+      </td>
       <td>
         <form method="post" class="inline-form"><?= csrf_field() ?>
           <input type="hidden" name="action" value="role"><input type="hidden" name="user_id" value="<?= $uid ?>">
@@ -87,7 +106,7 @@ layout_header('Users');
   <h2>Add a user</h2>
   <div class="grid2">
     <label>Name<input name="display_name" required></label>
-    <label>Email<input name="email" type="email"></label>
+    <label>Email<input name="email" type="email" required></label>
     <label>Username<input name="username" required></label>
     <label>Password (10+ characters)<input name="password" type="password" required autocomplete="new-password"></label>
     <label>Role<select name="role"><option value="staff">Staff</option><option value="admin">Admin</option></select></label>

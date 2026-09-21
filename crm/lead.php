@@ -34,6 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             break;
         case 'start_chase':
             $r = start_questionnaire_chase($lead, 'Questionnaire link sent by ' . (current_user()['display_name'] ?: current_user()['username']) . ' (message 1 of 3)', $me);
+            // Whoever sends the link looks after the client from here, unless someone already does.
+            if ($r['ok'] && !$lead['assigned_to']) touch_lead($id, ['assigned_to' => $me]);
             flash($r['message']);
             break;
         case 'resend_email':

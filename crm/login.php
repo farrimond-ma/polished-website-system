@@ -19,6 +19,7 @@ layout_header('Sign in', 'is-login');
     <label>Password<input name="password" type="password" required autocomplete="current-password"></label>
     <button type="submit">Sign in</button>
   </form>
+  <p class="hint"><a href="forgot.php">Forgot your password?</a></p>
   <p class="hint">Polished Insurance staff only.</p>
 </div>
 <?php layout_footer();

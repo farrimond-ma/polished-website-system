@@ -93,5 +93,6 @@ json_out_then(['ok' => true, 'reference' => lead_ref($leadId)], function () use 
     }
     notify_team('Questionnaire completed: ' . lead_ref($leadId) . ' ' . lead_name($lead),
         lead_name($lead) . ($lead['company_name'] ? ' (' . $lead['company_name'] . ')' : '') . " has submitted their questionnaire.\n"
-        . rtrim((string)cfg('crm_base_url', ''), '/') . '/lead.php?id=' . $leadId);
+        . rtrim((string)cfg('crm_base_url', ''), '/') . '/lead.php?id=' . $leadId,
+        (int)($lead['assigned_to'] ?? 0) ?: null);
 });

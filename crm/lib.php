@@ -341,12 +341,31 @@ function fake_send(string $channel, string $to, string $body): array {
     return ['ok' => true];
 }
 
-/** Internal alert to the team (email + optional Telegram). Best effort — never blocks. */
-function notify_team(string $subject, string $text): void {
-    $crmLink = rtrim((string)cfg('crm_base_url', ''), '/');
-    foreach ((array)(config()['notify_emails'] ?? []) as $to) {
-        if (!$to || $to === 'CHANGE_ME') continue;
-        send_email($to, 'Polished team', $subject, nl2br(e($text)), $text);
+/**
+ * Internal alert (email + optional Telegram). Best effort — never blocks.
+ *
+ * When the lead belongs to someone ($ownerId), it goes to them, so the person looking after a
+ * client hears that their questionnaire is in rather than having to watch a shared inbox. If they
+ * have no email address on their account, or the send fails, it falls back to the team addresses
+ * in config so nothing is missed.
+ */
+function notify_team(string $subject, string $text, ?int $ownerId = null): void {
+    $sent = false;
+    if ($ownerId) {
+        $st = db()->prepare('SELECT display_name, email FROM app_user WHERE user_id = ?');
+        $st->execute([$ownerId]);
+        $owner = $st->fetch();
+        if ($owner && trim((string)$owner['email']) !== '') {
+            $r = send_email((string)$owner['email'], (string)($owner['display_name'] ?: 'Polished team'),
+                $subject, nl2br(e($text)), $text);
+            $sent = !empty($r['ok']);
+        }
+    }
+    if (!$sent) {
+        foreach ((array)(config()['notify_emails'] ?? []) as $to) {
+            if (!$to || $to === 'CHANGE_ME') continue;
+            send_email($to, 'Polished team', $subject, nl2br(e($text)), $text);
+        }
     }
     send_telegram_alert('<b>' . e($subject) . "</b>\n" . e($text));
 }

@@ -91,6 +91,11 @@ function schema_migrations(bool $sqlite): array {
             // The website form asks whether they would rather have a call than the questionnaire link.
             'ALTER TABLE leads ADD COLUMN prefers_call ' . ($sqlite ? 'INTEGER NOT NULL DEFAULT 0' : 'TINYINT(1) NOT NULL DEFAULT 0'),
         ],
+        3 => [
+            // "Forgot your password?" — the emailed token is stored hashed and expires after an hour.
+            'ALTER TABLE app_user ADD COLUMN reset_token VARCHAR(64) NULL',
+            'ALTER TABLE app_user ADD COLUMN reset_expires ' . $dt,
+        ],
         // The Cases tables are NOT installed here: they are set up the first time someone opens the
         // Cases tab (see crm/cases/lib.php), so a problem there can never stop the rest of the CRM.
     ];

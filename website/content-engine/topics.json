@@ -48,13 +48,15 @@
   },
   {
     "id": "t005",
-    "status": "queued",
+    "status": "published",
     "title": "Window cleaners insurance and working at height explained",
     "keyword": "window cleaners insurance working at height",
     "coverSlug": "window-cleaners-insurance",
     "angle": "Heights, ladders vs water-fed poles, what insurers ask, safety practice.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "slug": "window-cleaners-insurance-working-at-height",
+    "publishedAt": "2026-09-21T14:16:23.950Z"
   },
   {
     "id": "t006",

@@ -16,6 +16,13 @@ What a great guide does:
 - Mentions Polished Insurance naturally where it helps the reader (for example, that our questionnaire only asks the questions that apply to cleaning businesses), without turning the guide into an advert.
 - Sounds like an experienced human broker: varied sentence length, concrete detail, no filler, no clichés ("in today's fast-paced world", "navigating the complexities", "delve", "it's important to note", "peace of mind" more than once), no emoji, no exclamation marks.
 
+House style (this is how the writing is judged, and a draft that breaks it is sent back):
+- No em dashes (—). Use a comma, a full stop or brackets. If a sentence seems to need a dash, it wants splitting in two.
+- Never these words: delve, tapestry, landscape of, pivotal, underscore, robust, leverage, utilise, multifaceted, nuanced, myriad, realm, testament to, ever-evolving, seamless, navigating the, in today's. Say the plain thing instead.
+- No hedging filler: "it is important to note", "it is worth noting", "it should be noted", "in order to", "due to the fact that", "that being said", "when it comes to".
+- No "not just X, but Y" and no strings of three adjectives for rhythm. Make the statement once, plainly.
+- Vary how sentences and paragraphs open. Do not start consecutive paragraphs the same way, and do not end sections with a summarising flourish.
+
 Internal linking (this matters for readers and for the site):
 - You will be given the ONLY internal URLs you may link to. Never invent or alter URLs. Use root-relative hrefs exactly as given, e.g. <a href="/get-a-quote/window-cleaners-insurance">.
 - Weave links into sentences with descriptive anchor text (never "click here" or bare URLs).

@@ -1,0 +1,76 @@
+name: Clean published guides
+
+# Runs the humanising pass over guides that were published before it existed: rewrites the bits
+# that read as machine-written (em dashes, giveaway vocabulary, hedging filler), keeping every
+# fact, link and heading. Run it by hand from the Actions tab — it is not scheduled.
+on:
+  workflow_dispatch:
+    inputs:
+      write:
+        description: 'Save the changes (leave off to see what would change first)'
+        type: boolean
+        default: false
+      slug:
+        description: 'Optional: clean one guide only, e.g. window-cleaners-insurance-working-at-height'
+        required: false
+      dashes_only:
+        description: 'Skip the rewrite and only remove em dashes (no model call)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-guide       # never runs while a new guide is being published
+  cancel-in-progress: false
+
+jobs:
+  clean:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.commit.outputs.changed }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install content engine
+        working-directory: website/content-engine
+        run: npm ci
+
+      - name: Clean guides
+        working-directory: website/content-engine
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          ARGS=""
+          if [ "${{ inputs.write }}" = "true" ]; then ARGS="--write"; fi
+          if [ "${{ inputs.dashes_only }}" = "true" ]; then ARGS="$ARGS --dashes-only"; fi
+          if [ -n "${{ inputs.slug }}" ]; then ARGS="$ARGS --slug=${{ inputs.slug }}"; fi
+          node clean-guides.mjs $ARGS
+
+      - name: Commit the cleaned guides
+        id: commit
+        if: ${{ inputs.write == true }}
+        run: |
+          git config user.name "polished-content-engine"
+          git config user.email "actions@users.noreply.github.com"
+          git add website/src/data/blogPosts.json || true
+          if git diff --cached --quiet; then
+            echo "Nothing changed."; echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            git commit -m "Guides: humanising pass over guides published before it existed"
+            git push origin HEAD:main
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  deploy:
+    needs: clean
+    if: ${{ needs.clean.outputs.changed == 'true' }}
+    uses: ./.github/workflows/deploy-website.yml
+    secrets: inherit

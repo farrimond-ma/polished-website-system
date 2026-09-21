@@ -20,6 +20,7 @@ import { fetchHeroImage } from './lib/images.mjs';
 import { titleCase } from '../src/lib/titleCase.js';
 import { POSTS_FILE, TOPICS_FILE, ENGINE_DIR, readJSON, writeJSON, allowedLinks, slugify, similarity } from './lib/site.mjs';
 import { refillTopics } from './refill-topics.mjs';
+import { humaniseHtml } from './lib/humanise.mjs';
 
 const args = process.argv.slice(2);
 const DRY_RUN = args.includes('--dry-run');
@@ -118,6 +119,19 @@ async function main() {
     console.log(`[audit] attempt ${attempt + 1}: ${wordCount(html)} words, ${issues.length} issue(s)`);
     if (!issues.length) break;
     issues.forEach((i) => console.log(`        - ${i}`));
+  }
+
+  // ---- final humanising sweep: rewrite whatever still reads as machine-written ----
+  {
+    const result = await humaniseHtml(article.contentHtml, { label: 'humanise' });
+    if (result.before.length) {
+      console.log(`[humanise] ${result.before.map((t) => `${t.id} x${t.count}`).join(', ')}`);
+      console.log(`[humanise] rewrote ${result.rewritten} block(s), kept ${result.kept} unchanged`);
+      if (result.after.length) console.log(`[humanise] still present: ${result.after.map((t) => `${t.id} x${t.count}`).join(', ')}`);
+    } else {
+      console.log('[humanise] nothing to fix.');
+    }
+    article.contentHtml = result.html;
   }
 
   // Hard requirements that must never ship broken. Link shortfalls are topped up deterministically.

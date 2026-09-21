@@ -1,3 +1,4 @@
+import { findAiTells, AI_TELLS } from './humanise.mjs';
 // Cleans generated article HTML and checks the internal linking rules.
 // Guides are rendered with dangerouslySetInnerHTML, so ONLY an allowlist of tags/attributes survives.
 
@@ -67,5 +68,9 @@ export function auditArticle(article, { coverSlug, minWords }) {
   if (!article.faqs || article.faqs.length < 4) issues.push('Provide at least 4 FAQs in the faqs array, matching the FAQ section wording.');
   if (/\b(cheapest|guaranteed? (the )?(lowest|best)|best price guaranteed)\b/i.test(html)) issues.push('Remove price or outcome guarantees such as "cheapest" or "guaranteed lowest price".');
   if (/\b(we|polished insurance) (are|is) (the )?(leading|number one|no\.? ?1|uk'?s? best)\b/i.test(html)) issues.push('Remove unverifiable superlative claims about Polished Insurance.');
+  // House style: the things that make an article read as machine-written.
+  for (const tell of findAiTells(html)) {
+    issues.push(`Remove the ${tell.id} (${tell.count} found: ${tell.samples.join(', ')}). ${AI_TELLS.find((t) => t.id === tell.id).fix}`);
+  }
   return issues;
 }

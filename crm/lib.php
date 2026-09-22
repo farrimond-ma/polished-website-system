@@ -646,6 +646,7 @@ function layout_header(string $title = '', string $bodyClass = ''): void {
             . $nav('cases.php', 'Cases', ['cases.php', 'renewals.php'])
             . $nav('tasks.php', 'Tasks', ['tasks.php'])
             . (is_admin() ? $nav('guides.php', 'Guides', ['guides.php']) : '')
+            . (is_admin() ? $nav('questions.php', 'Questions', ['questions.php']) : '')
             . (is_admin() ? $nav('messages.php', 'Messages', ['messages.php']) : '')
             . (is_admin() ? $nav('users.php', 'Users', ['users.php']) : '')
             . '</nav>';

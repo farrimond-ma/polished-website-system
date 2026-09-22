@@ -61,12 +61,49 @@ function q_section_title(string $sectionId): string {
     return $sectionId;
 }
 
-function q_client_schema(array $hiddenSections = []): array {
+/**
+ * Questions switched off for every client on the Questions page (admin). Stored as a list of
+ * question ids in the setting table, so it survives deploys and needs no code change.
+ */
+function q_globally_hidden(?array $set = null): array {
+    static $ids = null;
+    if ($set !== null) return $ids = $set;        // kept in step when the list is saved
+    if ($ids === null) {
+        try {
+            $raw = db()->query("SELECT svalue FROM setting WHERE skey='hidden_questions'")->fetchColumn();
+            $list = json_decode((string)$raw, true);
+            $ids = is_array($list) ? array_values(array_filter($list, 'is_string')) : [];
+        } catch (\Throwable $e) {
+            $ids = [];
+        }
+    }
+    return $ids;
+}
+
+/** Saves that list. */
+function q_set_globally_hidden(array $ids): void {
+    $ids = array_values(array_unique(array_filter($ids, fn($id) => is_string($id) && preg_match('/^[a-z0-9_]+$/', $id))));
+    db()->prepare("DELETE FROM setting WHERE skey='hidden_questions'")->execute();
+    db()->prepare("INSERT INTO setting (skey, svalue) VALUES ('hidden_questions', ?)")
+        ->execute([json_encode($ids, JSON_UNESCAPED_UNICODE)]);
+    q_globally_hidden($ids);
+}
+
+/**
+ * The questionnaire as the client sees it.
+ *  - $hiddenSections: whole pages staff have switched off for this client.
+ *  - $hiddenItems: single questions staff have switched off for this client.
+ * Questions switched off for everyone are dropped as well. Nothing here deletes an answer: a
+ * hidden question keeps whatever it holds, and staff still see it.
+ */
+function q_client_schema(array $hiddenSections = [], array $hiddenItems = []): array {
     $schema = q_schema();
+    $off = array_merge(q_globally_hidden(), $hiddenItems);
     $out = ['title' => $schema['title'] ?? '', 'intro' => $schema['intro'] ?? '', 'sections' => []];
     foreach ($schema['sections'] as $section) {
         if (in_array($section['id'], $hiddenSections, true)) continue;
-        $items = array_values(array_filter($section['items'], fn($it) => !q_hidden_from_client($it)));
+        $items = array_values(array_filter($section['items'], fn($it) =>
+            !q_hidden_from_client($it) && !in_array($it['id'] ?? '', $off, true)));
         // drop headings left with no question beneath them
         $clean = [];
         foreach ($items as $i => $it) {
@@ -91,9 +128,9 @@ function q_client_schema(array $hiddenSections = []): array {
 }
 
 /** Keys the client is allowed to read and write. */
-function q_client_keys(array $hiddenSections = []): array {
+function q_client_keys(array $hiddenSections = [], array $hiddenItems = []): array {
     $keys = [];
-    foreach (q_client_schema($hiddenSections)['sections'] as $section) {
+    foreach (q_client_schema($hiddenSections, $hiddenItems)['sections'] as $section) {
         foreach ($section['items'] as $it) {
             foreach (q_item_keys($it) as $k) $keys[$k] = true;
         }
@@ -311,7 +348,7 @@ function q_sanitise(array $incoming, ?array $allowed = null): array {
     }
     $out = [];
     foreach ($incoming as $k => $v) {
-        if ($k === '_hidden_sections') continue; // staff-only, handled separately
+        if ($k === '_hidden_sections' || $k === '_hidden_items') continue; // staff-only, handled separately
         if (!isset($types[$k])) continue;
         if ($allowed !== null && !isset($allowed[$k])) continue;
         $type = $types[$k];
@@ -341,8 +378,8 @@ function q_sanitise(array $incoming, ?array $allowed = null): array {
 }
 
 /** Visible required questions still unanswered (client scope), for server-side submit checks. */
-function q_missing_required(array $data, bool $clientScope, array $hiddenSections = []): array {
-    $schema = $clientScope ? q_client_schema($hiddenSections) : q_schema();
+function q_missing_required(array $data, bool $clientScope, array $hiddenSections = [], array $hiddenItems = []): array {
+    $schema = $clientScope ? q_client_schema($hiddenSections, $hiddenItems) : q_schema();
     $missing = [];
     foreach ($schema['sections'] as $section) {
         if (in_array($section['id'], $hiddenSections, true)) continue;
@@ -381,8 +418,9 @@ function q_display_value(array $item, $value): string {
 function q_progress(array $lead): array {
     $data = q_lead_data($lead);
     $hidden = $data['_hidden_sections'] ?? [];
+    $hiddenItems = $data['_hidden_items'] ?? [];
     $total = 0; $answered = 0;
-    foreach (q_client_schema($hidden)['sections'] as $section) {
+    foreach (q_client_schema($hidden, $hiddenItems)['sections'] as $section) {
         if (!q_condition_met($section['showIf'] ?? null, $data)) continue;
         foreach ($section['items'] as $it) {
             if (!q_is_input($it) || !q_condition_met($it['showIf'] ?? null, $data)) continue;

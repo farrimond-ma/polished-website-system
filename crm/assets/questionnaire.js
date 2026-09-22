@@ -32,6 +32,17 @@
   // Stored inside the case data under a reserved key so it travels with the record.
   const hiddenSections = new Set(data._hidden_sections || []);
 
+  // Single questions staff have decided not to ask THIS client, and the ones switched off for
+  // everyone on the Questions page. Neither deletes an answer: staff still see the question here.
+  const hiddenItems = new Set(data._hidden_items || []);
+  const offForAll = new Set(window.QUESTIONS_OFF_FOR_ALL || []);
+
+  function persistHiddenItems() {
+    if (hiddenItems.size) data._hidden_items = Array.from(hiddenItems);
+    else delete data._hidden_items;
+    scheduleSave();
+  }
+
   function persistHiddenSections() {
     if (hiddenSections.size) data._hidden_sections = Array.from(hiddenSections);
     else delete data._hidden_sections;
@@ -93,6 +104,7 @@
   }
 
   function isVisible(item) {
+    if (mode !== "staff" && (hiddenItems.has(item.id) || offForAll.has(item.id))) return false;
     return conditionMet(item.showIf);
   }
 
@@ -382,6 +394,33 @@
   const conditionalItems = []; // {node, item}
 
   // Staff-only badge showing whether Acturis captures this question
+  /**
+   * "Asked / Not asked" beside a question, in staff view only. Switching it off means this client
+   * is not asked it; the question and any answer stay here for staff.
+   */
+  function makeSkipToggle(item, field) {
+    if (mode !== "staff" || item.client === false) return null;   // staff-only questions already are
+    if (offForAll.has(item.id)) {
+      field.classList.add("section-off");
+      return el("span", { class: "qbadge qbadge-extra", title: "Switched off for every client on the Questions page", text: "Not asked (all clients)" });
+    }
+    const btn = el("button", { type: "button", class: "btn small ghost toggle-hide" });
+    const paint = () => {
+      const off = hiddenItems.has(item.id);
+      btn.textContent = off ? "Not asked \u2014 click to ask" : "Asked \u2014 click to skip";
+      btn.classList.toggle("is-off", off);
+      field.classList.toggle("section-off", off);
+    };
+    btn.addEventListener("click", () => {
+      if (hiddenItems.has(item.id)) hiddenItems.delete(item.id);
+      else hiddenItems.add(item.id);
+      persistHiddenItems();
+      paint();
+    });
+    paint();
+    return btn;
+  }
+
   function makeBadge(item) {
     if (mode !== "staff") return null;
     if (item.client === false) {
@@ -465,11 +504,13 @@
 
     const field = el("div", { class: "field", "data-fid": item.id });
     const badge = makeBadge(item);
+    const skip = makeSkipToggle(item, field);
     if (wrapLabel) {
       const lab = el("label", { for: "f_" + item.id });
       lab.appendChild(document.createTextNode(item.label + " "));
       if (item.required) lab.appendChild(el("span", { class: "req", text: "*" }));
       if (badge) lab.appendChild(badge);
+      if (skip) lab.appendChild(skip);
       field.appendChild(lab);
       if (item.help) field.appendChild(el("div", { class: "help", text: item.help }));
       field.appendChild(control);
@@ -724,7 +765,8 @@
               msg: section.title + ": “" + item.label.replace(/ \(must.*$/, "") + "” totals " + total + "% — it must total " + item.mustTotal + "%.",
             });
           }
-        } else if ((item.required || (item.requiredIf && conditionMet(item.requiredIf))) && isVisible(item)) {
+        } else if ((item.required || (item.requiredIf && conditionMet(item.requiredIf)))
+                   && isVisible(item) && !hiddenItems.has(item.id) && !offForAll.has(item.id)) {
           const v = val(item.id);
           if (v === undefined || v === "" || v === null) {
             problems.push({

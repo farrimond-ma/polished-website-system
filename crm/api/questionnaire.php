@@ -22,7 +22,8 @@ if (!$lead) json_out(['ok' => false, 'error' => 'This link is not valid. Please 
 $leadId = (int)$lead['lead_id'];
 $stored = q_lead_data($lead);
 $hidden = array_values(array_filter((array)($stored['_hidden_sections'] ?? []), 'is_string'));
-$clientKeys = q_client_keys($hidden);
+$hiddenItems = array_values(array_filter((array)($stored['_hidden_items'] ?? []), 'is_string'));
+$clientKeys = q_client_keys($hidden, $hiddenItems);
 $submitted = $lead['q_status'] === 'submitted';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -34,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         'submitted' => $submitted,
         'submitted_at' => $lead['q_submitted_at'],
         'prefilled' => array_keys(array_intersect_key(q_prefill_from_lead($lead), $clientKeys)),
-        'schema' => q_client_schema($hidden),
+        'schema' => q_client_schema($hidden, $hiddenItems),
         'data' => (object)$data,
     ]);
 }
@@ -67,7 +68,7 @@ if ($action !== 'submit') {
 }
 
 // ---- submit ----
-$missing = q_missing_required($merged, true, $hidden);
+$missing = q_missing_required($merged, true, $hidden, $hiddenItems);
 if ($missing) {
     touch_lead($leadId, $fields);
     json_out(['ok' => false, 'error' => 'Some required questions are still unanswered.', 'missing' => $missing], 422);

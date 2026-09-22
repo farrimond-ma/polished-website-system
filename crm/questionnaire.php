@@ -67,6 +67,7 @@ echo "<link rel='stylesheet' href='" . asset('assets/questionnaire.css') . "'>";
   window.STAFF_SUBMIT = true;           // even in client view this is a staff page
   window.FORM_SCHEMA = <?= $json(q_schema()) ?>;
   window.FORM_DATA = <?= $json((object)$data) ?>;
+  window.QUESTIONS_OFF_FOR_ALL = <?= $json(q_globally_hidden()) ?>;
   window.SAVE_URL = "questionnaire_save.php?id=<?= $id ?>";
   window.SUBMIT_URL = "questionnaire_save.php?id=<?= $id ?>&action=submit";
   window.CSRF_TOKEN = <?= $json(csrf_token()) ?>;

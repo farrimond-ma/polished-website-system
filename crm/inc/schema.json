@@ -95,6 +95,7 @@
           "id": "business_established",
           "label": "Business established date",
           "type": "date",
+          "required": true,
           "acturis": true
         },
         {

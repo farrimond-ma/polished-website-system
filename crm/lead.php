@@ -167,8 +167,9 @@ $tasks = $tasks->fetchAll();
 
 $qData = q_lead_data($lead);
 $hiddenSections = array_values(array_filter((array)($qData['_hidden_sections'] ?? []), 'is_string'));
+$hiddenItems = array_values(array_filter((array)($qData['_hidden_items'] ?? []), 'is_string'));
 $sectionsAll = count(q_client_schema([])['sections'] ?? []);
-$sectionsShown = count(q_client_schema($hiddenSections)['sections'] ?? []);
+$sectionsShown = count(q_client_schema($hiddenSections, $hiddenItems)['sections'] ?? []);
 
 $isCase = !empty($lead['is_case']);
 $policy = $isCase ? policy_for_case($lead['policy_case_id'] ? (int)$lead['policy_case_id'] : null) : null;
@@ -277,6 +278,9 @@ layout_header(lead_ref($id) . ' ' . lead_name($lead));
         <dt>Submitted</dt><dd><?= dt($lead['q_submitted_at']) ?></dd>
       </dl>
       <p class="sub">The client is asked <strong><?= $sectionsShown ?></strong> of <?= $sectionsAll ?> pages<?php
+        $offForAll = count(q_globally_hidden());
+        if ($hiddenItems): ?>, with <?= count($hiddenItems) ?> question(s) skipped for this client<?php endif;
+        if ($offForAll): ?> (<?= $offForAll ?> question(s) are switched off for everyone)<?php endif;
         if ($hiddenSections): ?> — <?= count($hiddenSections) ?> hidden: <?= e(implode(', ', array_map('q_section_title', $hiddenSections))) ?><?php
         endif; ?>. Open the questionnaire to hide a page you do not need for this client
         <?= $lead['q_status'] === 'not_started' ? ' — worth doing before you send the link.' : '.' ?></p>

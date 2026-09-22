@@ -12,8 +12,11 @@ if (!$lead) json_out(['ok' => false, 'error' => 'Lead not found'], 404);
 $body = json_body();
 $incoming = is_array($body['data'] ?? null) ? $body['data'] : [];
 $data = q_sanitise($incoming); // staff may write every known key
-$hidden = array_values(array_filter((array)($incoming['_hidden_sections'] ?? []), fn($s) => is_string($s) && preg_match('/^[a-z0-9_]+$/', $s)));
+$keep = fn($list) => array_values(array_filter((array)$list, fn($s) => is_string($s) && preg_match('/^[a-z0-9_]+$/', $s)));
+$hidden = $keep($incoming['_hidden_sections'] ?? []);
 if ($hidden) $data['_hidden_sections'] = $hidden;
+$hiddenItems = $keep($incoming['_hidden_items'] ?? []);
+if ($hiddenItems) $data['_hidden_items'] = $hiddenItems;
 
 $me = (int)current_user()['user_id'];
 // Staff edits never change q_status on their own (merely opening the page applies schema

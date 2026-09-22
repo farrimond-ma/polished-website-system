@@ -92,7 +92,7 @@ json_out_then(['ok' => true, 'reference' => lead_ref($leadId)], function () use 
         $m = build_submitted_email($lead);
         send_email($lead['email'], lead_name($lead), $m['subject'], $m['html'], $m['text']);
     }
-    notify_team('Questionnaire completed: ' . lead_ref($leadId) . ' ' . lead_name($lead),
+    notify_team('Questionnaire completed: ' . lead_ref($leadId) . ' ' . lead_title($lead),
         lead_name($lead) . ($lead['company_name'] ? ' (' . $lead['company_name'] . ')' : '') . " has submitted their questionnaire.\n"
         . rtrim((string)cfg('crm_base_url', ''), '/') . '/lead.php?id=' . $leadId,
         (int)($lead['assigned_to'] ?? 0) ?: null);

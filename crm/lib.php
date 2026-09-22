@@ -283,6 +283,12 @@ function money_or_dash($value): string {
     return ($value === null || $value === '') ? '—' : '£' . number_format((float)$value, 2);
 }
 
+/** How a record reads in a subject line: the business name, or the person if there is not one. */
+function lead_title(array $lead): string {
+    $business = trim((string)($lead['company_name'] ?? ''));
+    return $business !== '' ? $business : lead_name($lead);
+}
+
 /* ---------- client links ---------- */
 function new_link_token(): string { return bin2hex(random_bytes(24)); }
 function ensure_link_token(array &$lead): string {

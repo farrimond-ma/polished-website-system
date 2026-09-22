@@ -189,6 +189,9 @@ function q_lead_data(array $lead): array {
  * a question that changed from a tick box to Yes/No (e.g. tools / hired-in plant cover) shows a
  * previously ticked box as "yes".
  */
+/** Employers' liability is always arranged at this limit. */
+const EL_STANDARD_LIMIT = '10000000';
+
 function q_normalise_answers(array $data): array {
     foreach (q_schema()['sections'] as $section) {
         foreach ($section['items'] as $it) {
@@ -201,6 +204,9 @@ function q_normalise_answers(array $data): array {
             }
         }
     }
+    // Employers' liability is always written at £10,000,000, so the limit is not asked for: it
+    // follows from the answer, and quotes, exports and the Acturis mapping still see the figure.
+    if (($data['el_required'] ?? '') === 'yes') $data['el_limit'] = EL_STANDARD_LIMIT;
     return $data;
 }
 

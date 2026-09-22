@@ -37,7 +37,7 @@ function renewal_fields(): array {
         'num_manual_employees' => ['Number of manual employees', 'q', ''],
         'num_losc'             => ['Number of labour-only subcontractors', 'q', ''],
         'pl_limit'             => ['Public liability limit', 'q', ''],
-        'el_limit'             => ['Employers liability limit', 'q', ''],
+        'el_limit'             => ['Employers liability limit', 'q', 'Only used to tell whether they need the cover: it is always recorded as £10,000,000.'],
         'business_description' => ['Business description', 'q', ''],
         'prev_insurer_details' => ['Current insurer', 'q', ''],
         'claims_5yr'           => ['Claims in the last 5 years', 'q', 'Yes or No.'],
@@ -508,7 +508,9 @@ function renewal_prepare_row(array $row, array $map): array {
         $snapped = $options ? q_snap_to_option((string)$q['pl_limit'], $options) : null;
         if ($snapped !== null) $q['pl_limit'] = $snapped;
     }
-    if (!empty($q['el_limit'])) $q['el_required'] = 'yes';
+    // A quotation showing an employers' liability limit means they need the cover; the limit itself
+    // is always £10,000,000, so that is what is recorded whatever figure the document carried.
+    if (!empty($q['el_limit'])) { $q['el_required'] = 'yes'; $q['el_limit'] = EL_STANDARD_LIMIT; }
     if (!empty($q['cw_tools'])) $q['cw_tools_req'] = 'yes';
 
     return ['lead' => $lead, 'q' => $q, 'problems' => $problems, 'policy_number' => renewal_value($row, $map, 'policy_number')];

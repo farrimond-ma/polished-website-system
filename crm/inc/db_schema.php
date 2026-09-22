@@ -108,6 +108,12 @@ function schema_migrations(bool $sqlite): array {
             // Which policy in the Cases tables this case is: cover, premiums, MTAs and documents.
             'ALTER TABLE leads ADD COLUMN policy_case_id ' . ($sqlite ? 'INTEGER NULL' : 'BIGINT NULL'),
         ],
+        6 => [
+            // The premium we quoted the client. Kept on the record rather than in the
+            // questionnaire, which is the client's own answers and is not ours to write in.
+            'ALTER TABLE leads ADD COLUMN quoted_premium ' . ($sqlite ? 'REAL NULL' : 'DECIMAL(10,2) NULL'),
+            'ALTER TABLE leads ADD COLUMN quoted_at ' . $dt,
+        ],
         // The Cases tables are NOT installed here: they are set up the first time someone opens the
         // Cases tab (see crm/cases/lib.php), so a problem there can never stop the rest of the CRM.
     ];

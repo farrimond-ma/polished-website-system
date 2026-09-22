@@ -262,6 +262,19 @@ function current_record_is_case(): bool {
     return $seen[$id];
 }
 
+/** "£1,234.56", "1234.56" or "1,234" as a number, or null if it is not an amount. */
+function parse_money(string $value): ?float {
+    $clean = preg_replace('/[^0-9.]/', '', $value);
+    if ($clean === '' || !is_numeric($clean)) return null;
+    $n = round((float)$clean, 2);
+    return $n >= 0 && $n < 100000000 ? $n : null;
+}
+
+/** An amount as money, or a dash when there is none. */
+function money_or_dash($value): string {
+    return ($value === null || $value === '') ? '—' : '£' . number_format((float)$value, 2);
+}
+
 /* ---------- client links ---------- */
 function new_link_token(): string { return bin2hex(random_bytes(24)); }
 function ensure_link_token(array &$lead): string {

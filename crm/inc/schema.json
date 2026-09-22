@@ -1033,21 +1033,10 @@
         },
         {
           "id": "el_required",
-          "label": "Employers' Liability required? (£10,000,000 standard limit of indemnity, higher limits available)",
+          "label": "Employers' Liability required? (£10,000,000 limit of indemnity)",
           "type": "yesno",
           "required": true,
           "acturis": true
-        },
-        {
-          "id": "el_limit",
-          "label": "Limit required (£)",
-          "type": "currency",
-          "showIf": {
-            "field": "el_required",
-            "equals": "yes"
-          },
-          "acturis": true,
-          "client": false
         },
         {
           "type": "heading",

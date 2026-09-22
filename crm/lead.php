@@ -94,6 +94,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             add_note($id, 'Questionnaire marked as completed by staff.', $me);
             flash('Questionnaire marked as completed.');
             break;
+        case 'premium':
+            $raw = trim((string)post('quoted_premium', ''));
+            if ($raw === '') {
+                touch_lead($id, ['quoted_premium' => null, 'quoted_at' => null]);
+                add_note($id, 'Quoted premium cleared.', $me);
+                flash('Quoted premium cleared.');
+                break;
+            }
+            $amount = parse_money($raw);
+            if ($amount === null) { flash('That does not look like an amount.'); break; }
+            touch_lead($id, ['quoted_premium' => $amount, 'quoted_at' => now()]);
+            add_note($id, 'Quoted ' . money_or_dash($amount) . ' to the client.', $me);
+            flash('Quoted premium saved.');
+            break;
         case 'link_policy':
             $policyId = (int)post('policy_case_id', 0);
             if (!$policyId) { flash('Please choose a policy first.'); break; }
@@ -351,6 +365,18 @@ layout_header(lead_ref($id) . ' ' . lead_name($lead));
 
     <div class="card">
       <h2>Pipeline</h2>
+      <form method="post" class="status-form"><?= csrf_field() ?><input type="hidden" name="action" value="premium">
+        <input id="quoted_premium" name="quoted_premium" inputmode="decimal" size="12"
+          value="<?= $lead['quoted_premium'] !== null ? e(number_format((float)$lead['quoted_premium'], 2, '.', '')) : '' ?>"
+          placeholder="Premium quoted (£)" aria-label="Premium quoted in pounds">
+        <button class="btn small">Save</button>
+      </form>
+      <?php if ($lead['quoted_premium'] !== null): ?>
+        <div class="sub" style="margin:-4px 0 10px">Quoted <?= e(money_or_dash($lead['quoted_premium'])) ?><?= $lead['quoted_at'] ? ' on ' . dt($lead['quoted_at']) : '' ?>.
+          <?php if (!in_array($lead['status'], ['Quote Sent', 'Won', 'Lost', 'Not Proceeding', 'Closed'], true)): ?>
+            Set the status to Quote Sent when it has gone out.
+          <?php endif; ?></div>
+      <?php endif; ?>
       <form method="post" class="status-form"><?= csrf_field() ?><input type="hidden" name="action" value="status">
         <select name="status"><?php foreach (statuses() as $s): ?><option <?= $s === $lead['status'] ? 'selected' : '' ?>><?= e($s) ?></option><?php endforeach; ?></select>
         <button class="btn small">Update</button>

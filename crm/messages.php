@@ -22,8 +22,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     redirect('messages.php#' . $key);
 }
 
-// Preview with a realistic example lead
-$sample = ['lead_id' => 1, 'first_name' => 'Jane', 'q_status' => 'not_started'];
+// Preview with a realistic example: a new enquiry for one set, an existing client for the other.
+$sample = ['lead_id' => 1, 'first_name' => 'Jane', 'company_name' => 'Sparkle Cleaning Ltd', 'q_status' => 'not_started'];
+$sampleExisting = $sample + ['is_case' => 1, 'quoted_premium' => 2085.54];
 $sampleLink = rtrim((string)cfg('questionnaire_url', 'https://www.polished-insurance.co.uk/insurance-questionnaire'), '/')
     . '?t=' . str_repeat('a1b2c3d4', 6);
 
@@ -36,11 +37,28 @@ layout_header('Messages');
   The wording of every email and text message sent to clients. Changes are used from the next message sent — messages already
   sent are unaffected. Use these placeholders and they are filled in automatically:
   <strong>{first_name}</strong> the client’s first name (or “there”), <strong>{link}</strong> their personal questionnaire link,
-  <strong>{phone}</strong> our phone number, <strong>{reference}</strong> their enquiry reference.
+  <strong>{phone}</strong> our phone number, <strong>{reference}</strong> their enquiry reference,
+  <strong>{premium}</strong> the premium quoted on their record.
   Leave a blank line between paragraphs. Every email ends with “Kind regards, The Polished Insurance team” and the regulatory footer.
 </p>
 
-<?php foreach ($defaults as $key => $d): $t = msg_template($key); $vars = msg_vars($sample, $sampleLink); ?>
+<div class="stage-strip">
+  <a class="stage-chip<?= param('set') === 'existing' ? '' : ' active' ?>" href="messages.php">New enquiries<span><?= count(array_filter($defaults, fn($d) => ($d['group'] ?? '') !== 'existing')) ?></span></a>
+  <a class="stage-chip<?= param('set') === 'existing' ? ' active' : '' ?>" href="messages.php?set=existing">Existing clients<span><?= count(array_filter($defaults, fn($d) => ($d['group'] ?? '') === 'existing')) ?></span></a>
+</div>
+<p class="sub" style="max-width:820px">
+  <?= param('set') === 'existing'
+      ? 'These are used instead of the enquiry wording whenever the record is a case, so a client you already insure is asked to check their details for renewal rather than thanked for an enquiry.'
+      : 'Used for new enquiries. A client you already insure gets the renewal wording instead — see Existing clients above.' ?>
+</p>
+
+<?php
+$showExisting = param('set') === 'existing';
+foreach ($defaults as $key => $d):
+    if ((($d['group'] ?? '') === 'existing') !== $showExisting) continue;
+    $t = msg_template($key);
+    $vars = msg_vars($showExisting ? $sampleExisting : $sample, $sampleLink);
+?>
   <?php
     $isEmail = $d['type'] === 'email';
     $previewText = msg_fill_text($t['body'], $vars);

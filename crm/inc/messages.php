@@ -124,6 +124,90 @@ function msg_defaults(): array {
                 . "If you have decided to stay where you are, or the timing is wrong, a quick reply saves you hearing from us again and tells us when to look at it next.\n\n"
                 . "Either way, call us on {phone} if you would like to talk it through. Your reference is {reference}.",
         ],
+        /* ---- existing clients: the same messages, written for a renewal ---- */
+        'email_1_existing' => [
+            'label' => 'Email 1 — renewal questionnaire link (existing client)',
+            'type' => 'email',
+            'group' => 'existing',
+            'note' => 'Used instead of email 1 when the record is a case, so an existing client is not thanked for an enquiry.',
+            'subject' => 'Your insurance renewal: please check your details',
+            'body' => "Hi {first_name},\n\n"
+                . "Your insurance is coming up for renewal, so we are getting ready to go back to our insurers on your behalf.\n\n"
+                . "We have filled in what we already hold for you. Please check it is still right and fill in anything that has changed over the year, particularly your turnover, wages and the work you take on:\n\n"
+                . "{link}\n\n"
+                . "It usually takes a couple of minutes and your answers save as you go. If anything has changed that you would rather talk through, call us on {phone}.",
+        ],
+        'sms_1_existing' => [
+            'label' => 'Text 1 — renewal questionnaire link (existing client)',
+            'type' => 'sms',
+            'group' => 'existing',
+            'note' => 'Used instead of text 1 for an existing client.',
+            'body' => "Hi {first_name}, your insurance is due for renewal. Please check your details so we can get your terms: {link}",
+        ],
+        'email_2_existing' => [
+            'label' => 'Email 2 — renewal reminder (existing client)',
+            'type' => 'email',
+            'group' => 'existing',
+            'note' => 'First renewal reminder, for a client who has not opened their questionnaire yet.',
+            'subject' => 'Reminder: your renewal details',
+            'body' => "Hi {first_name},\n\n"
+                . "A quick reminder that we need your details checked before we can get your renewal terms.\n\n"
+                . "{link}\n\n"
+                . "Most of it is already filled in from last year, so it is usually a couple of minutes. If you would rather go through it on the phone, call us on {phone}.",
+        ],
+        'email_2_started_existing' => [
+            'label' => 'Email 2 — renewal reminder, already started (existing client)',
+            'type' => 'email',
+            'group' => 'existing',
+            'note' => 'Used when an existing client has started their renewal questionnaire but not finished it.',
+            'subject' => 'Your renewal details are nearly there',
+            'body' => "Hi {first_name},\n\n"
+                . "You have made a start on checking your details for renewal. Your answers are saved, so you can pick up where you left off:\n\n"
+                . "{link}\n\n"
+                . "If you would rather finish it over the phone, call us on {phone}.",
+        ],
+        'sms_2_existing' => [
+            'label' => 'Text 2 — renewal reminder (existing client)',
+            'type' => 'sms',
+            'group' => 'existing',
+            'note' => 'First renewal reminder by text.',
+            'body' => "Hi {first_name}, a reminder from Polished Insurance: we need your details checked before we can get your renewal terms. {link}",
+        ],
+        'sms_2_started_existing' => [
+            'label' => 'Text 2 — renewal reminder, already started (existing client)',
+            'type' => 'sms',
+            'group' => 'existing',
+            'note' => 'Used when an existing client has started their renewal questionnaire.',
+            'body' => "Hi {first_name}, your renewal details are saved. Pick up where you left off: {link}",
+        ],
+        'email_3_existing' => [
+            'label' => 'Email 3 — last renewal reminder (existing client)',
+            'type' => 'email',
+            'group' => 'existing',
+            'note' => 'Final renewal reminder. Worth saying plainly that cover does not renew itself.',
+            'subject' => 'Last reminder before your renewal date',
+            'body' => "Hi {first_name},\n\n"
+                . "This is our last reminder about your renewal. Without your details checked we cannot approach insurers, and your cover will not renew on its own.\n\n"
+                . "{link}\n\n"
+                . "If you have arranged cover elsewhere, or you would rather sort it over the phone, call us on {phone} and we will pick it up.",
+        ],
+        'sms_3_existing' => [
+            'label' => 'Text 3 — last renewal reminder (existing client)',
+            'type' => 'sms',
+            'group' => 'existing',
+            'note' => 'Final renewal reminder by text.',
+            'body' => "Hi {first_name}, last reminder: we need your details before your renewal date or your cover will not renew. {link} or call {phone}.",
+        ],
+        'email_submitted_existing' => [
+            'label' => 'Email — renewal details received (existing client)',
+            'type' => 'email',
+            'group' => 'existing',
+            'note' => 'Confirmation to an existing client after they check their details.',
+            'subject' => 'Thank you: we are working on your renewal',
+            'body' => "Hi {first_name},\n\n"
+                . "Thank you for checking your details. We are going back to our insurers now and will come back to you with your renewal terms.\n\n"
+                . "If anything changes in the meantime, or you have a question, call us on {phone}. Your reference is {reference}.",
+        ],
         'email_submitted' => [
             'label' => 'Email — questionnaire received',
             'type' => 'email',
@@ -155,8 +239,16 @@ function msg_overrides(bool $fresh = false): array {
 }
 
 /** The wording in use for one message: ['subject' => ?string, 'body' => string, 'edited' => bool]. */
-function msg_template(string $key): array {
+/**
+ * The wording for a message, choosing the existing-client version when there is one.
+ *
+ * Every client-facing message has a "_existing" twin written for a renewal: a client who has been
+ * with us a year should not be thanked for their enquiry. Passing the record picks the right one;
+ * the Messages page passes none, so each version is edited on its own.
+ */
+function msg_template(string $key, ?array $lead = null): array {
     $defaults = msg_defaults();
+    if ($lead !== null && !empty($lead['is_case']) && isset($defaults[$key . '_existing'])) $key .= '_existing';
     if (!isset($defaults[$key])) throw new InvalidArgumentException("Unknown message $key");
     $d = $defaults[$key];
     $stored = msg_overrides();
@@ -237,7 +329,7 @@ function msg_email_wrap(string $innerHtml): string {
 
 /** Builds one email from its template: ['subject', 'html', 'text']. */
 function msg_build_email(string $key, array $lead, string $link): array {
-    $t = msg_template($key);
+    $t = msg_template($key, $lead);
     $vars = msg_vars($lead, $link);
     $text = msg_fill_text($t['body'], $vars) . "\n\nKind regards,\nThe Polished Insurance team\n" . $vars['phone'];
     return [
@@ -257,7 +349,7 @@ function build_chase_email(array $lead, string $link, int $n = 1): array {
 function build_chase_sms(array $lead, string $link, int $n = 1): string {
     $started = ($lead['q_status'] ?? '') === 'in_progress';
     $key = $n === 2 ? ($started ? 'sms_2_started' : 'sms_2') : ($n === 3 ? 'sms_3' : 'sms_1');
-    return msg_fill_text(msg_template($key)['body'], msg_vars($lead, $link));
+    return msg_fill_text(msg_template($key, $lead)['body'], msg_vars($lead, $link));
 }
 
 /**

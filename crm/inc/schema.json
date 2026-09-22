@@ -1055,8 +1055,14 @@
         },
         {
           "id": "pl_limit",
-          "label": "Limit required (£)",
-          "type": "currency",
+          "label": "Limit required",
+          "type": "select",
+          "options": [
+            "£1,000,000",
+            "£2,000,000",
+            "£5,000,000",
+            "£10,000,000"
+          ],
           "acturis": true
         },
         {

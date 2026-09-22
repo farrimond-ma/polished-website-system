@@ -280,6 +280,11 @@ function renewal_parse_document(string $text): array {
         }
     }
     if (isset($found['entity_status'])) $found['entity_status'] = renewal_entity_value($found['entity_status']);
+    if (isset($found['pl_limit'])) {
+        $options = q_item_options('pl_limit');                 // the limit is a dropdown on the form
+        $snapped = $options ? q_snap_to_option((string)$found['pl_limit'], $options) : null;
+        if ($snapped !== null) $found['pl_limit'] = $snapped;
+    }
 
     if (isset($found['email']) && !filter_var($found['email'], FILTER_VALIDATE_EMAIL)) {
         // an email is often followed by other text on the same line
@@ -496,6 +501,13 @@ function renewal_prepare_row(array $row, array $map): array {
     if ($contact !== '') $q['contact_name'] = $contact;
     if ($lead['phone'] !== '') $q['contact_phone'] = $lead['phone'];
     if ($email !== '') $q['insured_email'] = $email;
+    // The public liability limit is a dropdown, so the number read from the document becomes the
+    // matching choice rather than a figure the client is then asked to confirm by hand.
+    if (isset($q['pl_limit'])) {
+        $options = q_item_options('pl_limit');
+        $snapped = $options ? q_snap_to_option((string)$q['pl_limit'], $options) : null;
+        if ($snapped !== null) $q['pl_limit'] = $snapped;
+    }
     if (!empty($q['el_limit'])) $q['el_required'] = 'yes';
     if (!empty($q['cw_tools'])) $q['cw_tools_req'] = 'yes';
 

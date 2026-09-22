@@ -192,10 +192,52 @@ function q_lead_data(array $lead): array {
 function q_normalise_answers(array $data): array {
     foreach (q_schema()['sections'] as $section) {
         foreach ($section['items'] as $it) {
-            if (($it['type'] ?? '') === 'yesno' && isset($it['id']) && ($data[$it['id']] ?? null) === true) $data[$it['id']] = 'yes';
+            $id = $it['id'] ?? '';
+            if ($id === '' || !isset($data[$id])) continue;
+            if (($it['type'] ?? '') === 'yesno' && $data[$id] === true) $data[$id] = 'yes';
+            if (($it['type'] ?? '') === 'select' && is_array($it['options'] ?? null)) {
+                $snapped = q_snap_to_option((string)$data[$id], $it['options']);
+                if ($snapped !== null) $data[$id] = $snapped;
+            }
         }
     }
     return $data;
+}
+
+/** One question from the schema by its id, or [] if there is no such question. */
+function q_item(string $id): array {
+    foreach (q_schema()['sections'] as $section) {
+        foreach ($section['items'] as $it) {
+            if (($it['id'] ?? '') === $id) return $it;
+        }
+    }
+    return [];
+}
+
+/** The choices a question offers, or [] if it is not a dropdown. */
+function q_item_options(string $id): array {
+    return array_values((array)(q_item($id)['options'] ?? []));
+}
+
+/**
+ * An amount answered as a plain number matched to the dropdown option that means the same thing,
+ * so answers given before a question became a dropdown (5000000, "£5,000,000", "5m") still show
+ * the right choice. Anything that does not clearly match one option is left exactly as it is.
+ */
+function q_snap_to_option(string $value, array $options): ?string {
+    $value = trim($value);
+    if ($value === '' || in_array($value, $options, true)) return null;
+
+    $digits = static fn(string $s): string => preg_replace('/\D+/', '', $s) ?? '';
+    $given = $digits($value);
+    if ($given === '') return null;
+    // "5m" and "5 million" mean the same as 5,000,000.
+    if (preg_match('/^\s*£?\s*([\d.]+)\s*(m|million)\b/iu', $value, $m)) {
+        $given = (string)(int)round((float)$m[1] * 1000000);
+    }
+
+    $matches = array_values(array_filter($options, fn($o) => $digits((string)$o) === $given));
+    return count($matches) === 1 ? (string)$matches[0] : null;
 }
 
 /** Answers with the lead's contact details filled into any still-empty field, plus schema defaults. */

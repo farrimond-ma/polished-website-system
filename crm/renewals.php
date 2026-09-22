@@ -6,8 +6,9 @@ require_login();
 $me = (int)current_user()['user_id'];
 
 $dir = __DIR__ . '/data';
-$token = preg_replace('/[^a-f0-9]/', '', (string)param('file', ''));
-$ext = in_array(param('ext'), ['docx', 'pdf', 'csv'], true) ? (string)param('ext') : '';
+$token = preg_replace('/[^a-f0-9]/', '', (string)(param('file', '') ?: post('file', '')));
+$extRaw = param('ext', '') ?: post('ext', '');
+$ext = in_array($extRaw, ['docx', 'pdf', 'csv'], true) ? (string)$extRaw : '';
 $path = ($token !== '' && $ext !== '') ? $dir . '/renewal_import_' . $token . '.' . $ext : '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -37,10 +38,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($v !== '') $values[$field] = $v;
         }
         [$leadId, $result] = renewal_import_one($values, $me);
-        if (!$leadId) { flash('Nothing was imported: ' . $result); redirect('renewals.php'); }
-        if ($path !== '' && is_file($path)) @unlink($path);
-        flash(($result === 'added' ? 'Case added' : 'Case updated') . ' — ' . lead_ref($leadId) . '. Open it to send the questionnaire.');
-        redirect('lead.php?id=' . $leadId);
+        if (!$leadId) {
+            $importError = $result;
+            $importValues = $values;
+            // Fall through to the review screen rather than redirecting: the document is still
+            // there, and so is everything staff typed.
+        } else {
+            if ($path !== '' && is_file($path)) @unlink($path);
+            flash(($result === 'added' ? 'Case added' : 'Case updated') . ' — ' . lead_ref($leadId)
+                . '. Open it to send the questionnaire.');
+            redirect('lead.php?id=' . $leadId);
+        }
     }
 
     // A spreadsheet of many clients
@@ -57,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         flash($msg);
         redirect('renewals.php');
     }
-    redirect('renewals.php');
+    if (!isset($importError)) redirect('renewals.php');
 }
 
 $fields = renewal_fields();
@@ -70,6 +78,7 @@ if ($path !== '' && is_file($path)) {
         $parsed = $doc['error'] ? [] : renewal_parse_document($doc['text']);
     }
 }
+if (isset($importValues)) $parsed = $importValues + $parsed;
 $map = $csv ? (renewal_map() ?: renewal_guess_map($csv['headers'])) : renewal_map();
 
 layout_header('Import from Acturis');
@@ -97,6 +106,11 @@ layout_header('Import from Acturis');
           them — the email address is how we match them to the CRM and send their questionnaire.</p>
       <?php endif; ?>
     <?php endif; ?>
+    <?php if (isset($importError)): ?>
+      <div class="flash" style="background:#fef3f2;border-color:#fecdca;color:#b42318">
+        Nothing was imported: <?= e($importError) ?>. Everything you typed is still here — fill in the
+        missing details and import again.</div>
+    <?php endif; ?>
     <form method="post">
       <?= csrf_field() ?><input type="hidden" name="action" value="import_one">
       <input type="hidden" name="file" value="<?= e($token) ?>"><input type="hidden" name="ext" value="<?= e($ext) ?>">
@@ -105,7 +119,9 @@ layout_header('Import from Acturis');
           <div>
             <label for="f_<?= e($id) ?>" class="sub"><?= e($label) ?><?= $id === 'email' ? ' *' : '' ?>
               <?= isset($parsed[$id]) ? '<span class="pill ok">read from document</span>' : '' ?></label>
-            <input id="f_<?= e($id) ?>" name="f_<?= e($id) ?>" value="<?= e($v) ?>" style="width:100%;padding:8px 10px;border:1px solid #cdd6df;border-radius:6px">
+            <input id="f_<?= e($id) ?>" name="f_<?= e($id) ?>" value="<?= e($v) ?>"
+              <?= $id === 'email' ? 'type="email" required placeholder="Needed to save the client and send their questionnaire"' : '' ?>
+              style="width:100%;padding:8px 10px;border:1px solid <?= $id === 'email' && $v === '' ? '#f0b3ab' : '#cdd6df' ?>;border-radius:6px">
           </div>
         <?php endforeach; ?>
       </div>

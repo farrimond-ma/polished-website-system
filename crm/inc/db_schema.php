@@ -108,6 +108,10 @@ function schema_migrations(bool $sqlite): array {
             // Which policy in the Cases tables this case is: cover, premiums, MTAs and documents.
             'ALTER TABLE leads ADD COLUMN policy_case_id ' . ($sqlite ? 'INTEGER NULL' : 'BIGINT NULL'),
         ],
+        8 => [
+            // A case is an existing client, not a new enquiry.
+            "UPDATE leads SET status = 'Existing' WHERE is_case = 1 AND status = 'New Enquiry'",
+        ],
         7 => [
             // Chasing a quote: three emails after the status goes to Quote Sent (1 hour, then 3
             // hours, then 12 hours later). quote_chase_due is when the next one is due.

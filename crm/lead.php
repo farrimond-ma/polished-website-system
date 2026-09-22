@@ -405,7 +405,7 @@ layout_header(lead_ref($id) . ' ' . lead_name($lead));
           <?php endif; ?></div>
       <?php endif; ?>
       <form method="post" class="status-form"><?= csrf_field() ?><input type="hidden" name="action" value="status">
-        <select name="status"><?php foreach (statuses() as $s): ?><option <?= $s === $lead['status'] ? 'selected' : '' ?>><?= e($s) ?></option><?php endforeach; ?></select>
+        <select name="status"><?php foreach ($isCase ? case_statuses() : lead_statuses() as $s): ?><option <?= $s === $lead['status'] ? 'selected' : '' ?>><?= e($s) ?></option><?php endforeach; ?></select>
         <button class="btn small">Update</button>
       </form>
       <form method="post" class="status-form"><?= csrf_field() ?><input type="hidden" name="action" value="assign">

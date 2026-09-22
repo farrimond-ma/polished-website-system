@@ -185,6 +185,7 @@ dl dd{margin:0}
 .pill.q-in_progress{background:#fff0d0;color:#96650a}
 .pill.q-submitted{background:#d8f5e3;color:#0a7a3d}
 .pill.st-new-enquiry{background:#e0f2fe;color:#075985}
+.pill.st-existing{background:#ede9fe;color:#5b21b6}
 .pill.st-questionnaire-completed,.pill.st-quoting,.pill.st-quote-sent{background:#e8f0ff;color:#0b4fd0}
 .pill.st-won{background:#d8f5e3;color:#0a7a3d}
 .pill.st-lost,.pill.st-not-proceeding,.pill.st-closed{background:#f1f2f4;color:#8a97a5}

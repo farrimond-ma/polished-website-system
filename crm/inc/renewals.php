@@ -325,7 +325,7 @@ function renewal_import_one(array $values, ?int $userId = null): array {
     db()->prepare('INSERT INTO leads (status, is_case, first_name, last_name, company_name, email, phone, source,
             renewal_date, q_data, link_token, assigned_to, next_follow_up, created_at, updated_at)
             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)')
-        ->execute(['New Enquiry', 1, $p['lead']['first_name'], $p['lead']['last_name'], $p['lead']['company_name'],
+        ->execute(['Existing', 1, $p['lead']['first_name'], $p['lead']['last_name'], $p['lead']['company_name'],
             $p['lead']['email'], $p['lead']['phone'], 'Renewal', $p['lead']['renewal_date'] ?? null,
             json_encode($p['q'], JSON_UNESCAPED_UNICODE), new_link_token(), $userId,
             $p['lead']['renewal_date'] ?? date('Y-m-d'), now(), now()]);
@@ -549,7 +549,7 @@ function renewal_import(array $rows, array $map, ?int $userId = null): array {
             $pdo->prepare('INSERT INTO leads (status, is_case, first_name, last_name, company_name, email, phone, source,
                     renewal_date, q_data, link_token, next_follow_up, created_at, updated_at)
                     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)')
-                ->execute(['New Enquiry', 1, $p['lead']['first_name'], $p['lead']['last_name'], $p['lead']['company_name'],
+                ->execute(['Existing', 1, $p['lead']['first_name'], $p['lead']['last_name'], $p['lead']['company_name'],
                     $p['lead']['email'], $p['lead']['phone'], 'Renewal', $p['lead']['renewal_date'] ?? null,
                     json_encode($p['q'], JSON_UNESCAPED_UNICODE), new_link_token(),
                     $p['lead']['renewal_date'] ?? date('Y-m-d'), now(), now()]);

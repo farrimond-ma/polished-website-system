@@ -27,7 +27,7 @@ $where = ['is_case = 1']; $args = [];
 if ($status === 'open') {
     $where[] = 'status NOT IN (' . implode(',', array_fill(0, count($finished), '?')) . ')';
     array_push($args, ...$finished);
-} elseif ($status !== 'all' && in_array($status, statuses(), true)) {
+} elseif ($status !== 'all' && in_array($status, case_statuses(), true)) {
     $where[] = 'status = ?'; $args[] = $status;
 }
 if (in_array($qs, ['not_started', 'in_progress', 'submitted'], true)) { $where[] = 'q_status = ?'; $args[] = $qs; }
@@ -69,7 +69,7 @@ layout_header('Cases');
 </div>
 <div class="stage-strip">
   <?= $chip('open', 'All live', $openCount) ?>
-  <?php foreach (statuses() as $s) echo $chip($s, $s, $counts[$s] ?? 0); ?>
+  <?php foreach (case_statuses() as $s) echo $chip($s, $s, $counts[$s] ?? 0); ?>
   <?= $chip('all', 'Everything', array_sum($counts)) ?>
 </div>
 <form class="filters" method="get">

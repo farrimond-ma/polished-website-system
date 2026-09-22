@@ -18,7 +18,7 @@ $where = [$scopeSql]; $args = [];          // clients with a policy live under C
 if ($status === 'open') {
     $where[] = 'status NOT IN (' . implode(',', array_fill(0, count(terminal_statuses()), '?')) . ')';
     array_push($args, ...terminal_statuses());
-} elseif ($status !== 'all' && in_array($status, statuses(), true)) {
+} elseif ($status !== 'all' && in_array($status, ($scope === 'all' ? statuses() : lead_statuses()), true)) {
     $where[] = 'status = ?'; $args[] = $status;
 }
 if (in_array($qs, ['not_started', 'in_progress', 'submitted'], true)) { $where[] = 'q_status = ?'; $args[] = $qs; }
@@ -53,7 +53,7 @@ layout_header('Leads');
 </div>
 <div class="stage-strip">
   <?= $chip('open', 'All open', $openCount) ?>
-  <?php foreach (statuses() as $s) echo $chip($s, $s, $counts[$s] ?? 0); ?>
+  <?php foreach (($scope === 'all' ? statuses() : lead_statuses()) as $s) echo $chip($s, $s, $counts[$s] ?? 0); ?>
   <?= $chip('all', 'Everything', array_sum($counts)) ?>
 </div>
 <form class="filters" method="get">

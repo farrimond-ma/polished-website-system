@@ -194,13 +194,17 @@ function flash(?string $msg = null): ?string {
 
 /* ---------- pipeline ---------- */
 function statuses(): array {
-    return ['New Enquiry', 'Contacted', 'Questionnaire Sent', 'Questionnaire Completed',
+    return ['New Enquiry', 'Existing', 'Contacted', 'Questionnaire Sent', 'Questionnaire Completed',
             'Quoting', 'Quote Sent', 'Won', 'Lost', 'Not Proceeding', 'Closed'];
 }
+/** A lead is an enquiry, so it never starts as Existing. */
+function lead_statuses(): array { return array_values(array_diff(statuses(), ['Existing'])); }
+/** A case is an existing client, so it never starts as a new enquiry. */
+function case_statuses(): array { return array_values(array_diff(statuses(), ['New Enquiry'])); }
 function terminal_statuses(): array { return ['Won', 'Lost', 'Not Proceeding', 'Closed']; }
 /** Statuses a completed questionnaire moves a lead forward FROM (later stages are left alone). */
 function pre_questionnaire_statuses(): array {
-    return ['New Enquiry', 'Contacted', 'Questionnaire Sent', 'Lost', 'Not Proceeding', 'Closed'];
+    return ['New Enquiry', 'Existing', 'Contacted', 'Questionnaire Sent', 'Lost', 'Not Proceeding', 'Closed'];
 }
 function status_class(string $s): string { return 'st-' . strtolower(preg_replace('/[^a-z0-9]+/i', '-', $s)); }
 function q_status_label(string $s): string {

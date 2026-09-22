@@ -106,6 +106,19 @@ function q_num($v): float {
 }
 
 /** Evaluates a showIf condition against the answers (mirrors questionnaire.js). */
+/**
+ * Is this date within the last $months months? A date that has not been given, or that cannot be
+ * read, counts as no, so a question asked only of new businesses stays hidden until the date says
+ * otherwise. A date in the future counts as yes: the business is newer still.
+ */
+function q_date_within_months(string $value, int $months): bool {
+    $value = trim($value);
+    if ($value === '') return false;
+    $ts = strtotime($value);
+    if ($ts === false) return false;
+    return $ts >= strtotime("-$months months", strtotime('today'));
+}
+
 function q_condition_met($cond, array $data): bool {
     if (!$cond || !is_array($cond)) return true;
     if (isset($cond['all'])) {
@@ -118,6 +131,7 @@ function q_condition_met($cond, array $data): bool {
     }
     if (isset($cond['field'])) {
         $v = $data[$cond['field']] ?? null;
+        if (isset($cond['withinMonths'])) return q_date_within_months((string)($v ?? ''), (int)$cond['withinMonths']);
         if (isset($cond['in'])) return in_array($v, $cond['in'], true);
         return $v === ($cond['equals'] ?? null);
     }

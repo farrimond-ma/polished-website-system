@@ -108,7 +108,11 @@
           "label": "Do you (or the people running the business) have at least 1 year’s experience in cleaning work?",
           "type": "yesno",
           "acturis": false,
-          "client": true
+          "client": true,
+          "showIf": {
+            "field": "business_established",
+            "withinMonths": 12
+          }
         },
         {
           "id": "experience_details",

@@ -7,11 +7,25 @@ const num = (v) => {
   return Number.isNaN(n) ? 0 : n;
 };
 
+// Is a date within the last so many months? Nothing entered counts as no.
+const dateWithinMonths = (value, months) => {
+  if (!value) return false;
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return false;
+  const cutoff = new Date();
+  cutoff.setHours(0, 0, 0, 0);
+  cutoff.setMonth(cutoff.getMonth() - months);
+  return d >= cutoff;
+};
+
 export function conditionMet(cond, data) {
   if (!cond) return true;
   if (cond.all) return cond.all.every((c) => conditionMet(c, data));
   if (cond.any) return cond.any.some((c) => conditionMet(c, data));
-  if (cond.field) return cond.in ? cond.in.includes(data[cond.field]) : data[cond.field] === cond.equals;
+  if (cond.field) {
+    if (cond.withinMonths) return dateWithinMonths(data[cond.field], cond.withinMonths);
+    return cond.in ? cond.in.includes(data[cond.field]) : data[cond.field] === cond.equals;
+  }
   if (cond.anyYes) return cond.anyYes.some((id) => data[id] === 'yes');
   if (cond.fieldGt0) return num(data[cond.fieldGt0]) > 0;
   if (cond.anyGt0) return cond.anyGt0.some((id) => num(data[id]) > 0);

@@ -66,12 +66,26 @@
     return isNaN(v) ? 0 : v;
   }
 
+  // Is a date within the last so many months? Nothing entered counts as no.
+  function dateWithinMonths(value, months) {
+    if (!value) return false;
+    const d = new Date(value);
+    if (isNaN(d.getTime())) return false;
+    const cutoff = new Date();
+    cutoff.setHours(0, 0, 0, 0);
+    cutoff.setMonth(cutoff.getMonth() - months);
+    return d >= cutoff;
+  }
+
   // Mirrors q_condition_met() in inc/questionnaire.php and the website's React questionnaire.
   function conditionMet(cond) {
     if (!cond) return true;
     if (cond.all) return cond.all.every(conditionMet);
     if (cond.any) return cond.any.some(conditionMet);
-    if (cond.field) return cond.in ? cond.in.includes(val(cond.field)) : val(cond.field) === cond.equals;
+    if (cond.field) {
+      if (cond.withinMonths) return dateWithinMonths(val(cond.field), cond.withinMonths);
+      return cond.in ? cond.in.includes(val(cond.field)) : val(cond.field) === cond.equals;
+    }
     if (cond.anyYes) return cond.anyYes.some((id) => val(id) === "yes");
     if (cond.fieldGt0) return numVal(cond.fieldGt0) > 0;
     if (cond.anyGt0) return cond.anyGt0.some((id) => numVal(id) > 0);

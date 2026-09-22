@@ -289,6 +289,48 @@ function lead_title(array $lead): string {
     return $business !== '' ? $business : lead_name($lead);
 }
 
+/**
+ * A case is really in one of three places: the questionnaire has not gone out, it has gone out and
+ * is not back, or it is done. That is what staff filter a renewal list by, so it is worked out from
+ * what already happens to a record rather than being another status to keep up to date.
+ */
+function case_stages(): array {
+    return [
+        'notsent'   => 'Questionnaire not sent',
+        'sent'      => 'Questionnaire sent',
+        'completed' => 'Questionnaire completed',
+    ];
+}
+
+/** The same three, short enough for a table column. */
+function case_stage_short(string $stage): string {
+    return ['notsent' => 'Not sent', 'sent' => 'Sent', 'completed' => 'Completed'][$stage] ?? $stage;
+}
+
+/** The colour a stage borrows from the questionnaire pills. */
+function case_stage_class(string $stage): string {
+    return ['notsent' => 'q-not_started', 'sent' => 'q-in_progress', 'completed' => 'q-submitted'][$stage] ?? '';
+}
+
+/** SQL for one of those, to use in a WHERE clause. */
+function case_stage_sql(string $stage): string {
+    $gone = "(auto_chase_count > 0 OR chasing = 1 OR q_status = 'in_progress' OR status = 'Questionnaire Sent')";
+    switch ($stage) {
+        case 'completed': return "q_status = 'submitted'";
+        case 'sent':      return "q_status <> 'submitted' AND $gone";
+        case 'notsent':   return "q_status <> 'submitted' AND NOT $gone";
+        default:          return '1=1';
+    }
+}
+
+/** Which of the three a record is in. */
+function case_stage(array $lead): string {
+    if (($lead['q_status'] ?? '') === 'submitted') return 'completed';
+    $gone = (int)($lead['auto_chase_count'] ?? 0) > 0 || !empty($lead['chasing'])
+        || ($lead['q_status'] ?? '') === 'in_progress' || ($lead['status'] ?? '') === 'Questionnaire Sent';
+    return $gone ? 'sent' : 'notsent';
+}
+
 /* ---------- client links ---------- */
 function new_link_token(): string { return bin2hex(random_bytes(24)); }
 function ensure_link_token(array &$lead): string {

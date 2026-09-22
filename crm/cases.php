@@ -10,27 +10,24 @@ require __DIR__ . '/lib.php';
 require_login();
 $pdo = db();
 
-$status = (string)param('status', 'open');
+$stage = (string)param('stage', 'open');
 $q = trim((string)param('q', ''));
-$qs = (string)param('qs', '');
 $due = (string)param('due', '');
 
 // On a case, Won is the normal state — they are a client. Only these mean the case is over.
 $finished = ['Lost', 'Not Proceeding', 'Closed'];
+$live = 'status NOT IN (' . implode(',', array_map(fn($s) => $pdo->quote($s), $finished)) . ')';
 
-$counts = [];
-foreach ($pdo->query('SELECT status, COUNT(*) c FROM leads WHERE is_case = 1 GROUP BY status') as $r) $counts[$r['status']] = (int)$r['c'];
-$openCount = 0;
-foreach ($counts as $s => $c) if (!in_array($s, $finished, true)) $openCount += $c;
+// A renewal list is read by where the questionnaire has got to, not by the sales pipeline.
+$counts = ['open' => (int)$pdo->query("SELECT COUNT(*) FROM leads WHERE is_case = 1 AND $live")->fetchColumn()];
+foreach (array_keys(case_stages()) as $key) {
+    $counts[$key] = (int)$pdo->query("SELECT COUNT(*) FROM leads WHERE is_case = 1 AND $live AND (" . case_stage_sql($key) . ')')->fetchColumn();
+}
+$counts['all'] = (int)$pdo->query('SELECT COUNT(*) FROM leads WHERE is_case = 1')->fetchColumn();
 
 $where = ['is_case = 1']; $args = [];
-if ($status === 'open') {
-    $where[] = 'status NOT IN (' . implode(',', array_fill(0, count($finished), '?')) . ')';
-    array_push($args, ...$finished);
-} elseif ($status !== 'all' && in_array($status, case_statuses(), true)) {
-    $where[] = 'status = ?'; $args[] = $status;
-}
-if (in_array($qs, ['not_started', 'in_progress', 'submitted'], true)) { $where[] = 'q_status = ?'; $args[] = $qs; }
+if ($stage !== 'all') $where[] = $live;
+if (isset(case_stages()[$stage])) $where[] = '(' . case_stage_sql($stage) . ')';
 if ($due === 'soon') { $where[] = 'renewal_date IS NOT NULL AND renewal_date <= ?'; $args[] = date('Y-m-d', strtotime('+60 days')); }
 if ($q !== '') {
     $id = parse_ref_search($q);
@@ -48,10 +45,10 @@ $cases = $st->fetchAll();
 $dueSoon = (int)$pdo->query('SELECT COUNT(*) FROM leads WHERE is_case = 1 AND renewal_date IS NOT NULL AND renewal_date <= '
     . $pdo->quote(date('Y-m-d', strtotime('+60 days'))))->fetchColumn();
 
-$chip = function (string $key, string $label, int $n) use ($status, $q, $qs) {
-    $active = $status === $key ? ' active' : '';
-    $href = 'cases.php?' . http_build_query(array_filter(['status' => $key, 'q' => $q, 'qs' => $qs]));
-    return "<a class='stage-chip$active' href='" . e($href) . "'>" . e($label) . "<span>$n</span></a>";
+$chip = function (string $key, string $label) use ($stage, $q, $counts, $due) {
+    $active = $stage === $key ? ' active' : '';
+    $href = 'cases.php?' . http_build_query(array_filter(['stage' => $key, 'q' => $q, 'due' => $due]));
+    return "<a class='stage-chip$active' href='" . e($href) . "'>" . e($label) . '<span>' . (int)($counts[$key] ?? 0) . '</span></a>';
 };
 $today = date('Y-m-d');
 
@@ -68,19 +65,13 @@ layout_header('Cases');
   </div>
 </div>
 <div class="stage-strip">
-  <?= $chip('open', 'All live', $openCount) ?>
-  <?php foreach (case_statuses() as $s) echo $chip($s, $s, $counts[$s] ?? 0); ?>
-  <?= $chip('all', 'Everything', array_sum($counts)) ?>
+  <?= $chip('open', 'All live') ?>
+  <?php foreach (case_stages() as $key => $label) echo $chip($key, $label); ?>
+  <?= $chip('all', 'Everything') ?>
 </div>
 <form class="filters" method="get">
-  <input type="hidden" name="status" value="<?= e($status) ?>">
+  <input type="hidden" name="stage" value="<?= e($stage) ?>">
   <input name="q" value="<?= e($q) ?>" placeholder="Search name, business, email, phone or POL-0001">
-  <select name="qs" onchange="this.form.submit()">
-    <option value="">Questionnaire: any</option>
-    <?php foreach (['not_started', 'in_progress', 'submitted'] as $o): ?>
-      <option value="<?= $o ?>" <?= $qs === $o ? 'selected' : '' ?>>Questionnaire: <?= e(q_status_label($o)) ?></option>
-    <?php endforeach; ?>
-  </select>
   <select name="due" onchange="this.form.submit()">
     <option value="">Renewal: any date</option>
     <option value="soon" <?= $due === 'soon' ? 'selected' : '' ?>>Renewal: within 60 days (<?= $dueSoon ?>)</option>
@@ -100,7 +91,7 @@ layout_header('Cases');
       <td><?= e($l['company_name']) ?></td>
       <td class="<?= $l['renewal_date'] && $l['renewal_date'] < $today ? 'overdue' : '' ?>" style="white-space:nowrap"><?= d($l['renewal_date']) ?></td>
       <td><span class="pill <?= status_class($l['status']) ?>"><?= e($l['status']) ?></span><?= $l['chasing'] ? " <span class='pill chasing'>Chasing " . (int)$l['auto_chase_count'] . "/3</span>" : '' ?></td>
-      <td><span class="pill q-<?= e($l['q_status']) ?>"><?= e(q_status_label($l['q_status'])) ?></span></td>
+      <td><span class="pill <?= e(case_stage_class(case_stage($l))) ?>"><?= e(case_stage_short(case_stage($l))) ?></span></td>
       <td><?= e(user_name($l['assigned_to'] ? (int)$l['assigned_to'] : null)) ?></td>
     </tr>
   <?php endforeach; ?>

@@ -237,6 +237,10 @@ function add_note(int $leadId, string $body, ?int $userId = null): void {
 function touch_lead(int $leadId, array $fields): void {
     // Won means they now have a policy with us, so the record belongs under Cases from here on.
     if (($fields['status'] ?? '') === 'Won') $fields['is_case'] = 1;
+    // Moving off Quote Sent ends the quote chasers: they have answered, or gone elsewhere.
+    if (isset($fields['status']) && $fields['status'] !== 'Quote Sent' && !array_key_exists('quote_chase_due', $fields)) {
+        $fields['quote_chase_due'] = null;
+    }
     $fields['updated_at'] = now();
     $sets = implode(', ', array_map(fn($k) => "$k = ?", array_keys($fields)));
     db()->prepare("UPDATE leads SET $sets WHERE lead_id = ?")->execute([...array_values($fields), $leadId]);
@@ -404,6 +408,77 @@ function notify_team(string $subject, string $text, ?int $ownerId = null): void 
         }
     }
     send_telegram_alert('<b>' . e($subject) . "</b>\n" . e($text));
+}
+
+/* ---------- chasing a quote ---------- */
+
+/**
+ * How long after the last message the next quote chaser is due: an hour after the quote goes out,
+ * three hours after that, then twelve hours after that. Nothing is sent after the third.
+ */
+function quote_chase_gaps(): array { return [1, 3, 12]; }
+function max_quote_chase_messages(): int { return count(quote_chase_gaps()); }
+
+/** When quote chaser number $n (1-3) falls due, counting from now. */
+function quote_chase_due_after(int $n): ?string {
+    $gaps = quote_chase_gaps();
+    return isset($gaps[$n - 1]) ? date('Y-m-d H:i:s', time() + $gaps[$n - 1] * 3600) : null;
+}
+
+/**
+ * Starts the quote chasers. Called when a record is marked Quote Sent.
+ * A chaser quotes the premium, so there is nothing to send until one is recorded.
+ */
+function start_quote_chase(int $leadId, array $lead): void {
+    if (($lead['quoted_premium'] ?? null) === null) {
+        add_note($leadId, 'Quote chasers not started: no premium recorded yet. Save the premium to start them.');
+        return;
+    }
+    touch_lead($leadId, ['quote_chase_count' => 0, 'quote_chase_due' => quote_chase_due_after(1)]);
+    add_note($leadId, 'Quote chasers started: first email due in ' . quote_chase_gaps()[0] . ' hour.');
+}
+
+/** Stops them, quietly (used when the status moves on or someone clicks stop). */
+function stop_quote_chase(int $leadId): void {
+    touch_lead($leadId, ['quote_chase_due' => null]);
+}
+
+/** The records whose next quote chaser is due now. */
+function due_quote_chases(): array {
+    $st = db()->prepare("SELECT * FROM leads
+        WHERE status = 'Quote Sent' AND quote_chase_due IS NOT NULL AND quote_chase_due <= ?
+          AND quote_chase_count < ? AND quoted_premium IS NOT NULL AND email <> ''
+        ORDER BY quote_chase_due LIMIT 200");
+    $st->execute([now(), max_quote_chase_messages()]);
+    return $st->fetchAll();
+}
+
+/** Sends one quote chaser and schedules the next. Returns a line describing what happened. */
+function send_quote_chase(array $lead): string {
+    $id = (int)$lead['lead_id'];
+    $n = (int)$lead['quote_chase_count'] + 1;
+    $m = build_quote_chase_email($lead, $n);
+    $r = send_email((string)$lead['email'], lead_name($lead), $m['subject'], $m['html'], $m['text']);
+
+    if (empty($r['ok'])) {
+        // Try again on the next run rather than losing the message altogether.
+        touch_lead($id, ['quote_chase_due' => date('Y-m-d H:i:s', time() + 3600)]);
+        add_note($id, "Quote chaser $n could not be sent: " . (string)($r['error'] ?? 'unknown error') . ' Will try again in an hour.');
+        return lead_ref($id) . ": quote chaser $n FAILED (" . (string)($r['error'] ?? '') . ')';
+    }
+
+    $next = $n < max_quote_chase_messages() ? quote_chase_due_after($n + 1) : null;
+    touch_lead($id, ['quote_chase_count' => $n, 'quote_chase_due' => $next]);
+    add_note($id, "Quote chaser $n of " . max_quote_chase_messages() . ' emailed to ' . $lead['email'] . '.'
+        . ($next ? '' : ' No more are scheduled.'));
+    return lead_ref($id) . ": quote chaser $n sent";
+}
+
+/** Sends every quote chaser that is due. Returns the lines to print. */
+function run_quote_chases(): array {
+    $out = [];
+    foreach (due_quote_chases() as $lead) $out[] = send_quote_chase($lead);
+    return $out;
 }
 
 /* ---------- chasing ---------- */

@@ -22,7 +22,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 touch_lead($id, $fields);
                 add_note($id, "Status changed from {$lead['status']} to $new." . ($lead['chasing'] && isset($fields['chasing']) ? ' Automatic reminders stopped.' : ''), $me);
-                flash("Status set to $new.");
+                if ($new === 'Quote Sent') start_quote_chase($id, $lead);
+                flash("Status set to $new." . ($new === 'Quote Sent' && $lead['quoted_premium'] === null
+                    ? ' Quote chasers are waiting on a premium: save one and set the status again.' : ''));
             }
             break;
         case 'assign':
@@ -74,8 +76,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             break;
         case 'stop_chase':
             stop_chasing($id);
+            stop_quote_chase($id);
             add_note($id, 'Automatic reminders stopped.', $me);
             flash('Automatic reminders stopped.');
+            break;
+        case 'start_quote_chase':
+            start_quote_chase($id, $lead);
+            flash($lead['quoted_premium'] === null ? 'Save the premium first.' : 'Quote chasers started.');
             break;
         case 'regenerate_link':
             touch_lead($id, ['link_token' => new_link_token()]);
@@ -371,6 +378,22 @@ layout_header(lead_ref($id) . ' ' . lead_name($lead));
           placeholder="Premium quoted (£)" aria-label="Premium quoted in pounds">
         <button class="btn small">Save</button>
       </form>
+      <?php if ($lead['quote_chase_due'] || (int)$lead['quote_chase_count'] > 0): ?>
+        <div class="sub" style="margin:-4px 0 10px">
+          Quote chasers: <strong><?= (int)$lead['quote_chase_count'] ?> of <?= max_quote_chase_messages() ?></strong> sent<?php
+            if ($lead['quote_chase_due']): ?>, next due <?= dt($lead['quote_chase_due']) ?><?php
+            else: ?>. Nothing further is scheduled<?php endif; ?>.
+          <?php if ($lead['quote_chase_due']): ?>
+            <form method="post" style="display:inline"><?= csrf_field() ?><input type="hidden" name="action" value="stop_chase">
+              <button class="btn small ghost">Stop</button>
+            </form>
+          <?php endif; ?>
+        </div>
+      <?php elseif ($lead['status'] === 'Quote Sent' && $lead['quoted_premium'] !== null): ?>
+        <form method="post" class="status-form"><?= csrf_field() ?><input type="hidden" name="action" value="start_quote_chase">
+          <button class="btn small ghost">Start quote chasers</button>
+        </form>
+      <?php endif; ?>
       <?php if ($lead['quoted_premium'] !== null): ?>
         <div class="sub" style="margin:-4px 0 10px">Quoted <?= e(money_or_dash($lead['quoted_premium'])) ?><?= $lead['quoted_at'] ? ' on ' . dt($lead['quoted_at']) : '' ?>.
           <?php if (!in_array($lead['status'], ['Quote Sent', 'Won', 'Lost', 'Not Proceeding', 'Closed'], true)): ?>

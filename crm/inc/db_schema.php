@@ -108,6 +108,13 @@ function schema_migrations(bool $sqlite): array {
             // Which policy in the Cases tables this case is: cover, premiums, MTAs and documents.
             'ALTER TABLE leads ADD COLUMN policy_case_id ' . ($sqlite ? 'INTEGER NULL' : 'BIGINT NULL'),
         ],
+        7 => [
+            // Chasing a quote: three emails after the status goes to Quote Sent (1 hour, then 3
+            // hours, then 12 hours later). quote_chase_due is when the next one is due.
+            'ALTER TABLE leads ADD COLUMN quote_chase_count INT NOT NULL DEFAULT 0',
+            'ALTER TABLE leads ADD COLUMN quote_chase_due ' . $dt,
+            'CREATE INDEX idx_lead_quote_chase ON leads (quote_chase_due)',
+        ],
         6 => [
             // The premium we quoted the client. Kept on the record rather than in the
             // questionnaire, which is the client's own answers and is not ours to write in.

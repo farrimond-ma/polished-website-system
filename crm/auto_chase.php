@@ -54,3 +54,7 @@ foreach ($leads as $lead) {
     ]);
     echo "$ref: message $n — sent: " . (implode(', ', $r['sent']) ?: 'nothing') . ($r['failures'] ? ' — problems: ' . implode('; ', $r['failures']) : '') . "\n";
 }
+
+// Quote chasers are timed in hours and want their own hourly cron (quote_chase.php). Running them
+// here as well means they still go out, a little late, if that job has not been set up.
+foreach (run_quote_chases() as $line) echo "$line\n";

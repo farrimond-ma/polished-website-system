@@ -93,6 +93,37 @@ function msg_defaults(): array {
                 . "If it is easier to speak sooner, call us on {phone} and we will pick it up straight away.\n\n"
                 . "Your reference is {reference}.",
         ],
+        'quote_1' => [
+            'label' => 'Quote chaser 1 — an hour after the quote goes out',
+            'type' => 'email',
+            'note' => 'Sent an hour after the status is set to Quote Sent. {premium} is the premium recorded on the record.',
+            'subject' => 'Your business insurance quote',
+            'body' => "Hi {first_name},\n\n"
+                . "We recently sent you a quote for your business insurance.\n\n"
+                . "We just wondered if you were interested in proceeding or had any questions?\n\n"
+                . "Our premium was {premium}.\n\n"
+                . "If you would like to go ahead, or talk anything through, call us on {phone} and we will pick it up straight away.",
+        ],
+        'quote_2' => [
+            'label' => 'Quote chaser 2 — three hours after the first',
+            'type' => 'email',
+            'note' => 'Sent three hours after quote chaser 1, unless the status has moved on.',
+            'subject' => 'Anything you would like changed on your quote?',
+            'body' => "Hi {first_name},\n\n"
+                . "I wanted to check you received our quote of {premium} for your business insurance.\n\n"
+                . "If the cover or the limits are not quite right for how you work, tell us what you need and we will go back to the insurer. Most things can be adjusted.\n\n"
+                . "You can reply to this email or call us on {phone}.",
+        ],
+        'quote_3' => [
+            'label' => 'Quote chaser 3 — twelve hours after the second',
+            'type' => 'email',
+            'note' => 'The last quote chaser. Nothing further is sent automatically after this one.',
+            'subject' => 'Your quote is still open',
+            'body' => "Hi {first_name},\n\n"
+                . "Your quote of {premium} is still open, so there is nothing to do if you are happy with it apart from letting us know.\n\n"
+                . "If you have decided to stay where you are, or the timing is wrong, a quick reply saves you hearing from us again and tells us when to look at it next.\n\n"
+                . "Either way, call us on {phone} if you would like to talk it through. Your reference is {reference}.",
+        ],
         'email_submitted' => [
             'label' => 'Email — questionnaire received',
             'type' => 'email',
@@ -162,6 +193,9 @@ function msg_vars(array $lead, string $link): array {
         'link' => $link,
         'phone' => (string)cfg('company_phone', '01942 403370'),
         'reference' => isset($lead['lead_id']) ? lead_ref((int)$lead['lead_id']) : '',
+        // The premium we quoted, ready to drop into a sentence ("Our premium was {premium}.").
+        'premium' => isset($lead['quoted_premium']) && $lead['quoted_premium'] !== null
+            ? '£' . number_format((float)$lead['quoted_premium'], 2) : '',
     ];
 }
 
@@ -242,6 +276,11 @@ function build_custom_email(array $lead, string $subject, string $body, string $
 /** Straight-away acknowledgement for someone who asked for a call rather than the link. */
 function build_ack_email(array $lead): array {
     return msg_build_email('email_ack', $lead, '');
+}
+
+/** Quote chaser 1, 2 or 3 for a client who has had a quote. */
+function build_quote_chase_email(array $lead, int $n): array {
+    return msg_build_email('quote_' . max(1, min(3, $n)), $lead, '');
 }
 
 /** Confirmation to the client after they submit the questionnaire. */

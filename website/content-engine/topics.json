@@ -60,23 +60,26 @@
   },
   {
     "id": "t006",
-    "status": "queued",
+    "status": "skipped",
     "title": "Loss of keys cover for cleaning businesses: is it worth it?",
     "keyword": "loss of keys insurance cleaners",
     "coverSlug": "loss-of-keys-insurance",
     "angle": "Master key systems, fobs, costs, key handling procedures clients expect.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "note": "Overlaps /guides/keyholding-risks-explained"
   },
   {
     "id": "t007",
-    "status": "queued",
+    "status": "published",
     "title": "Insurance for domestic cleaners working in customers' homes",
     "keyword": "domestic cleaners insurance",
     "coverSlug": "domestic-cleaners-insurance",
     "angle": "Sole traders vs agencies, breakages, keys, pets, accusations of theft.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "slug": "domestic-cleaners-insurance-customers-homes",
+    "publishedAt": "2026-09-23T12:48:33.520Z"
   },
   {
     "id": "t008",

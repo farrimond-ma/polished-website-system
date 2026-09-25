@@ -83,23 +83,26 @@
   },
   {
     "id": "t008",
-    "status": "queued",
+    "status": "skipped",
     "title": "Carpet cleaning insurance: damage to property worked upon",
     "keyword": "carpet cleaners insurance damage to property worked upon",
     "coverSlug": "carpet-cleaners-insurance",
     "angle": "Shrinkage, colour run, water damage and why the extension matters.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "note": "Overlaps /guides/what-is-treatment-risk-insurance"
   },
   {
     "id": "t009",
-    "status": "queued",
+    "status": "published",
     "title": "What insurance do end of tenancy cleaners need?",
     "keyword": "end of tenancy cleaning insurance",
     "coverSlug": "end-of-tenancy-cleaning-insurance",
     "angle": "Letting agent requirements, keys, empty properties, deep clean risks.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "slug": "end-of-tenancy-cleaning-insurance-guide",
+    "publishedAt": "2026-09-25T12:46:07.610Z"
   },
   {
     "id": "t010",

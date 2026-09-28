@@ -106,13 +106,15 @@
   },
   {
     "id": "t010",
-    "status": "queued",
+    "status": "published",
     "title": "Oven cleaning insurance for franchisees and independents",
     "keyword": "oven cleaning insurance",
     "coverSlug": "oven-cleaners-insurance",
     "angle": "Appliance damage, chemicals, franchise requirements, vans.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "slug": "oven-cleaning-insurance-franchisees-independents",
+    "publishedAt": "2026-09-28T15:34:48.745Z"
   },
   {
     "id": "t011",

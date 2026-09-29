@@ -386,8 +386,29 @@ function q_missing_required(array $data, bool $clientScope, array $hiddenSection
         if (!q_condition_met($section['showIf'] ?? null, $data)) continue;
         foreach ($section['items'] as $it) {
             if (!q_is_input($it)) continue;
-            // "required" always; "requiredIf" only when its condition is met (e.g. the manual
-            // wageroll once any manual staff are entered).
+            // A percentage split is answered when it adds up, which is the rule both questionnaires
+            // already apply on screen. Checking it here too means a split cannot arrive half done.
+            if (($it['type'] ?? '') === 'percent_group') {
+                if (!q_condition_met($it['showIf'] ?? null, $data)) continue;
+                if (empty($it['mustTotal'])) continue;
+                $total = 0.0;
+                $answered = false;
+                foreach ($it['fields'] ?? [] as $f) {
+                    $v = $data[$f['id']] ?? null;
+                    if (!q_blank($v)) $answered = true;
+                    $total += q_num($v);
+                }
+                if (!$answered) {
+                    $missing[] = $section['title'] . ': ' . $it['label'];
+                } elseif (abs($total - (float)$it['mustTotal']) > 0.01) {
+                    $missing[] = $section['title'] . ': ' . $it['label']
+                        . ' (adds up to ' . rtrim(rtrim(number_format($total, 2, '.', ''), '0'), '.')
+                        . '%, it must total ' . (int)$it['mustTotal'] . '%)';
+                }
+                continue;
+            }
+            // "required" always; "requiredIf" only when its condition is met (e.g. a sum insured
+            // once the cover is asked for).
             $needed = !empty($it['required']) || (isset($it['requiredIf']) && q_condition_met($it['requiredIf'], $data));
             if (!$needed) continue;
             if (!q_condition_met($it['showIf'] ?? null, $data)) continue;

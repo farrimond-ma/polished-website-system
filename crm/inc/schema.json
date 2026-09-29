@@ -106,6 +106,7 @@
         },
         {
           "id": "experience_held",
+          "required": true,
           "label": "Do you (or the people running the business) have at least 1 year’s experience in cleaning work?",
           "type": "yesno",
           "acturis": false,
@@ -128,6 +129,7 @@
         },
         {
           "id": "prev_insurer_details",
+          "required": true,
           "label": "Who are you currently insured with?",
           "type": "text",
           "acturis": true
@@ -232,26 +234,18 @@
         },
         {
           "id": "manual_wages",
+          "required": true,
           "label": "Total estimated manual wages (including manual labour-only subcontractor payments)",
           "type": "currency",
           "acturis": true,
-          "requiredIf": {
-            "anyGt0": [
-              "num_manual_directors",
-              "num_manual_employees",
-              "num_losc"
-            ]
-          },
           "help": "Needed because you have entered manual staff. Include manual labour-only subcontractor payments."
         },
         {
           "id": "clerical_wages",
+          "required": true,
           "label": "Total estimated clerical wages",
           "type": "currency",
           "acturis": true,
-          "requiredIf": {
-            "fieldGt0": "num_clerical"
-          },
           "help": "Needed because you have entered clerical staff."
         },
         {
@@ -266,30 +260,35 @@
         },
         {
           "id": "num_clerical",
+          "required": true,
           "label": "Clerical employees, directors, principals and clerical labour-only subcontractors",
           "type": "number",
           "acturis": true
         },
         {
           "id": "num_manual_directors",
+          "required": true,
           "label": "Manual directors, principals and partners",
           "type": "number",
           "acturis": true
         },
         {
           "id": "num_manual_employees",
+          "required": true,
           "label": "Manual employees",
           "type": "number",
           "acturis": true
         },
         {
           "id": "num_losc",
+          "required": true,
           "label": "Manual labour-only subcontractors",
           "type": "number",
           "acturis": true
         },
         {
           "id": "bfsc_percent",
+          "required": true,
           "label": "Percentage of work performed by bona fide subcontractors",
           "type": "percent",
           "acturis": true
@@ -1049,6 +1048,7 @@
         },
         {
           "id": "pl_limit",
+          "required": true,
           "label": "Limit required",
           "type": "select",
           "options": [
@@ -1065,12 +1065,15 @@
         },
         {
           "id": "cw_tools_req",
+          "default": "no",
+          "required": true,
           "label": "Do you require cover for your Tools and Equipment?",
           "type": "yesno",
           "acturis": true
         },
         {
           "id": "cw_tools",
+          "requiredIf": { "field": "cw_tools_req", "equals": "yes" },
           "label": "Tools and equipment — sum insured (£)",
           "type": "currency",
           "showIf": {
@@ -1081,12 +1084,15 @@
         },
         {
           "id": "cw_hired_plant_req",
+          "default": "no",
+          "required": true,
           "label": "Do you need cover for Hired in Plant?",
           "type": "yesno",
           "acturis": true
         },
         {
           "id": "cw_hired_plant",
+          "requiredIf": { "field": "cw_hired_plant_req", "equals": "yes" },
           "label": "Hired-in plant — sum insured (£)",
           "type": "currency",
           "showIf": {
@@ -1134,11 +1140,11 @@
         },
         {
           "id": "ext_loss_of_keys",
-          "label": "Loss of keys",
+          "label": "Loss of customers' keys",
           "type": "yesno",
           "acturis": true,
           "default": "yes",
-          "client": false
+          "client": true
         },
         {
           "id": "ext_misuse_telephones",
@@ -1178,7 +1184,7 @@
           "type": "yesno",
           "acturis": true,
           "default": "no",
-          "client": false
+          "client": true
         },
         {
           "id": "ext_trace_access",

@@ -148,11 +148,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             flash('Task completed.');
             break;
         case 'delete':
-            if (!is_admin()) { flash('Admins only.'); break; }
+            if (!is_admin()) { flash('Only an admin can delete a record.'); break; }
+            $gone = lead_ref($id) . ' ' . lead_name($lead);
             $pdo->prepare('DELETE FROM lead_note WHERE lead_id = ?')->execute([$id]);
             $pdo->prepare('DELETE FROM lead_task WHERE lead_id = ?')->execute([$id]);
             $pdo->prepare('DELETE FROM leads WHERE lead_id = ?')->execute([$id]);
-            flash(lead_ref($id) . ' and all its data have been deleted.');
+            flash($gone . ' and all their data have been deleted.');
             redirect($list);
     }
     redirect($back);
@@ -440,10 +441,19 @@ layout_header(lead_ref($id) . ' ' . lead_name($lead));
     </div>
 
     <?php if (is_admin()): ?>
-      <form method="post" onsubmit="return confirm('Permanently delete this lead, its questionnaire answers, notes and tasks? This cannot be undone.')">
-        <?= csrf_field() ?><input type="hidden" name="action" value="delete">
-        <button class="btn ghost danger small">Delete lead (GDPR erasure)</button>
-      </form>
+      <div class="card">
+        <h2>Delete this <?= e(strtolower($word)) ?></h2>
+        <p class="sub">Removes <?= e(lead_name($lead)) ?> and everything held with them: their
+          questionnaire answers, the history, notes and tasks. It cannot be undone, and it is how a
+          client's right to erasure is met.
+          <?php if ($isCase && $lead['policy_case_id']): ?>
+            The policy itself is not touched, only this record.
+          <?php endif; ?></p>
+        <form method="post" onsubmit="return confirm('Permanently delete <?= e(addslashes(lead_name($lead))) ?> and all their data? This cannot be undone.')">
+          <?= csrf_field() ?><input type="hidden" name="action" value="delete">
+          <button class="btn ghost danger">Delete this <?= e(strtolower($word)) ?> permanently</button>
+        </form>
+      </div>
     <?php endif; ?>
   </div>
 </div>

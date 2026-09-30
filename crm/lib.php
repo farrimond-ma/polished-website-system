@@ -195,7 +195,7 @@ function flash(?string $msg = null): ?string {
 /* ---------- pipeline ---------- */
 function statuses(): array {
     return ['New Enquiry', 'Existing', 'Contacted', 'Questionnaire Sent', 'Questionnaire Completed',
-            'Quoting', 'Quote Sent', 'Won', 'Lost', 'Not Proceeding', 'Closed'];
+            'Referred', 'Quote Sent', 'Won', 'Lost', 'Not Proceeding', 'Closed'];
 }
 /** A lead is an enquiry, so it never starts as Existing. */
 function lead_statuses(): array { return array_values(array_diff(statuses(), ['Existing'])); }

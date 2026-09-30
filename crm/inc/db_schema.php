@@ -108,6 +108,13 @@ function schema_migrations(bool $sqlite): array {
             // Which policy in the Cases tables this case is: cover, premiums, MTAs and documents.
             'ALTER TABLE leads ADD COLUMN policy_case_id ' . ($sqlite ? 'INTEGER NULL' : 'BIGINT NULL'),
         ],
+        9 => [
+            // Winning a lead used to turn it into a case. It should not have: Cases holds the
+            // clients we already insure. Anything that became a case only by being won goes back
+            // to Leads, while imported clients and anything linked to a policy stay put.
+            "UPDATE leads SET is_case = 0
+               WHERE is_case = 1 AND source <> 'Renewal' AND policy_case_id IS NULL",
+        ],
         8 => [
             // A case is an existing client, not a new enquiry.
             "UPDATE leads SET status = 'Existing' WHERE is_case = 1 AND status = 'New Enquiry'",

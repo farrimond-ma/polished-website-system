@@ -239,8 +239,9 @@ function add_note(int $leadId, string $body, ?int $userId = null): void {
 }
 
 function touch_lead(int $leadId, array $fields): void {
-    // Won means they now have a policy with us, so the record belongs under Cases from here on.
-    if (($fields['status'] ?? '') === 'Won') $fields['is_case'] = 1;
+    // Winning a lead does not move it to Cases: it stays under Leads, in the Won list. Cases are
+    // the clients we already insure, which means the ones imported from Acturis and any record
+    // someone has linked a policy to by hand.
     // Moving off Quote Sent ends the quote chasers: they have answered, or gone elsewhere.
     if (isset($fields['status']) && $fields['status'] !== 'Quote Sent' && !array_key_exists('quote_chase_due', $fields)) {
         $fields['quote_chase_due'] = null;

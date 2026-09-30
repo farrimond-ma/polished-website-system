@@ -118,13 +118,15 @@
   },
   {
     "id": "t011",
-    "status": "queued",
+    "status": "published",
     "title": "Pressure washing insurance: surfaces, runoff and roof cleaning",
     "keyword": "pressure washing insurance",
     "coverSlug": "pressure-washing-insurance",
     "angle": "Damage to surfaces, water ingress, soft washing chemicals, height.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "slug": "pressure-washing-insurance-surfaces-runoff-roof-cleaning",
+    "publishedAt": "2026-09-30T13:50:02.223Z"
   },
   {
     "id": "t012",

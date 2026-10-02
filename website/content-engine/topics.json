@@ -130,13 +130,15 @@
   },
   {
     "id": "t012",
-    "status": "queued",
+    "status": "published",
     "title": "Cleaning equipment insurance: protecting machines and vans",
     "keyword": "cleaning equipment insurance",
     "coverSlug": "tools-and-equipment-insurance-for-cleaners",
     "angle": "Theft from vehicles, security conditions, hired-in equipment, valuation.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "slug": "cleaning-equipment-insurance-machines-vans",
+    "publishedAt": "2026-10-02T13:51:02.985Z"
   },
   {
     "id": "t013",

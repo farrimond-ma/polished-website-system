@@ -142,23 +142,26 @@
   },
   {
     "id": "t013",
-    "status": "queued",
+    "status": "skipped",
     "title": "Insurance for starting a cleaning business in the UK",
     "keyword": "insurance for new cleaning business",
     "coverSlug": "commercial-cleaning-insurance",
     "angle": "Checklist for a new cleaning company: covers, cost drivers, what insurers ask.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "note": "Overlaps /guides/do-i-need-insurance-for-cleaning"
   },
   {
     "id": "t014",
-    "status": "queued",
+    "status": "published",
     "title": "Office cleaning insurance: out-of-hours access and alarm codes",
     "keyword": "office cleaning insurance",
     "coverSlug": "commercial-cleaning-insurance",
     "angle": "Security risks, keyholding, damage to IT equipment, lone working.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "slug": "office-cleaning-insurance-out-of-hours-access",
+    "publishedAt": "2026-10-05T16:07:25.723Z"
   },
   {
     "id": "t015",

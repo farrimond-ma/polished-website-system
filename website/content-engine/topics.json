@@ -165,13 +165,15 @@
   },
   {
     "id": "t015",
-    "status": "queued",
+    "status": "published",
     "title": "Labour-only subcontractors and your cleaning insurance",
     "keyword": "labour only subcontractors cleaning insurance",
     "coverSlug": "employers-liability-insurance-for-cleaners",
     "angle": "How insurers treat LOSC vs bona fide subcontractors, wages declarations, certificates.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "slug": "labour-only-subcontractors-cleaning-insurance",
+    "publishedAt": "2026-10-07T14:35:37.824Z"
   },
   {
     "id": "t016",

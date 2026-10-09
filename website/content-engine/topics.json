@@ -177,13 +177,15 @@
   },
   {
     "id": "t016",
-    "status": "queued",
+    "status": "published",
     "title": "Fidelity guarantee insurance for cleaning companies",
     "keyword": "fidelity guarantee insurance cleaning",
     "coverSlug": "contract-cleaners-insurance",
     "angle": "Employee dishonesty, vetting, tender requirements from banks and offices.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "slug": "fidelity-guarantee-insurance-cleaning-companies",
+    "publishedAt": "2026-10-09T14:22:46.175Z"
   },
   {
     "id": "t017",

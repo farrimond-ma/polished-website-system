@@ -78,6 +78,7 @@ $wasStatus = $lead['status'];
 $fields['q_status'] = 'submitted';
 $fields['q_submitted_at'] = now();
 $fields['chasing'] = 0;
+$fields['q_reopened_at'] = null;              // finished again, so it is no longer reopened
 $fields['next_chase_date'] = null;
 $fields['next_chase_window'] = null;
 $fields['next_follow_up'] = date('Y-m-d');

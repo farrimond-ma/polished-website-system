@@ -24,7 +24,7 @@ $all = param('all') === '1';
   <a href="?id=<?= $id ?>&amp;all=<?= $all ? '0' : '1' ?>"><?= $all ? 'Hide' : 'Show' ?> unanswered / not applicable questions</a></div>
 <div class="bar">
   <div><h1><?= e(q_schema()['title']) ?></h1><div class="sub"><?= e(lead_name($lead)) ?> · <?= e($lead['company_name']) ?></div></div>
-  <div class="sub" style="text-align:right"><strong><?= e(lead_ref($id)) ?></strong><br>Status: <?= e(q_status_label($lead['q_status'])) ?><br><?= $lead['q_submitted_at'] ? 'Submitted ' . dt($lead['q_submitted_at']) : 'Printed ' . dt(now()) ?></div>
+  <div class="sub" style="text-align:right"><strong><?= e(lead_ref($id)) ?></strong><br>Status: <?= e(q_status_label_for($lead)) ?><br><?= $lead['q_submitted_at'] ? 'Submitted ' . dt($lead['q_submitted_at']) : 'Printed ' . dt(now()) ?></div>
 </div>
 <?php foreach (q_schema()['sections'] as $section):
     $applies = q_condition_met($section['showIf'] ?? null, $data);

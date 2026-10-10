@@ -194,8 +194,8 @@ function flash(?string $msg = null): ?string {
 
 /* ---------- pipeline ---------- */
 function statuses(): array {
-    return ['New Enquiry', 'Existing', 'Contacted', 'Questionnaire Sent', 'Questionnaire Completed',
-            'Referred', 'Quote Sent', 'Won', 'Lost', 'Not Proceeding', 'Closed'];
+    return ['New Enquiry', 'Existing', 'Info Requested', 'Questionnaire Sent', 'Questionnaire Completed',
+            'Referred to U/W', 'Quote Sent', 'Won', 'Lost', 'Not Proceeding', 'Closed'];
 }
 /** A lead is an enquiry, so it never starts as Existing. */
 function lead_statuses(): array { return array_values(array_diff(statuses(), ['Existing'])); }
@@ -204,11 +204,26 @@ function case_statuses(): array { return array_values(array_diff(statuses(), ['N
 function terminal_statuses(): array { return ['Won', 'Lost', 'Not Proceeding', 'Closed']; }
 /** Statuses a completed questionnaire moves a lead forward FROM (later stages are left alone). */
 function pre_questionnaire_statuses(): array {
-    return ['New Enquiry', 'Existing', 'Contacted', 'Questionnaire Sent', 'Lost', 'Not Proceeding', 'Closed'];
+    return ['New Enquiry', 'Existing', 'Info Requested', 'Questionnaire Sent', 'Lost', 'Not Proceeding', 'Closed'];
 }
 function status_class(string $s): string { return 'st-' . strtolower(preg_replace('/[^a-z0-9]+/i', '-', $s)); }
 function q_status_label(string $s): string {
     return ['not_started' => 'Not started', 'in_progress' => 'In progress', 'submitted' => 'Completed'][$s] ?? $s;
+}
+
+/**
+ * The same, for a record: a questionnaire we reopened reads "Reopened" rather than "In progress",
+ * so it is clear the client finished it once and we asked for a change.
+ */
+function q_status_label_for(array $lead): string {
+    if (($lead['q_status'] ?? '') === 'in_progress' && !empty($lead['q_reopened_at'])) return 'Reopened';
+    return q_status_label((string)($lead['q_status'] ?? ''));
+}
+
+/** The pill colour for that state. */
+function q_status_class_for(array $lead): string {
+    return 'q-' . (($lead['q_status'] ?? '') === 'in_progress' && !empty($lead['q_reopened_at'])
+        ? 'reopened' : (string)($lead['q_status'] ?? ''));
 }
 function lead_sources(): array { return ['Website form', 'Phone', 'Email', 'Referral', 'Renewal', 'Manual Input']; }
 
@@ -589,7 +604,7 @@ function start_questionnaire_chase(array $lead, string $label = 'Questionnaire l
         'next_chase_date' => date('Y-m-d', strtotime('+' . (int)cfg('first_auto_chase_days', 2) . ' days')),
         'next_chase_window' => random_chase_window(),
     ];
-    if (in_array($lead['status'], ['New Enquiry', 'Contacted'], true)) $fields['status'] = 'Questionnaire Sent';
+    if (in_array($lead['status'], ['New Enquiry', 'Info Requested'], true)) $fields['status'] = 'Questionnaire Sent';
     touch_lead((int)$lead['lead_id'], $fields);
     return ['ok' => true, 'message' => 'Questionnaire link sent (' . implode(' and ', $r['sent']) . '). Automatic reminders are on.'];
 }

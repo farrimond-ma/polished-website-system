@@ -21,7 +21,7 @@ echo "<link rel='stylesheet' href='" . asset('assets/questionnaire.css') . "'>";
 <div class="page-head">
   <div>
     <h1>Questionnaire · <span class="mono"><?= e(lead_ref($id)) ?></span> <?= e(lead_name($lead)) ?></h1>
-    <div class="sub">Status: <strong><?= e(q_status_label($lead['q_status'])) ?></strong>
+    <div class="sub">Status: <strong><?= e(q_status_label_for($lead)) ?></strong>
       <?= $lead['q_submitted_at'] ? ' · submitted ' . dt($lead['q_submitted_at']) : '' ?>
       · Changes save automatically.
       <?php if ($lead['q_status'] === 'in_progress'): ?> The client may be editing too — reload before making big changes.<?php endif; ?></div>

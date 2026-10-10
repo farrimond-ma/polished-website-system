@@ -90,12 +90,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             flash('New link created. The previous link has stopped working.');
             break;
         case 'reopen':
-            touch_lead($id, ['q_status' => 'in_progress', 'q_submitted_at' => null]);
+            touch_lead($id, ['q_status' => 'in_progress', 'q_submitted_at' => null, 'q_reopened_at' => now()]);
             add_note($id, 'Questionnaire reopened so the client can make changes.', $me);
             flash('Questionnaire reopened — the client can edit it again using their link.');
             break;
         case 'mark_submitted':
-            $fields = ['q_status' => 'submitted', 'q_submitted_at' => now(), 'chasing' => 0, 'next_chase_date' => null, 'next_chase_window' => null];
+            $fields = ['q_status' => 'submitted', 'q_submitted_at' => now(), 'q_reopened_at' => null,
+                       'chasing' => 0, 'next_chase_date' => null, 'next_chase_window' => null];
             if (in_array($lead['status'], pre_questionnaire_statuses(), true)) $fields['status'] = 'Questionnaire Completed';
             touch_lead($id, $fields);
             add_note($id, 'Questionnaire marked as completed by staff.', $me);
@@ -269,7 +270,7 @@ layout_header(lead_ref($id) . ' ' . lead_name($lead));
     <div class="card">
       <h2>Questionnaire</h2>
       <div class="q-summary">
-        <span class="pill pill-lg q-<?= e($lead['q_status']) ?>"><?= e(q_status_label($lead['q_status'])) ?></span>
+        <span class="pill pill-lg <?= e(q_status_class_for($lead)) ?>"><?= e(q_status_label_for($lead)) ?></span>
         <div class="progress"><div style="width:<?= $progress['pct'] ?>%"></div></div>
         <span class="sub"><?= $progress['answered'] ?> of <?= $progress['total'] ?> client questions answered</span>
       </div>

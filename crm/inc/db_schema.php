@@ -108,6 +108,18 @@ function schema_migrations(bool $sqlite): array {
             // Which policy in the Cases tables this case is: cover, premiums, MTAs and documents.
             'ALTER TABLE leads ADD COLUMN policy_case_id ' . ($sqlite ? 'INTEGER NULL' : 'BIGINT NULL'),
         ],
+        12 => [
+            // When staff reopen a submitted questionnaire it goes back to in progress. Knowing it
+            // was reopened, rather than never finished, is the difference between chasing a client
+            // and waiting on a change we asked for.
+            'ALTER TABLE leads ADD COLUMN q_reopened_at ' . $dt,
+        ],
+        11 => [
+            // Clearer names for two stages: we have asked the client for information, and the case
+            // is with an underwriter.
+            "UPDATE leads SET status = 'Info Requested' WHERE status = 'Contacted'",
+            "UPDATE leads SET status = 'Referred to U/W' WHERE status = 'Referred'",
+        ],
         10 => [
             // "Quoting" is now "Referred": the case is with an insurer.
             "UPDATE leads SET status = 'Referred' WHERE status = 'Quoting'",

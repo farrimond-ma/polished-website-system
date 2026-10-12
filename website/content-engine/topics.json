@@ -189,23 +189,26 @@
   },
   {
     "id": "t017",
-    "status": "queued",
+    "status": "skipped",
     "title": "How to answer insurance questions in a cleaning tender",
     "keyword": "cleaning tender insurance requirements",
     "coverSlug": "contract-cleaners-insurance",
     "angle": "Typical PQQ/ITT questions, evidence, named interest, certificates, limits.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "note": "Overlaps /guides/public-liability-limit-cleaning-contract"
   },
   {
     "id": "t018",
-    "status": "queued",
+    "status": "published",
     "title": "Biohazard and trauma cleaning insurance explained",
     "keyword": "biohazard cleaning insurance",
     "coverSlug": "specialist-cleaning-insurance",
     "angle": "Declaring specialist work, training, waste, exclusions.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "slug": "biohazard-cleaning-insurance-explained",
+    "publishedAt": "2026-10-12T16:49:02.518Z"
   },
   {
     "id": "t019",

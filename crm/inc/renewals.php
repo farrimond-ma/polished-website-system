@@ -96,8 +96,7 @@ function renewal_labels(): array {
                                    'client name', 'business name', 'insured'],
         'phone'                => ['mobile number', 'mobile', 'telephone number', 'telephone', 'contact number'],
         'renewal_date'         => ['period of insurance', 'renewal date', 'expiry date', 'renewal'],
-        'policy_number'        => ['policy number', 'policy no', 'policy ref', 'policy document reference',
-                                   'quotation reference'],
+        'policy_number'        => ['policy number', 'policy no', 'policy ref', 'quotation reference'],
         'trading_names'        => ['trading name', 'trading as', 't/as'],
         'address'              => ['address of the business', 'postal address', 'correspondence address',
                                    'registered address', 'risk address', 'address'],
@@ -195,6 +194,17 @@ function renewal_parse_cover_table(string $text): array {
         $covers[] = ['cover' => $name, 'limit' => $limit, 'excess' => $excess === '' ? 'Nil' : $excess];
     }
     return $covers;
+}
+
+/**
+ * Which Acturis document this is. A schedule is the insurer's own record of the policy as it
+ * stands, so where it disagrees with a quotation about an address or a policy number, it is right.
+ */
+function renewal_document_kind(string $text): string {
+    $head = mb_strtolower(mb_substr(trim($text), 0, 400));
+    if (preg_match('/\bpolicy number\b/', $head) || preg_match('/^schedule\b/', $head)) return 'schedule';
+    if (preg_match('/\bquotation\b/', $head)) return 'quotation';
+    return 'other';
 }
 
 /** Tidies one value read out of a document: no label punctuation, no bullet, no stray spaces. */
@@ -366,7 +376,11 @@ function renewal_parse_document(string $text): array {
 }
 
 /** Imports one client from checked values ([field => value]). Returns [leadId, 'added'|'updated']. */
-function renewal_import_one(array $values, ?int $userId = null): array {
+/**
+ * Imports one client from a document staff have checked on screen.
+ * $authoritative means the details came from a schedule, so they correct anything we already hold.
+ */
+function renewal_import_one(array $values, ?int $userId = null, bool $authoritative = false): array {
     // renewal_prepare_row() works on a row keyed by column name, so map field => field.
     $map = [];
     foreach (array_keys(renewal_fields()) as $f) $map[$f] = $f;
@@ -379,7 +393,12 @@ function renewal_import_one(array $values, ?int $userId = null): array {
     if ($existing) {
         $leadId = (int)$existing['lead_id'];
         $data = q_lead_data($existing);
-        foreach ($p['q'] as $k => $v) if (q_blank($data[$k] ?? null)) $data[$k] = $v;
+        // A schedule corrects what we hold, because it is the insurer's own record. Anything the
+        // client has answered themselves is left alone: by then they know better than the paperwork.
+        $correct = $authoritative && in_array($existing['q_status'] ?? '', ['not_started', ''], true);
+        foreach ($p['q'] as $k => $v) {
+            if ($k === '_current_cover' || $correct || q_blank($data[$k] ?? null)) $data[$k] = $v;
+        }
         $fields = array_filter($p['lead'], fn($v) => $v !== '' && $v !== null);
         unset($fields['email']);
         $fields['q_data'] = json_encode($data, JSON_UNESCAPED_UNICODE);
@@ -387,7 +406,9 @@ function renewal_import_one(array $values, ?int $userId = null): array {
         $fields['is_case'] = 1;                    // they already have a policy with us
         if (!$existing['assigned_to'] && $userId) $fields['assigned_to'] = $userId;
         touch_lead($leadId, $fields);
-        add_note($leadId, 'Updated from an Acturis document.' . ($p['policy_number'] !== '' ? ' Policy ' . $p['policy_number'] . '.' : ''), $userId);
+        add_note($leadId, ($authoritative ? 'Updated from the policy schedule, which corrects what we held.'
+            : 'Updated from an Acturis document, filling in anything we did not hold.')
+            . ($p['policy_number'] !== '' ? ' Policy ' . $p['policy_number'] . '.' : ''), $userId);
         return [$leadId, 'updated'];
     }
     db()->prepare('INSERT INTO leads (status, is_case, first_name, last_name, company_name, email, phone, source,

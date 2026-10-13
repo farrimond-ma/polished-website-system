@@ -37,16 +37,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $v = trim((string)post('f_' . $field, ''));
             if ($v !== '') $values[$field] = $v;
         }
-        // The cover table is read from the document itself rather than the form, since it is a
-        // table of covers and limits, not something staff retype.
+        // The cover table and the kind of document are read from the document itself rather than
+        // the form: they are not things staff retype.
+        $isSchedule = false;
         if ($path !== '' && is_file($path) && $ext !== 'csv') {
             $doc = renewal_document_text($path, 'x.' . $ext);
             if (!$doc['error']) {
+                $isSchedule = renewal_document_kind($doc['text']) === 'schedule';
                 $covers = renewal_parse_cover_table($doc['text']);
                 if ($covers) $values['_current_cover'] = $covers;
             }
         }
-        [$leadId, $result] = renewal_import_one($values, $me);
+        [$leadId, $result] = renewal_import_one($values, $me, $isSchedule);
         if (!$leadId) {
             $importError = $result;
             $importValues = $values;
@@ -107,7 +109,14 @@ layout_header('Import from Acturis');
     <?php if ($doc['error']): ?>
       <div class="flash"><?= e($doc['error']) ?></div>
     <?php else: ?>
-      <?php $covers = $doc['error'] ? [] : renewal_parse_cover_table($doc['text']); ?>
+      <?php
+        $covers = $doc['error'] ? [] : renewal_parse_cover_table($doc['text']);
+        $kind = $doc['error'] ? 'other' : renewal_document_kind($doc['text']);
+      ?>
+      <?php if ($kind === 'schedule'): ?>
+        <p class="sub">This is a policy schedule, so what it says corrects anything we already hold for this client,
+          such as their address or policy number. Answers the client has given themselves are left alone.</p>
+      <?php endif; ?>
       <?php if ($covers): ?>
         <p class="sub"><strong><?= count($covers) ?></strong> cover(s) read from the schedule. They are kept with the
           client and shown at the top of their questionnaire, so they can see what they hold today:

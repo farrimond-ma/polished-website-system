@@ -261,6 +261,26 @@ function q_normalise_answers(array $data): array {
     return $data;
 }
 
+/**
+ * The covers a client already holds, as read from their schedule: a list of
+ * ['cover' => ..., 'limit' => ..., 'excess' => ...]. Shown to them so a renewal starts from what
+ * they have rather than a blank form. Staff-written only: a client cannot change it.
+ */
+function q_current_cover(array $data): array {
+    $list = $data['_current_cover'] ?? null;
+    if (!is_array($list)) return [];
+    $out = [];
+    foreach ($list as $row) {
+        if (!is_array($row) || ($row['cover'] ?? '') === '') continue;
+        $out[] = [
+            'cover' => (string)$row['cover'],
+            'limit' => (string)($row['limit'] ?? ''),
+            'excess' => (string)($row['excess'] ?? ''),
+        ];
+    }
+    return $out;
+}
+
 /** One question from the schema by its id, or [] if there is no such question. */
 function q_item(string $id): array {
     foreach (q_schema()['sections'] as $section) {
@@ -348,7 +368,8 @@ function q_sanitise(array $incoming, ?array $allowed = null): array {
     }
     $out = [];
     foreach ($incoming as $k => $v) {
-        if ($k === '_hidden_sections' || $k === '_hidden_items') continue; // staff-only, handled separately
+        // Staff-only keys, each handled where it is set rather than written by a client.
+        if (in_array($k, ['_hidden_sections', '_hidden_items', '_current_cover'], true)) continue;
         if (!isset($types[$k])) continue;
         if ($allowed !== null && !isset($allowed[$k])) continue;
         $type = $types[$k];

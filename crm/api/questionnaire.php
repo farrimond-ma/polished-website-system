@@ -35,6 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         'submitted' => $submitted,
         'submitted_at' => $lead['q_submitted_at'],
         'prefilled' => array_keys(array_intersect_key(q_prefill_from_lead($lead), $clientKeys)),
+        'currentCover' => q_current_cover($stored),
         'schema' => q_client_schema($hidden, $hiddenItems),
         'data' => (object)$data,
     ]);

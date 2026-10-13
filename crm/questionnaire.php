@@ -36,6 +36,27 @@ echo "<link rel='stylesheet' href='" . asset('assets/questionnaire.css') . "'>";
   </div>
 </div>
 
+<?php $currentCover = q_current_cover($data); ?>
+<?php if ($currentCover): ?>
+  <div class="card">
+    <h2>Cover at the moment</h2>
+    <p class="sub">Read from their schedule when they were imported, and shown to the client at the top of their
+      questionnaire. Nothing here is theirs to edit.</p>
+    <table class="grid small">
+      <thead><tr><th>Cover</th><th>Limit</th><th>Excess</th></tr></thead>
+      <tbody>
+        <?php foreach ($currentCover as $c): ?>
+          <tr>
+            <td><?= e($c['cover']) ?></td>
+            <td style="white-space:nowrap"><?= e($c['limit']) ?></td>
+            <td class="sub"><?= e($c['excess']) ?></td>
+          </tr>
+        <?php endforeach; ?>
+      </tbody>
+    </table>
+  </div>
+<?php endif; ?>
+
 <?php if ($view === 'client'): ?>
   <div class="client-view-note">You are seeing exactly what the client sees, in their order — staff-only questions are hidden.
     Anything you type here still saves to the lead. <a href="questionnaire.php?id=<?= $id ?>">Switch to staff view</a> for every question.</div>

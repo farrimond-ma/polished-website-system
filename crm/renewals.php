@@ -37,6 +37,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $v = trim((string)post('f_' . $field, ''));
             if ($v !== '') $values[$field] = $v;
         }
+        // The cover table is read from the document itself rather than the form, since it is a
+        // table of covers and limits, not something staff retype.
+        if ($path !== '' && is_file($path) && $ext !== 'csv') {
+            $doc = renewal_document_text($path, 'x.' . $ext);
+            if (!$doc['error']) {
+                $covers = renewal_parse_cover_table($doc['text']);
+                if ($covers) $values['_current_cover'] = $covers;
+            }
+        }
         [$leadId, $result] = renewal_import_one($values, $me);
         if (!$leadId) {
             $importError = $result;
@@ -98,6 +107,12 @@ layout_header('Import from Acturis');
     <?php if ($doc['error']): ?>
       <div class="flash"><?= e($doc['error']) ?></div>
     <?php else: ?>
+      <?php $covers = $doc['error'] ? [] : renewal_parse_cover_table($doc['text']); ?>
+      <?php if ($covers): ?>
+        <p class="sub"><strong><?= count($covers) ?></strong> cover(s) read from the schedule. They are kept with the
+          client and shown at the top of their questionnaire, so they can see what they hold today:
+          <?= e(implode(', ', array_map(fn($c) => $c['cover'] . ' ' . $c['limit'], array_slice($covers, 0, 4)))) ?><?= count($covers) > 4 ? ' and more' : '' ?>.</p>
+      <?php endif; ?>
       <p class="sub">Read from the document — <strong><?= count($parsed) ?></strong> detail(s) recognised. Correct anything
         that is wrong and fill in anything missing, then import. Everything here pre-fills the client's questionnaire for
         them to check and confirm.</p>

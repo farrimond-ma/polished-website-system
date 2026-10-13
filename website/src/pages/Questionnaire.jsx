@@ -206,7 +206,7 @@ const Questionnaire = () => {
         const initial = withDefaults(body.schema, body.data || {});
         latest.current = initial;
         setData(initial);
-        setState({ status: body.submitted ? 'submitted' : 'ready', schema: body.schema, reference: body.reference, firstName: body.first_name, prefilled: new Set(body.prefilled || []) });
+        setState({ status: body.submitted ? 'submitted' : 'ready', schema: body.schema, reference: body.reference, firstName: body.first_name, prefilled: new Set(body.prefilled || []), currentCover: body.currentCover || [] });
       })
       .catch(() => setState({ status: 'error', message: `We could not connect. Please check your internet connection and try again, or call us on ${SITE.phoneDisplay}.` }));
   }, [token]);
@@ -376,6 +376,26 @@ const Questionnaire = () => {
           <div className="q-callout">
             <strong>Useful to have to hand:</strong> your annual turnover and wages, number of staff, your current policy renewal date, and details of any claims in the last five years.
           </div>
+          {state.currentCover?.length > 0 && (
+            <div className="q-cover">
+              <h2>Your cover at the moment</h2>
+              <p className="q-small">This is what your current policy covers, taken from your schedule. There is nothing to
+                fill in here. If anything looks wrong, or you want to add or drop a cover, tell us on the phone or when you
+                reach the covers section.</p>
+              <table className="q-cover-table">
+                <thead><tr><th>Cover</th><th>Limit</th><th>Excess</th></tr></thead>
+                <tbody>
+                  {state.currentCover.map((c, i) => (
+                    <tr key={i}>
+                      <td>{c.cover}</td>
+                      <td className="q-cover-limit">{c.limit}</td>
+                      <td className="q-cover-excess">{c.excess}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
           {schema.intro && <p className="q-small">{schema.intro}</p>}
           <div className="q-actions"><span /><button type="button" className="btn btn-primary" onClick={() => goTo(1)}>Start &rarr;</button></div>
         </div>

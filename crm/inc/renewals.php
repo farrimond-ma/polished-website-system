@@ -129,6 +129,74 @@ function renewal_labels(): array {
  * Pulls "label: value" pairs out of the document text. Returns [field => value] for whatever it
  * recognised — staff check and correct everything on screen before anything is saved.
  */
+/**
+ * The covers a client actually holds, read from the "Cover Details" table of a Zurich schedule.
+ *
+ * The table is one row per cover: a name, the limit of indemnity and the excess. Anything marked
+ * "Not Insured" is left out, so what comes back is only what they are covered for. A row whose name
+ * wraps onto two lines (such as "Property held in trust / (special exclusion 12, clause d)") is put
+ * back together, and so is an excess that runs on below.
+ *
+ * Returns [['cover' => ..., 'limit' => ..., 'excess' => ...], ...].
+ */
+function renewal_parse_cover_table(string $text): array {
+    $text = strtr($text, ["\xE2\x80\x99" => "'", "\xE2\x80\x93" => '-', "\xE2\x80\x94" => '-', "\xC2\xA0" => ' ']);
+    $lines = array_map(fn($l) => trim((string)$l), preg_split('/\R/', $text) ?: []);
+
+    // Only the cover table, which runs from its heading to the endorsements (or the end).
+    $from = null; $to = count($lines);
+    foreach ($lines as $i => $line) {
+        if ($from === null && preg_match('/^cover details$/i', $line)) $from = $i;
+        if ($from !== null && $i > $from && preg_match('/^endorsements$/i', $line)) { $to = $i; break; }
+    }
+    if ($from === null) return [];
+
+    $covers = [];
+    $pending = [];
+    $skipNext = false;
+    for ($i = $from + 1; $i < $to; $i++) {
+        $line = $lines[$i];
+        if ($line === '' || preg_match('/^page \d+ of \d+$/i', $line)) continue;
+        if ($skipNext && !str_contains($line, '£')) { $skipNext = false; continue; }
+        $skipNext = false;
+
+        // Table headings and blurb are not covers.
+        if (preg_match('/^(the policy provides|cover\s+limit of indemnity|extensions? to\b)/i', $line)) {
+            $pending = [];
+            if (preg_match('/^extensions? to\b/i', $line)) $skipNext = true;   // its second line
+            continue;
+        }
+        // A cover they do not hold.
+        if (stripos($line, 'not insured') !== false) { $pending = []; continue; }
+
+        $at = mb_strpos($line, '£');
+        if ($at === false) { $pending[] = $line; continue; }                     // part of a name
+
+        $name = renewal_clean_value(mb_substr($line, 0, $at));
+        if ($name === '') $name = renewal_clean_value(implode(' ', $pending));   // the name was above
+        $pending = [];
+        if ($name === '') continue;
+
+        // "£10,000,000 Nil" or "£75,000 £500" or "£100,000 £500 each and every claim increasing..."
+        $rest = trim(mb_substr($line, $at));
+        if (!preg_match('/^(£[\d,.]+)\s*(.*)$/u', $rest, $m)) continue;
+        $limit = $m[1];
+        $excess = renewal_clean_value($m[2]);
+        // An excess that runs on to the next line or two.
+        for ($j = $i + 1; $j < $to && $j <= $i + 2; $j++) {
+            $next = $lines[$j];
+            if ($next === '' || str_contains($next, '£') || stripos($next, 'not insured') !== false) break;
+            if (preg_match('/^(part|section|extensions?|page|cover)\b/i', $next)) break;
+            if (!preg_match('/^[a-z]/', $next)) break;                           // a new row, not a run-on
+            $excess = trim($excess . ' ' . $next);
+            $i = $j;
+        }
+        if (preg_match('/^[\d][\d,.]*$/', $excess)) $excess = '£' . $excess;
+        $covers[] = ['cover' => $name, 'limit' => $limit, 'excess' => $excess === '' ? 'Nil' : $excess];
+    }
+    return $covers;
+}
+
 /** Tidies one value read out of a document: no label punctuation, no bullet, no stray spaces. */
 function renewal_clean_value(string $value): string {
     $value = trim($value, " \t\r\n:?-|\xE2\x80\xA2");
@@ -495,6 +563,9 @@ function renewal_prepare_row(array $row, array $map): array {
         }
         $q[$field] = mb_substr($raw, 0, 300);
     }
+    // The covers they hold today, read from the schedule's cover table.
+    if (!empty($row['_current_cover']) && is_array($row['_current_cover'])) $q['_current_cover'] = $row['_current_cover'];
+
     // Sensible extras the client can correct
     if (($q['insured_name'] ?? '') === '' && $lead['company_name'] !== '') $q['insured_name'] = $lead['company_name'];
     $contact = trim($lead['first_name'] . ' ' . $lead['last_name']);

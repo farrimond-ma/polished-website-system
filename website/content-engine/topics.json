@@ -212,13 +212,15 @@
   },
   {
     "id": "t019",
-    "status": "queued",
+    "status": "published",
     "title": "Builders cleans and construction site cleaning insurance",
     "keyword": "builders clean insurance",
     "coverSlug": "specialist-cleaning-insurance",
     "angle": "Site risks, main contractor requirements, CSCS, damage to finished works.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "slug": "builders-clean-insurance-construction-sites",
+    "publishedAt": "2026-10-14T12:56:27.293Z"
   },
   {
     "id": "t020",

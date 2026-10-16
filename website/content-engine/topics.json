@@ -235,13 +235,15 @@
   },
   {
     "id": "t021",
-    "status": "queued",
+    "status": "published",
     "title": "Cleaning business insurance renewal checklist",
     "keyword": "cleaning insurance renewal",
     "coverSlug": "contract-cleaners-insurance",
     "angle": "What to review before renewal: turnover, wages, activities, limits, claims.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "slug": "cleaning-insurance-renewal-checklist",
+    "publishedAt": "2026-10-16T12:23:25.677Z"
   },
   {
     "id": "t022",

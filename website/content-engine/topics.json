@@ -247,13 +247,15 @@
   },
   {
     "id": "t022",
-    "status": "queued",
+    "status": "published",
     "title": "Fair presentation of risk: what cleaning businesses must tell insurers",
     "keyword": "fair presentation of risk cleaning business",
     "coverSlug": "commercial-cleaning-insurance",
     "angle": "Insurance Act 2015 duty for commercial customers, examples of material facts.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "slug": "fair-presentation-of-risk-cleaning-business",
+    "publishedAt": "2026-10-19T14:45:18.022Z"
   },
   {
     "id": "t023",

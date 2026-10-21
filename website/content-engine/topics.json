@@ -270,13 +270,15 @@
   },
   {
     "id": "t024",
-    "status": "queued",
+    "status": "published",
     "title": "Do sole trader cleaners need employers' liability for a helper?",
     "keyword": "sole trader cleaner employers liability helper",
     "coverSlug": "employers-liability-insurance-for-cleaners",
     "angle": "Family members, casual help, exemptions and when cover is needed.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "slug": "sole-trader-cleaner-employers-liability-helper",
+    "publishedAt": "2026-10-21T13:01:25.165Z"
   },
   {
     "id": "t025",

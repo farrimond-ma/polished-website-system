@@ -282,13 +282,15 @@
   },
   {
     "id": "t025",
-    "status": "queued",
+    "status": "published",
     "title": "Professional indemnity for cleaning and facilities management companies",
     "keyword": "professional indemnity facilities management cleaning",
     "coverSlug": "professional-indemnity-insurance-for-cleaning-companies",
     "angle": "When advice, specifications and audits create PI exposure.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "slug": "professional-indemnity-facilities-management-cleaning",
+    "publishedAt": "2026-10-23T12:37:50.966Z"
   },
   {
     "id": "t026",

@@ -294,13 +294,15 @@
   },
   {
     "id": "t026",
-    "status": "queued",
+    "status": "published",
     "title": "Hospital and healthcare cleaning contracts: insurance requirements",
     "keyword": "healthcare cleaning contract insurance",
     "coverSlug": "contract-cleaners-insurance",
     "angle": "NHS and private healthcare expectations, infection control, higher limits.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "slug": "healthcare-cleaning-contract-insurance",
+    "publishedAt": "2026-10-26T14:21:55.781Z"
   },
   {
     "id": "t027",

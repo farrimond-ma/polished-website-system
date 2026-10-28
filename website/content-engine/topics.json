@@ -306,13 +306,15 @@
   },
   {
     "id": "t027",
-    "status": "queued",
+    "status": "published",
     "title": "School cleaning contracts: insurance and safeguarding expectations",
     "keyword": "school cleaning contract insurance",
     "coverSlug": "contract-cleaners-insurance",
     "angle": "Local authority and academy requirements, DBS, limits and evidence.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "slug": "school-cleaning-contract-insurance",
+    "publishedAt": "2026-10-28T14:07:28.885Z"
   },
   {
     "id": "t028",

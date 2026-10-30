@@ -318,23 +318,26 @@
   },
   {
     "id": "t028",
-    "status": "queued",
+    "status": "skipped",
     "title": "Insurance for window cleaners using water-fed poles",
     "keyword": "water fed pole insurance",
     "coverSlug": "window-cleaners-insurance",
     "angle": "Equipment values, van systems, theft conditions, reduced height risk.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "note": "Overlaps /guides/window-cleaners-insurance-working-at-height"
   },
   {
     "id": "t029",
-    "status": "queued",
+    "status": "published",
     "title": "Commercial kitchen and extraction cleaning insurance",
     "keyword": "kitchen extraction cleaning insurance",
     "coverSlug": "specialist-cleaning-insurance",
     "angle": "Fire risk, industry cleaning standards, access, hot works exclusions.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "slug": "kitchen-extraction-cleaning-insurance",
+    "publishedAt": "2026-10-30T14:06:35.287Z"
   },
   {
     "id": "t030",
@@ -407,5 +410,125 @@
     "angle": "Why liability cover does not pay you, options for sole traders.",
     "addedAt": "2026-09-15",
     "source": "seed"
+  },
+  {
+    "id": "t037",
+    "status": "queued",
+    "title": "Carpet cleaning insurance: shrinkage, colour run and water damage claims",
+    "keyword": "carpet cleaning insurance",
+    "coverSlug": "carpet-cleaners-insurance",
+    "angle": "Walk through the most common carpet and upholstery claims — browning, shrinkage, dye bleed, overwetting into ceilings below — and explain which policy section (treatment risk vs public liability) actually responds, with practical testing and documentation steps that keep claims payable.",
+    "addedAt": "2026-10-30",
+    "source": "ai"
+  },
+  {
+    "id": "t038",
+    "status": "queued",
+    "title": "Do window cleaners need insurance to use a water-fed pole system?",
+    "keyword": "water fed pole window cleaning insurance",
+    "coverSlug": "window-cleaners-insurance",
+    "angle": "Explain how insurers view reach-and-wash versus ladders, height limits on policies, damage to frames, seals and conservatory roofs, and what to declare about pole height and van-mounted tanks.",
+    "addedAt": "2026-10-30",
+    "source": "ai"
+  },
+  {
+    "id": "t039",
+    "status": "queued",
+    "title": "Cleaning insurance for working in occupied buildings: slips, wet floors and signage",
+    "keyword": "wet floor slip claim cleaning company",
+    "coverSlug": "public-liability-insurance-for-cleaners",
+    "angle": "A practical guide to the single most common public liability claim against cleaners — a member of the public slipping on a wet floor — covering signage, cordoning, mopping routines, evidence gathering and how a claim is defended.",
+    "addedAt": "2026-10-30",
+    "source": "ai"
+  },
+  {
+    "id": "t040",
+    "status": "queued",
+    "title": "Do I need insurance to clean solar panels?",
+    "keyword": "solar panel cleaning insurance",
+    "coverSlug": "window-cleaners-insurance",
+    "angle": "Cover the add-on many window cleaners take on: roof access, damage to panels and inverters, voided manufacturer warranties, and whether standard window cleaning policies extend to solar panel work.",
+    "addedAt": "2026-10-30",
+    "source": "ai"
+  },
+  {
+    "id": "t041",
+    "status": "queued",
+    "title": "Insurance for cleaners who hold client keys, fobs and alarm codes",
+    "keyword": "cleaner lost client keys insurance",
+    "coverSlug": "loss-of-keys-insurance",
+    "angle": "Set out exactly what loss of keys cover pays for — replacement locks, suited systems, alarm recoding, access control fobs — and how it differs for domestic rounds versus commercial sites, plus key register best practice.",
+    "addedAt": "2026-10-30",
+    "source": "ai"
+  },
+  {
+    "id": "t042",
+    "status": "queued",
+    "title": "What insurance do you need to start a cleaning business in the UK?",
+    "keyword": "insurance to start a cleaning business uk",
+    "coverSlug": "domestic-cleaners-insurance",
+    "angle": "A start-up checklist covering public liability, employers' liability if you hire, tools cover, business use on van insurance, ICO registration and what new clients will ask to see before your first job.",
+    "addedAt": "2026-10-30",
+    "source": "ai"
+  },
+  {
+    "id": "t043",
+    "status": "queued",
+    "title": "Cleaning contract insurance clauses: how to read the insurance schedule before you sign",
+    "keyword": "cleaning contract insurance requirements",
+    "coverSlug": "contract-cleaners-insurance",
+    "angle": "Decode the typical insurance clause in a cleaning tender or contract — indemnity limits, indemnity to principal, waiver of subrogation, hold harmless wording — and flag the clauses that need broker sign-off before signing.",
+    "addedAt": "2026-10-30",
+    "source": "ai"
+  },
+  {
+    "id": "t044",
+    "status": "queued",
+    "title": "Insurance for cleaners working in retail stores and shopping centres",
+    "keyword": "retail cleaning insurance",
+    "coverSlug": "commercial-cleaning-insurance",
+    "angle": "Covers trading-hours cleaning, stock and display damage, escalator and hard floor machine risks, centre management permit-to-work rules and the indemnity limits shopping centre landlords typically demand.",
+    "addedAt": "2026-10-30",
+    "source": "ai"
+  },
+  {
+    "id": "t045",
+    "status": "queued",
+    "title": "Damaged a tenant's or landlord's property on an end of tenancy clean: what now?",
+    "keyword": "end of tenancy cleaning damage claim",
+    "coverSlug": "end-of-tenancy-cleaning-insurance",
+    "angle": "A claims-scenario guide: who is the claimant when an agent, landlord and tenant are all involved, deposit dispute fallout, re-clean demands versus genuine damage, and how to document property condition on arrival.",
+    "addedAt": "2026-10-30",
+    "source": "ai"
+  },
+  {
+    "id": "t046",
+    "status": "queued",
+    "title": "Oven cleaning dip tank insurance: caustic chemicals, vans and home premises",
+    "keyword": "oven cleaning dip tank insurance",
+    "coverSlug": "oven-cleaners-insurance",
+    "angle": "Explain the risks insurers care about with heated caustic dip tanks — chemical burns, spills, tank in a van or garage, storage at a home address — and how this affects public liability, equipment and premises cover.",
+    "addedAt": "2026-10-30",
+    "source": "ai"
+  },
+  {
+    "id": "t047",
+    "status": "queued",
+    "title": "Does your cleaning equipment insurance cover theft from a van overnight?",
+    "keyword": "tools stolen from van cleaning business",
+    "coverSlug": "tools-and-equipment-insurance-for-cleaners",
+    "angle": "Unpack the overnight vehicle theft conditions cleaners most often fall foul of — locked and immobilised clauses, garaged or off-street requirements, time restrictions, forcible entry, and cover for hired-in machines.",
+    "addedAt": "2026-10-30",
+    "source": "ai"
+  },
+  {
+    "id": "t048",
+    "status": "queued",
+    "title": "Insurance for jet washing near cars, windows and neighbouring property",
+    "keyword": "pressure washing damage claim insurance",
+    "coverSlug": "pressure-washing-insurance",
+    "angle": "Focus on third-party damage: overspray onto vehicles, blown render and pointing, sealer and chemical staining, blocked drains from silt runoff — and how to survey and photograph before starting.",
+    "addedAt": "2026-10-30",
+    "source": "ai"
   }
 ]

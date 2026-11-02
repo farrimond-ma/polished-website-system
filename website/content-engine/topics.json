@@ -341,13 +341,15 @@
   },
   {
     "id": "t030",
-    "status": "queued",
+    "status": "published",
     "title": "How to reduce your cleaning insurance premium without cutting cover",
     "keyword": "reduce cleaning insurance cost",
     "coverSlug": "commercial-cleaning-insurance",
     "angle": "Risk management, accurate declarations, excess choices, claims handling.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "slug": "reduce-cleaning-insurance-cost",
+    "publishedAt": "2026-11-02T17:10:18.453Z"
   },
   {
     "id": "t031",

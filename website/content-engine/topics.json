@@ -364,13 +364,15 @@
   },
   {
     "id": "t032",
-    "status": "queued",
+    "status": "published",
     "title": "Airbnb and holiday let cleaning insurance",
     "keyword": "airbnb cleaning business insurance",
     "coverSlug": "end-of-tenancy-cleaning-insurance",
     "angle": "Changeover cleaning risks, keys and lockboxes, laundry, host requirements.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "slug": "airbnb-cleaning-business-insurance",
+    "publishedAt": "2026-11-04T15:30:17.254Z"
   },
   {
     "id": "t033",

@@ -376,13 +376,15 @@
   },
   {
     "id": "t033",
-    "status": "queued",
+    "status": "published",
     "title": "Industrial and warehouse cleaning insurance",
     "keyword": "industrial cleaning insurance",
     "coverSlug": "specialist-cleaning-insurance",
     "angle": "Machinery, working at height, forklifts nearby, client site rules.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "slug": "industrial-cleaning-insurance-warehouses",
+    "publishedAt": "2026-11-06T15:00:25.699Z"
   },
   {
     "id": "t034",

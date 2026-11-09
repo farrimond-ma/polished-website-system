@@ -388,13 +388,15 @@
   },
   {
     "id": "t034",
-    "status": "queued",
+    "status": "published",
     "title": "Insurance for cleaning companies with multi-site contracts across the UK",
     "keyword": "multi site cleaning contract insurance",
     "coverSlug": "contract-cleaners-insurance",
     "angle": "Territory, travel, subcontractors in different regions, consistent certificates.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "slug": "multi-site-cleaning-contract-insurance",
+    "publishedAt": "2026-11-09T17:37:13.647Z"
   },
   {
     "id": "t035",

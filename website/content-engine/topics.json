@@ -411,13 +411,15 @@
   },
   {
     "id": "t036",
-    "status": "queued",
+    "status": "published",
     "title": "Personal accident cover for self-employed cleaners",
     "keyword": "personal accident insurance cleaners",
     "coverSlug": "window-cleaners-insurance",
     "angle": "Why liability cover does not pay you, options for sole traders.",
     "addedAt": "2026-09-15",
-    "source": "seed"
+    "source": "seed",
+    "slug": "personal-accident-insurance-cleaners",
+    "publishedAt": "2026-11-11T15:19:04.498Z"
   },
   {
     "id": "t037",

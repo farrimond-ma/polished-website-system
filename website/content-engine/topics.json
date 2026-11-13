@@ -423,13 +423,15 @@
   },
   {
     "id": "t037",
-    "status": "queued",
+    "status": "published",
     "title": "Carpet cleaning insurance: shrinkage, colour run and water damage claims",
     "keyword": "carpet cleaning insurance",
     "coverSlug": "carpet-cleaners-insurance",
     "angle": "Walk through the most common carpet and upholstery claims — browning, shrinkage, dye bleed, overwetting into ceilings below — and explain which policy section (treatment risk vs public liability) actually responds, with practical testing and documentation steps that keep claims payable.",
     "addedAt": "2026-10-30",
-    "source": "ai"
+    "source": "ai",
+    "slug": "carpet-cleaning-insurance-damage-claims",
+    "publishedAt": "2026-11-13T15:21:24.421Z"
   },
   {
     "id": "t038",

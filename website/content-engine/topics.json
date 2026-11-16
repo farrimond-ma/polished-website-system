@@ -435,13 +435,15 @@
   },
   {
     "id": "t038",
-    "status": "queued",
+    "status": "published",
     "title": "Do window cleaners need insurance to use a water-fed pole system?",
     "keyword": "water fed pole window cleaning insurance",
     "coverSlug": "window-cleaners-insurance",
     "angle": "Explain how insurers view reach-and-wash versus ladders, height limits on policies, damage to frames, seals and conservatory roofs, and what to declare about pole height and van-mounted tanks.",
     "addedAt": "2026-10-30",
-    "source": "ai"
+    "source": "ai",
+    "slug": "water-fed-pole-window-cleaning-insurance",
+    "publishedAt": "2026-11-16T17:07:21.529Z"
   },
   {
     "id": "t039",

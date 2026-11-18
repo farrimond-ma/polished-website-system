@@ -447,13 +447,15 @@
   },
   {
     "id": "t039",
-    "status": "queued",
+    "status": "published",
     "title": "Cleaning insurance for working in occupied buildings: slips, wet floors and signage",
     "keyword": "wet floor slip claim cleaning company",
     "coverSlug": "public-liability-insurance-for-cleaners",
     "angle": "A practical guide to the single most common public liability claim against cleaners — a member of the public slipping on a wet floor — covering signage, cordoning, mopping routines, evidence gathering and how a claim is defended.",
     "addedAt": "2026-10-30",
-    "source": "ai"
+    "source": "ai",
+    "slug": "wet-floor-slip-claim-cleaning-company",
+    "publishedAt": "2026-11-18T16:31:42.424Z"
   },
   {
     "id": "t040",

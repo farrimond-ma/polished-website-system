@@ -459,13 +459,15 @@
   },
   {
     "id": "t040",
-    "status": "queued",
+    "status": "published",
     "title": "Do I need insurance to clean solar panels?",
     "keyword": "solar panel cleaning insurance",
     "coverSlug": "window-cleaners-insurance",
     "angle": "Cover the add-on many window cleaners take on: roof access, damage to panels and inverters, voided manufacturer warranties, and whether standard window cleaning policies extend to solar panel work.",
     "addedAt": "2026-10-30",
-    "source": "ai"
+    "source": "ai",
+    "slug": "solar-panel-cleaning-insurance",
+    "publishedAt": "2026-11-20T16:07:12.238Z"
   },
   {
     "id": "t041",

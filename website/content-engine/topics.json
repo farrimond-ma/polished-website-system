@@ -471,23 +471,26 @@
   },
   {
     "id": "t041",
-    "status": "queued",
+    "status": "skipped",
     "title": "Insurance for cleaners who hold client keys, fobs and alarm codes",
     "keyword": "cleaner lost client keys insurance",
     "coverSlug": "loss-of-keys-insurance",
     "angle": "Set out exactly what loss of keys cover pays for — replacement locks, suited systems, alarm recoding, access control fobs — and how it differs for domestic rounds versus commercial sites, plus key register best practice.",
     "addedAt": "2026-10-30",
-    "source": "ai"
+    "source": "ai",
+    "note": "Overlaps /guides/keyholding-risks-explained"
   },
   {
     "id": "t042",
-    "status": "queued",
+    "status": "published",
     "title": "What insurance do you need to start a cleaning business in the UK?",
     "keyword": "insurance to start a cleaning business uk",
     "coverSlug": "domestic-cleaners-insurance",
     "angle": "A start-up checklist covering public liability, employers' liability if you hire, tools cover, business use on van insurance, ICO registration and what new clients will ask to see before your first job.",
     "addedAt": "2026-10-30",
-    "source": "ai"
+    "source": "ai",
+    "slug": "insurance-to-start-a-cleaning-business-uk",
+    "publishedAt": "2026-11-23T19:18:45.105Z"
   },
   {
     "id": "t043",

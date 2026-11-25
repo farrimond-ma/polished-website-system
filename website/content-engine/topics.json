@@ -494,23 +494,26 @@
   },
   {
     "id": "t043",
-    "status": "queued",
+    "status": "skipped",
     "title": "Cleaning contract insurance clauses: how to read the insurance schedule before you sign",
     "keyword": "cleaning contract insurance requirements",
     "coverSlug": "contract-cleaners-insurance",
     "angle": "Decode the typical insurance clause in a cleaning tender or contract — indemnity limits, indemnity to principal, waiver of subrogation, hold harmless wording — and flag the clauses that need broker sign-off before signing.",
     "addedAt": "2026-10-30",
-    "source": "ai"
+    "source": "ai",
+    "note": "Overlaps /guides/public-liability-limit-cleaning-contract"
   },
   {
     "id": "t044",
-    "status": "queued",
+    "status": "published",
     "title": "Insurance for cleaners working in retail stores and shopping centres",
     "keyword": "retail cleaning insurance",
     "coverSlug": "commercial-cleaning-insurance",
     "angle": "Covers trading-hours cleaning, stock and display damage, escalator and hard floor machine risks, centre management permit-to-work rules and the indemnity limits shopping centre landlords typically demand.",
     "addedAt": "2026-10-30",
-    "source": "ai"
+    "source": "ai",
+    "slug": "retail-cleaning-insurance-shops-shopping-centres",
+    "publishedAt": "2026-11-25T18:01:29.541Z"
   },
   {
     "id": "t045",
@@ -550,6 +553,126 @@
     "coverSlug": "pressure-washing-insurance",
     "angle": "Focus on third-party damage: overspray onto vehicles, blown render and pointing, sealer and chemical staining, blocked drains from silt runoff — and how to survey and photograph before starting.",
     "addedAt": "2026-10-30",
+    "source": "ai"
+  },
+  {
+    "id": "t049",
+    "status": "queued",
+    "title": "Gym, Leisure Centre and Swimming Pool Cleaning Insurance",
+    "keyword": "gym cleaning insurance",
+    "coverSlug": "commercial-cleaning-insurance",
+    "angle": "Cover considerations for cleaning wet-side areas, changing rooms and gym equipment: chemical handling near pools, slip claims from members using facilities during cleaning, damage to expensive cardio machines, and the public liability limits leisure operators typically demand in their contracts.",
+    "addedAt": "2026-11-25",
+    "source": "ai"
+  },
+  {
+    "id": "t050",
+    "status": "queued",
+    "title": "Pub, Restaurant and Hospitality Cleaning Insurance Explained",
+    "keyword": "restaurant cleaning insurance",
+    "coverSlug": "commercial-cleaning-insurance",
+    "angle": "What cleaning firms working in pubs, restaurants and cafes need: cover for damage to bar fittings and glassware, early-morning access and alarm responsibilities, stock and till areas, food hygiene expectations, and how liability is split between the cleaner and the venue.",
+    "addedAt": "2026-11-25",
+    "source": "ai"
+  },
+  {
+    "id": "t051",
+    "status": "queued",
+    "title": "Cleaning Tenders and PQQs: The Insurance Evidence Buyers Ask For",
+    "keyword": "cleaning tender insurance requirements",
+    "coverSlug": "contract-cleaners-insurance",
+    "angle": "A practical walkthrough of the insurance sections in cleaning tenders and pre-qualification questionnaires, which certificates and limits are usually requested, how to answer indemnity wording questions, and what to do when a tender demands cover you don't yet hold.",
+    "addedAt": "2026-11-25",
+    "source": "ai"
+  },
+  {
+    "id": "t052",
+    "status": "queued",
+    "title": "Communal Area Cleaning Insurance for Blocks of Flats and Managing Agents",
+    "keyword": "communal area cleaning insurance",
+    "coverSlug": "contract-cleaners-insurance",
+    "angle": "Risks specific to stairwells, lobbies and bin stores in residential blocks: resident slip claims, damage to lifts and intercoms, fire door and escape route obligations, and the indemnity levels managing agents usually write into cleaning contracts.",
+    "addedAt": "2026-11-25",
+    "source": "ai"
+  },
+  {
+    "id": "t053",
+    "status": "queued",
+    "title": "TUPE and Taking Over an Existing Cleaning Contract: Insurance Implications",
+    "keyword": "TUPE cleaning contract insurance",
+    "coverSlug": "contract-cleaners-insurance",
+    "angle": "What changes on your policy when staff transfer to you with a contract win: employers' liability for inherited employees, declaring new wage rolls and sites mid-term, liability for incidents that happened under the outgoing contractor, and run-off considerations when you lose a contract.",
+    "addedAt": "2026-11-25",
+    "source": "ai"
+  },
+  {
+    "id": "t054",
+    "status": "queued",
+    "title": "Using a Client's Own Vacuum and Products: Who Pays When It Breaks?",
+    "keyword": "cleaner damaged client's vacuum",
+    "coverSlug": "domestic-cleaners-insurance",
+    "angle": "How liability works when domestic cleaners use equipment and chemicals supplied by the householder, where public liability responds and where it may not, the role of the goods in your care clause, and how to word your terms to limit disputes over worn-out machines.",
+    "addedAt": "2026-11-25",
+    "source": "ai"
+  },
+  {
+    "id": "t055",
+    "status": "queued",
+    "title": "Self-Employed Cleaners Working Through an Agency or App: Do You Need Your Own Insurance?",
+    "keyword": "self employed cleaner agency insurance",
+    "coverSlug": "domestic-cleaners-insurance",
+    "angle": "Explains why agency or platform cover is often limited or non-existent for self-employed cleaners, how to check what the agency's policy actually protects, and why holding your own public liability keeps you working if you take private clients alongside platform jobs.",
+    "addedAt": "2026-11-25",
+    "source": "ai"
+  },
+  {
+    "id": "t056",
+    "status": "queued",
+    "title": "Gutter Clearing and Fascia Cleaning Insurance for Window Cleaners",
+    "keyword": "gutter cleaning insurance",
+    "coverSlug": "window-cleaners-insurance",
+    "angle": "Adding gutter vacuuming, fascia and soffit cleaning to a window round: height and ladder disclosures, damage to guttering and roof tiles, blocked downpipe and water ingress claims, and why insurers treat roof-level work differently from pole work.",
+    "addedAt": "2026-11-25",
+    "source": "ai"
+  },
+  {
+    "id": "t057",
+    "status": "queued",
+    "title": "Cleaning Antique Rugs, Leather and High-Value Upholstery: Insurance Explained",
+    "keyword": "antique rug cleaning insurance",
+    "coverSlug": "carpet-cleaners-insurance",
+    "angle": "Why single-item value limits matter when you clean Persian rugs, silk, leather suites and designer furniture, how treatment risk cover differs from public liability, pre-clean testing and disclaimers, and what to do when an irreplaceable item is damaged.",
+    "addedAt": "2026-11-25",
+    "source": "ai"
+  },
+  {
+    "id": "t058",
+    "status": "queued",
+    "title": "End of Tenancy Cleaning for Letting Agents: Contract Clauses and Insurance",
+    "keyword": "end of tenancy cleaning letting agent contract",
+    "coverSlug": "end-of-tenancy-cleaning-insurance",
+    "angle": "Reviewing the insurance and indemnity clauses letting agents put in their supplier agreements, re-clean guarantees, key collection arrangements, access to unoccupied properties, and the cover levels agents commonly insist on before adding you to their panel.",
+    "addedAt": "2026-11-25",
+    "source": "ai"
+  },
+  {
+    "id": "t059",
+    "status": "queued",
+    "title": "Damaged an Aga, Range or Built-In Oven: Insurance for Oven Cleaners",
+    "keyword": "oven cleaner damaged cooker",
+    "coverSlug": "oven-cleaners-insurance",
+    "angle": "Claims scenarios around cracked enamel, damaged fan elements, discoloured chrome and Agas knocked out of commission, how goods in your care cover differs from public liability, and the pre-clean checks that protect you when a customer blames an existing fault.",
+    "addedAt": "2026-11-25",
+    "source": "ai"
+  },
+  {
+    "id": "t060",
+    "status": "queued",
+    "title": "Hoarder and Void Property Deep Cleaning Insurance",
+    "keyword": "hoarder clean insurance",
+    "coverSlug": "specialist-cleaning-insurance",
+    "angle": "Cover for clearance and deep cleaning of hoarded, void or neglected properties: unknown hazards and sharps, disposal and waste carrier duties, damage to the fabric of the property, dealing with found valuables, and the disclosures insurers want before quoting.",
+    "addedAt": "2026-11-25",
     "source": "ai"
   }
 ]

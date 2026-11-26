@@ -69,7 +69,7 @@ layout_header('Leads');
   <button type="submit">Search</button>
 </form>
 <table class="grid">
-  <thead><tr><th>Ref</th><th>Client</th><th>Business</th><th>Status</th><th>Questionnaire</th><th>Assigned</th><th>Received</th></tr></thead>
+  <thead><tr><th>Ref</th><th>Client</th><th>Business</th><th>Status</th><th>Questionnaire</th><th>Assigned</th><th>Completed</th></tr></thead>
   <tbody>
   <?php if (!$leads): ?><tr><td colspan="7" class="empty">No leads match.</td></tr><?php endif; ?>
   <?php foreach ($leads as $l): ?>
@@ -80,7 +80,15 @@ layout_header('Leads');
       <td><span class="pill <?= status_class($l['status']) ?>"><?= e($l['status']) ?></span><?= $l['chasing'] ? " <span class='pill chasing'>Chasing " . (int)$l['auto_chase_count'] . "/3</span>" : '' ?><?= !empty($l['prefers_call']) ? " <span class='pill call'>Wants a call</span>" : '' ?></td>
       <td><span class="pill <?= e(q_status_class_for($l)) ?>"><?= e(q_status_label_for($l)) ?></span></td>
       <td><?= e(user_name($l['assigned_to'] ? (int)$l['assigned_to'] : null)) ?></td>
-      <td><?= dt($l['created_at']) ?></td>
+      <td style="white-space:nowrap">
+        <?php if ($l['q_submitted_at']): ?>
+          <?= dt($l['q_submitted_at']) ?>
+          <div class="sub">received <?= d($l['created_at']) ?></div>
+        <?php else: ?>
+          <span class="sub">not yet</span>
+          <div class="sub">received <?= d($l['created_at']) ?></div>
+        <?php endif; ?>
+      </td>
     </tr>
   <?php endforeach; ?>
   </tbody>

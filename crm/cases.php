@@ -79,10 +79,10 @@ layout_header('Cases');
   <button type="submit">Search</button>
 </form>
 <table class="grid">
-  <thead><tr><th>Ref</th><th>Client</th><th>Business</th><th>Renewal</th><th>Status</th><th>Questionnaire</th><th>Assigned</th></tr></thead>
+  <thead><tr><th>Ref</th><th>Client</th><th>Business</th><th>Renewal</th><th>Status</th><th>Questionnaire</th><th>Completed</th><th>Assigned</th></tr></thead>
   <tbody>
   <?php if (!$cases): ?>
-    <tr><td colspan="7" class="empty">No cases match. Import a client from Acturis, or mark a lead as Won.</td></tr>
+    <tr><td colspan="8" class="empty">No cases match. Import a client from Acturis, or mark a lead as Won.</td></tr>
   <?php endif; ?>
   <?php foreach ($cases as $l): ?>
     <tr onclick="location.href='lead.php?id=<?= (int)$l['lead_id'] ?>'">
@@ -92,6 +92,14 @@ layout_header('Cases');
       <td class="<?= $l['renewal_date'] && $l['renewal_date'] < $today ? 'overdue' : '' ?>" style="white-space:nowrap"><?= d($l['renewal_date']) ?></td>
       <td><span class="pill <?= status_class($l['status']) ?>"><?= e($l['status']) ?></span><?= $l['chasing'] ? " <span class='pill chasing'>Chasing " . (int)$l['auto_chase_count'] . "/3</span>" : '' ?></td>
       <td><span class="pill <?= e(case_stage_class(case_stage($l))) ?>"><?= e(case_stage_short(case_stage($l))) ?></span></td>
+      <td style="white-space:nowrap">
+        <?php if ($l['q_submitted_at']): ?>
+          <?= dt($l['q_submitted_at']) ?>
+        <?php else: ?>
+          <span class="sub">not yet</span>
+        <?php endif; ?>
+        <div class="sub">client since <?= d($l['created_at']) ?></div>
+      </td>
       <td><?= e(user_name($l['assigned_to'] ? (int)$l['assigned_to'] : null)) ?></td>
     </tr>
   <?php endforeach; ?>

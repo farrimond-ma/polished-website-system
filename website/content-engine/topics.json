@@ -517,13 +517,15 @@
   },
   {
     "id": "t045",
-    "status": "queued",
+    "status": "published",
     "title": "Damaged a tenant's or landlord's property on an end of tenancy clean: what now?",
     "keyword": "end of tenancy cleaning damage claim",
     "coverSlug": "end-of-tenancy-cleaning-insurance",
     "angle": "A claims-scenario guide: who is the claimant when an agent, landlord and tenant are all involved, deposit dispute fallout, re-clean demands versus genuine damage, and how to document property condition on arrival.",
     "addedAt": "2026-10-30",
-    "source": "ai"
+    "source": "ai",
+    "slug": "end-of-tenancy-cleaning-damage-claim",
+    "publishedAt": "2026-11-27T17:27:28.595Z"
   },
   {
     "id": "t046",
